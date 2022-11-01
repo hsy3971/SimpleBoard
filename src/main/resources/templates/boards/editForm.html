@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <style>
+        .container {
+            max-width: 560px;
+        }
+        .field-error {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div th:replace="fragments/navbar :: navbarFragment"></div>
+    <form th:action th:object="${board}">
+        <div>
+            <input type="hidden" id="bid" class="form-control"  th:field="*{uid}">
+        </div>
+
+        <div>
+            <label for="subject" th:text="#{label.board.subject}">제목</label>
+            <input type="text" id="subject" th:field="*{subject}" class="form-control" placeholder="제목을 입력하세요.">
+            <br/>
+        </div>
+        <div>
+            <label for="name" th:text="|작성자 : ${board.name}|"></label>
+            <input type="hidden" id="name" class="form-control"  th:field="*{name}">
+        </div>
+        <div>
+            <label for="content" th:text="#{label.board.contents}">내용</label>
+            <textarea cols="150" rows="10" id="content" th:field="*{content}" class="form-control" placeholder="내용을 입력하세요.">
+
+            </textarea>
+
+        </div>
+        <hr class="my-4">
+
+        <div class="row">
+            <div class="col">
+<!--                <button class="w-100 btn btn-primary btn-lg" type="submit" th:text="#{button.update}">수정</button>-->
+                <input class="w-100 btn btn-primary btn-lg" type="button" onclick="boardUpdate()" value="수정"/>
+            </div>
+            <div class="col">
+                <button class="w-100 btn btn-danger btn-lg"
+                        onclick="location.href='Board.html'"
+                        th:onclick="|location.href='@{/boards/{uid}(uid=${board.uid})}'|"
+                        type="button" th:text="#{button.cancel}">취소</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="/js/board.js"></script>
+</body>

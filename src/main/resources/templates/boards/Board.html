@@ -1,0 +1,129 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.0/font/bootstrap-icons.css" />
+<!--    밑에 두줄은 collapse 펼치기기능은 잘 됐으나 show를 통해 펼친상태에서 클릭시 숨기는 것이 안됐다-->
+<!--    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>-->
+<!--    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>-->
+<!--    와씨발 이거 추가하니까 collapse의 show상태에서 클릭시 숨기기기능이 작동된다. 밑2줄-->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <style>
+        .container {
+            max-width: 560px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div th:replace="fragments/navbar :: navbarFragment"></div>
+    <!--추가-->
+    <h2 th:if="${param.status}" th:text="'저장 완료'"></h2>
+    <form class="card text-dark bg-light">
+        <div class="card-header d-flex justify-content-between">
+            <label for="boardId" th:text="|번호 : ${board.uid}|"></label>
+            <input type="hidden" id="boardId" name="boardId" class="form-control" value="1" th:value="${board.uid}" readonly>
+            <label for="updatedate" th:text="${board.updatedate}"></label>
+            <input type="hidden" id="updatedate" name="updatedate" class="form-control" value="10" th:value="${board.updatedate}" readonly>
+        </div>
+        <div class="card-header d-flex justify-content-between">
+            <label for="name" th:text="|작성자 : ${board.name}|"></label>
+            <input type="hidden" id="name" name="name" class="form-control" value="작성자" th:value="${board.name}" readonly>
+            <label for="viewcnt" th:text="|조회수 : ${board.viewcnt}|"></label>
+            <input type="hidden" id="viewcnt" name="viewcnt" class="form-control" value="10" th:value="${board.viewcnt}" readonly>
+        </div>
+        <div class="card-body">
+            <label for="boardSubject" th:text="#{label.board.subject}">제목</label>
+            <input type="text" id="boardSubject" name="boardSubject" class="form-control" value="상품A" th:value="${board.subject}" readonly>
+            <br/>
+            <label for="content" th:text="#{label.board.contents}">글 내용</label>
+            <textarea rows="5" type="text" id="content" name="content" class="form-control" value="10" th:value="${board.content}" th:text="${board.content}" readonly></textarea>
+        </div>
+    </form>
+
+    <hr class="my-4">
+
+    <div class="row">
+        <div class="col">
+            <!--@{/boards/{uid}/edit @{}안에 /boards/{uid}/edit가 이동할 페이지이다.-->
+            <!--uid=${board.uid} uid는 키에 해당하고 board.uid가 value에 해당-->
+            <!--번거로운 코드 대신, + 연산자를 사용하지 않고 작성하는 방법도 존재한다 -> location.href 앞 뒤로 | 를 작성해주면 된다. -->
+            <button th:if="${writer} == true" class="w-100 btn btn-primary btn-lg"
+                    onclick="location.href='editForm.html'"
+                    th:onclick="|location.href='@{/boards/{uid}/edit(uid=${board.uid})}'|"
+                    type="button" th:text="#{page.updateBoard}">수정</button>
+        </div>
+        <div class="col">
+            <button class="w-100 btn btn-success btn-lg"
+                    onclick="location.href='Board.html'"
+                    th:onclick="|location.href='@{/boards}'|"
+                    type="button" th:text="#{button.list}">목록</button>
+        </div>
+
+        <div class="col">
+            <input th:if="${writer} == true" class="w-100 btn btn-danger btn-lg" type="button" onclick="boardDelete()" value="삭제"/>
+        </div>
+    </div>
+<!--아니 createComment -> commentCreate로 바꾸니까 함수가 호출이 된다... 뭐지?-->
+    <br/>
+    <div class="card">
+        <input type="hidden" id="postsId" th:value="${board.uid}">
+        <div class="card-header">댓글 작성</div>
+        <div class="card-body">
+            <textarea id="cmt" class="form-control" rows="1" placeholder="댓글을 입력하세요"></textarea>
+        </div>
+        <div class="card-footer">
+            <button type="button" class="btn btn-dark" onclick="commentCreate()">등록</button>
+        </div>
+    </div>
+    <br>
+
+    <div class="card">
+        <div class="card-header">댓글 목록</div>
+            <div th:each="comment:${comments}">
+                <form method="POST">
+                    <ul id="comment-box" class="list-group">
+                        <li id="comment--1" class="list-group-item d-flex justify-content-between">
+<!--                            th:attr가 collapse multi-collapse 그리고 comment.id를 붙여주기 위해 사용되는 함수(이렇게 comment.id를 class에 붙여주지 않게 되면 특정한 하나의 수정버튼을 눌러도 모든 댓글의 수정창이 열리게 된다.)-->
+                            <p th:attr="class = 'collapse multi-collapse'+${comment.id}+' show'" th:text="${comment.comment}"></p>
+                            <div class="d-flex">
+                                <p style="font-size:8px;" class="font-italic" th:text="${comment.member.uname}"></p>
+                                &nbsp;
+                                <p style="font-size:8px;" class="font-italic" th:text="${comment.modified_date}"></p>
+                                &nbsp;
+<!--                                th:attr사용법 잘익혀두기 쓸일이 많을거라 생각이 든다.-->
+<!--                                굳이 controller에서 비교하지 않고 이미 뷰에서 반복문이 존재하기 때문에 이런식으로 comment에 id와 controller에서 넘겨준 member에 해당하는 userid.uid를 비교하면 된다.-->
+                                <span><a th:if="${comment.member.uid} == ${userid.uid}" type="button" data-toggle="collapse" data-target=".multi-collapse" th:attr="data-target='.multi-collapse'+${comment.id}" class="bi bi-pencil-square"></a></span>
+                                &nbsp;
+                                <!--                                thymeleaf th:onclick으로 함수호출시 매개변수도 같이 넘겨주는법 잘봐두기-->
+                                <span><a th:if="${comment.member.uid} == ${userid.uid}" type="button" class="bi bi-x-square" th:bid="${board.uid}" th:cid="${comment.id}" th:onclick="main.commentDelete(this.getAttribute('bid'),this.getAttribute('cid'))"></a></span>
+<!--                                원래는 form태그에 multi-collapse와 comment.id를 붙여서 실행하는데 이상하게 form태그에 붙이면 접혀있어야 하는데 펼쳐져있다. 그렇다고 누른다고 접혀있던게 펼쳐지지도 않는다...-->
+                                &nbsp;&nbsp;
+                                <form>
+                                    <input type="hidden" id="cId" th:value="${comment.id}">
+                                    <input type="hidden" id="pId" th:value="${board.uid}">
+                                    <div th:attr="class = 'form-group collapse multi-collapse'+${comment.id}">
+                                        <textarea class="form-control" style="resize: none;" id="comment-content" rows="3" cols="80" th:text="${comment.comment}"></textarea>
+                                        <br/>
+                                        <button type="button" id="btn-comment-update" class="btn btn-primary"> 수정</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </li>
+                    </ul>
+                </form>
+            </div>
+        <div class="card-footer">Board Service</div>
+    </div>
+
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="/js/comment.js"></script>
+<script type="text/javascript" src="/js/cmt.js"></script>
+<script type="text/javascript" src="/js/board.js"></script>
+</body>
+</html>

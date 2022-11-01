@@ -1,0 +1,122 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap cdn 설정 -->
+<!--    깔쌈한 스타일(전체 html에 적용시켜줌)-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+<div class="container" style="max-width: 1000px">
+    <div th:replace="fragments/navbar :: navbarFragment"> </div>
+    <nav id ="nav">
+        <div class="text-right">
+            <ul>
+                <span th:if="${info} != null" class="mx-3" th:text="|${info} 님 안녕하세요!!!|"></span>
+                <a class="nav-link btn btn-warning" sec:authorize="isAuthenticated()" th:href="@{/logout}">로그아웃</a>
+            </ul>
+        </div>
+    </nav>
+    <div>
+        <form class="d-flex justify-content-end" name="search-form" th:action="@{/boards}" method="get">
+            <input type="text" name="searchKeyword" th:value="${param.searchKeyword}">
+            <input type="submit" class="btn btn-dark mr-2" value="검색">
+        </form>
+    </div>
+
+    <hr class="my-4">
+    <div>
+        <table class="table table-hover">
+            <thead class="thead-dark">
+            <tr class="bg-primary">
+                <th th:text="#{label.board.id}">ID</th>
+                <th th:text="#{label.board.subject}">제목</th>
+                <th th:text="#{label.board.name}">작성자</th>
+                <th th:text="#{label.board.viewcnt}">조회수</th>
+<!--                <th th:text="#{label.board.regdate}">등록일</th>-->
+                <th th:text="#{label.board.updatedate}">수정일</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="board : ${boards}">
+                <td th:text="${board.uid}">글 ID</a></td>
+                <td><a href="board.html" th:href="@{/boards/{uid}(uid=${board.uid})}" th:text="${board.subject}">제목</a></td>
+                <td th:text="${board.name}">작성자</td>
+                <td th:text="${board.viewcnt}">조회수</td>
+<!--                <td th:text="${board.regdate}">등록일</td>-->
+                <td th:text="${board.updatedate}">수정일</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-primary float-end"
+                    onclick="location.href='addForm.html'"
+                    th:onclick="|location.href='@{/boards/add}'|"
+                    type="button" th:text="#{page.addBoard}">글 작성</button>
+        </div>
+    </div>
+
+<!--    - boards.number: 멤버 리스트의 현재 페이지 번호 (Page 인터페이스는 페이지 번호를 0번부터 시작함)-->
+<!--    - boards.totalPages: 멤버 리스트로 도출할 수 있는 최대 페이지 수 (ex. 총 멤버 (100명) / 페이지 당 회원 수 (10명) = 10)-->
+<!--    - boards.first: 현재 페이지 번호가 맨 처음 페이지인지를 알려주는 변수 (boolean 타입으로 true/false를 가짐)-->
+<!--    - boards.last: 현재 페이지 번호가 가장 마지막 페이지인지를 알려주는 변수 (boolean 타입으로 true/false를 가짐)-->
+<!--    - boards.numberOfElements: 한 페이지에서 보여주는 아이템의 개수-->
+<!--    totalPages = 3, first = true of false, last = true or false, -->
+
+<!--    페이징 참고 : https://ivvve.github.io/2019/01/13/java/Spring/pagination_3/-->
+<!--                https://ivvve.github.io/2019/01/13/java/Spring/pagination_4/-->
+<!--    검색기능 참고 : https://mycodearchive.tistory.com/m/183-->
+
+<!--    th:with는 특정 태그 밑에서 값을 활용할 수 있도록 커스텀 변수를 정의하는 것입니다.-->
+<!--            start : 현제 페이지를 통해 현재 페이지 그룹의 시작 페이지를 구하는 로직이다.-->
+<!--            last : 전체 페이지 수와 현재 페이지 그룹의 시작 페이지를 통해 현재 페이지 그룹의 마지막 페이지를 구하는 로직이다.-->
+    <nav aria-label="Page navigation" style="text-align: center;">
+        <ul class="pagination"
+            th:with="start=${T(java.lang.Math).floor(boards.number/10) * 10 + 1},
+                    last=(${start + 9 < boards.totalPages ? start + 9 : boards.totalPages})">
+<!--            수정-->
+            <li>
+                <a th:href="@{/boards(page=1)}" aria-label="First">
+                    <span aria-hidden="true">First</span>
+                </a>
+            </li>
+
+            <li th:class="${boards.first} ? 'disabled'">
+                <a th:href="${boards.first} ? '#' :@{/boards(page=${boards.number}, searchKeyword=${param.searchKeyword})}" aria-label="Previous">
+                    <span aria-hidden="true">&lt;</span>
+                </a>
+            </li>
+            <!-- #numbers.sequence(start, last)는 1, 5라고 치면 1~5까지 다 출력해준다.-->
+<!--            지금 th:if문으로 파라미터로 넘어오는 searchKeyword를 null일때와 아닐때로 나눠줬는데 이유가 안그러면 searchkeyword가 없을때도 출력이 된다-->
+<!--            예를 들어 검색값없이 그냥 페이지2를 눌러도 /boards/page=2?searchkeyword= 이런식으로 출력이 돼서 페이징이 제대로 시행되지 않는다.-->
+<!--            또 한가지 문제점이 이번엔 검색을 해서 그 검색이 10개이상이라 페이지가 2이상이 되는경우에 처음페이지인 1에서는 괜찮은데 검색한 상황에서 2페이지를 누르게 되면 올바르게 페이징 되지 않는다.-->
+
+            <li th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'active'">
+                <a th:href="@{/boards(page=${page}, searchKeyword=${param.searchKeyword})}" th:text="${page}"></a>
+            </li>
+
+            <li th:class="${boards.last} ? 'disabled'">
+                <a th:href="${boards.last} ? '#' : @{/boards(page=${boards.number + 2}, searchKeyword=${param.searchKeyword})}" aria-label="Next">
+                    <span aria-hidden="true">&gt;</span>
+                </a>
+            </li>
+
+            <li>
+                <a th:href="@{/boards(page=${boards.totalPages})}" aria-label="Last">
+                    <span aria-hidden="true">Last</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+</div>
+
+</body>
+</html>
