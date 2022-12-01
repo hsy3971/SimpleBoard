@@ -36,4 +36,4 @@ out/
 ### VS Code ###
 .vscode/
 #깃허브에 application-oauth.properties파일 안의 클라이언트id와 pw를 보여주지 않기 위해 .gitignore에 다음과 같이 등록해준다.
-application-oauth.properties
+application-oauth.yml
