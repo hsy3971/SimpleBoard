@@ -1,14 +1,4 @@
 spring:
-  datasource:
-    url: jdbc:h2:tcp://localhost/~/simple
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
-  thymeleaf:
-    prefix: classpath:/templates/
-    suffix: .html
-    cache: false
-
   jpa:
     hibernate:
       ddl-auto: none
