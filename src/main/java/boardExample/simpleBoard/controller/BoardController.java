@@ -45,8 +45,10 @@ public class BoardController {
             model.addAttribute("info", user.getUname());
         }
         else {
-            Member member = (Member) authentication.getPrincipal();  //userDetail 객체를 가져옴
-            model.addAttribute("info", member.getUname());
+            if (authentication != null) {
+                Member member = (Member) authentication.getPrincipal();  //userDetail 객체를 가져옴
+                model.addAttribute("info", member.getUname());
+            }
         }
 
         if (searchKeyword == null) {
@@ -74,10 +76,12 @@ public class BoardController {
         }
         // 일반 로그인일때
         else {
-            Member member = (Member) authentication.getPrincipal();
-            id = member.getUno();
-            //        member라는 로그인한 유저정보를 던져줘서 뷰에서 .uid를 통해 뷰에 comment.member.uid와 비교를 한다.
-            model.addAttribute("userid", member);
+            if (authentication != null) {
+                Member member = (Member) authentication.getPrincipal();
+                id = member.getUno();
+                //        member라는 로그인한 유저정보를 던져줘서 뷰에서 .uid를 통해 뷰에 comment.member.uid와 비교를 한다.
+                model.addAttribute("userid", member);
+            }
         }
         boardService.viewCount(uid);
         Optional<Board> result = boardService.BoardOne(uid);
@@ -89,8 +93,10 @@ public class BoardController {
             model.addAttribute("comments", comments);
         }
 //        board의 외래키인 u_no와 Long형에 해당하는 로그인한 아이디의 u_no와 비교(name으로 비교시 동명이인이 있을 수 있기떄문에 불가)
-        if (id.equals(board.getMember().getUno())) {
-            model.addAttribute("writer", true);
+        if (id != null) {
+            if (id.equals(board.getMember().getUno())) {
+                model.addAttribute("writer", true);
+            }
         }
 //        밑에 방식으로 comment마다 아이디를 비교를 해주고 맞다면 true 아니라면 false를 던져준다.
 //        댓글리스트가 여러개이기 떄문에 true,true,false이런식으로 넘어올수있다. false값만 있다면 버튼이 비활성화된다.

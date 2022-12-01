@@ -50,7 +50,7 @@ public class MemberController {
      */
     @GetMapping
     public String root() {
-        return "redirect:/login";
+        return "redirect:/boards";
     }
 
     /**
