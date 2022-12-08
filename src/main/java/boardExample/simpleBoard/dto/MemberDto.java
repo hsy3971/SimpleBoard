@@ -33,7 +33,10 @@ public class MemberDto {
                 .uid(uid)
                 .u_pw(u_pw)
                 .uname(uname)
+                .u_auth("USER")
                 .email(email)
+                .append_date(append_date)
+                .update_date(update_date)
                 .build();
         return build;
     }
@@ -59,7 +62,9 @@ public class MemberDto {
         private final String u_pw;
         private final String uname;
         private final String u_auth;
+        private final String append_date;
         private final String update_date;
+        private final String email;
 
         /* Entity -> dto (Response) */
         public UserSessionDto(Member member) {
@@ -68,7 +73,9 @@ public class MemberDto {
             this.u_pw = member.getU_pw();
             this.uname = member.getUname();
             this.u_auth = member.getU_auth();
+            this.append_date = member.getAppend_date();
             this.update_date = member.getUpdate_date();
+            this.email = member.getEmail();
         }
     }
 }

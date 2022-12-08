@@ -94,11 +94,11 @@ public class BoardService {
 
     /* READ 게시글 리스트 조회 readOnly 속성으로 조회속도 개선 */
     // 이것도 결국에는 findById를 통해서 id값을 통해 게시글을 가져오는데 기존에 있던 BoardOne메서드는 entity를 return한다. 하지만 이건 dto를 return한다.(차이점) -> api에서 이 메서드를 써야하는 이유
-    @Transactional(readOnly = true)
-    public BoardDto.Response findBoard(Long id) {
-        Board board = boardRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("해당 게시글이 존재하지 않습니다. id: " + id));
-        // entity -> dto로 변환후 return
-        return new BoardDto.Response(board);
-    }
+//    @Transactional(readOnly = true)
+//    public BoardDto.Response findBoard(Long id) {
+//        Board board = boardRepository.findById(id).orElseThrow(() ->
+//                new IllegalArgumentException("해당 게시글이 존재하지 않습니다. id: " + id));
+//        // entity -> dto로 변환후 return
+//        return new BoardDto.Response(board);
+//    }
 }

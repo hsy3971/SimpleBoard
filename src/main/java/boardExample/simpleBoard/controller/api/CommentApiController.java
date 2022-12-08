@@ -48,9 +48,9 @@ public class CommentApiController {
         return ResponseEntity.ok(cid);
     }
 
-    // read
-    @GetMapping("/boards/{id}/comments")
-    public List<CommentDto.Response> read(@PathVariable Long id) {
-        return commentService.findAll(id);
-    }
+//    // read
+//    @GetMapping("/boards/{id}/comments")
+//    public List<CommentDto.Response> read(@PathVariable Long id) {
+//        return commentService.findAll(id);
+//    }
 }

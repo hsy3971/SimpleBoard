@@ -68,4 +68,12 @@ public class MemberService {
     public Member findByUno(Long id) {
         return memberRepository.findByUno(id);
     }
+
+    //아이디중복검사
+    public void DuplicateMember(MemberDto member) {
+        Optional<Member> uid = memberRepository.findByUid(member.getUid());
+        if (!uid.isEmpty()) {
+            throw new IllegalStateException("이미 존재하는 회원입니다.");
+        }
+    }
 }

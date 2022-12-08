@@ -19,10 +19,11 @@ public class BoardApiController {
     private final HttpSession httpSession;
 
     /* 게시글 읽기(READ) -> 조회 */
-    @GetMapping("/boards/{uid}")
-    public ResponseEntity read(@PathVariable("uid") Long uid) {
-        return ResponseEntity.ok(boardService.findBoard(uid));
-    }
+//    @GetMapping("/boards/{uid}")
+//    public ResponseEntity read(@PathVariable("uid") Long uid) {
+//        return ResponseEntity.ok(boardService.findBoard(uid));
+//    }
+
     // 비동기 게시글 저장
     @PostMapping("/boards")
     public ResponseEntity create(@RequestBody BoardDto boardDto, Authentication authentication) {

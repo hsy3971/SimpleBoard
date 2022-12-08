@@ -37,7 +37,6 @@ public class CommentService {
 
         Comment comment = dto.toEntity();
         commentRepository.save(comment);
-
         return dto.getId();
     }
 
@@ -60,11 +59,12 @@ public class CommentService {
 
     /* READ */
 //    해당 게시글에 대한 댓글리스트를 가져온다.
-    @Transactional(readOnly = true)
-    public List<CommentDto.Response> findAll(Long id) {
-        Board board = boardRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("해당 게시글이 존재하지 않습니다. id: " + id));
-        List<Comment> comments = board.getComments();
-        return comments.stream().map(CommentDto.Response::new).collect(Collectors.toList());
-    }
+//    @Transactional(readOnly = true)
+//    public List<CommentDto.Response> findAll(Long id) {
+//        Board board = boardRepository.findById(id).orElseThrow(() ->
+//                new IllegalArgumentException("해당 게시글이 존재하지 않습니다. id: " + id));
+//        List<Comment> comments = board.getComments();
+//        System.out.println("comments = " + comments);
+//        return comments.stream().map(CommentDto.Response::new).collect(Collectors.toList());
+//    }
 }
