@@ -119,6 +119,38 @@
                 </ul>
             </form>
         </div>
+        <nav th:if="${comments} != null" aria-label="Page navigation" style="text-align: center;">
+        <ul class="pagination"
+            th:with="start=${T(java.lang.Math).floor(comments.number/10) * 10 + 1},
+                    last=(${start + 9 < comments.totalPages ? start + 9 : comments.totalPages})">
+            <li>
+                <a th:href="@{/boards/{uid}(uid=${board.uid}, page=1)}" aria-label="First">
+                    <span aria-hidden="true">First</span>
+                </a>
+            </li>
+
+            <li th:class="${comments.first} ? 'disabled'">
+                <a th:href="${comments.first} ? '#' :@{/boards/{uid}(uid=${board.uid}, page=${comments.number})}" aria-label="Previous">
+                    <span aria-hidden="true">&lt;</span>
+                </a>
+            </li>
+            <li th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == comments.number + 1} ? 'active'">
+                <a th:href="@{/boards/{uid}(uid=${board.uid}, page=${page})}" th:text="${page}"></a>
+            </li>
+
+            <li th:class="${comments.last} ? 'disabled'">
+                <a th:href="${comments.last} ? '#' : @{/boards/{uid}(uid=${board.uid}, page=${comments.number + 2})}" aria-label="Next">
+                    <span aria-hidden="true">&gt;</span>
+                </a>
+            </li>
+
+            <li>
+                <a th:href="@{/boards/{uid}(uid=${board.uid}, page=${comments.totalPages})}" aria-label="Last">
+                    <span aria-hidden="true">Last</span>
+                </a>
+            </li>
+        </ul>
+        </nav>
         <div class="card-footer">Board Service</div>
     </div>
 

@@ -8,6 +8,10 @@ import boardExample.simpleBoard.repository.BoardRepository;
 import boardExample.simpleBoard.repository.CommentRepository;
 import boardExample.simpleBoard.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,6 +59,14 @@ public class CommentService {
         Comment comment = commentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다. id=" + id));
 
         commentRepository.delete(comment);
+    }
+    @Transactional
+    public Page<Comment> commentpageList(Pageable pageable, Board board) {
+        int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
+//        페이지 번호(0부터 시작하기때문에 ex) 1이라면 0으로 저장된다?), 페이지당 데이터의 수, 정렬방향, uid별로 정렬하라
+        pageable = PageRequest.of(page, 3, Sort.by(Sort.Direction.DESC, "id"));
+        System.out.println("pageable = " + pageable);
+        return commentRepository.findAllByBoard(board, pageable);
     }
 
     /* READ */

@@ -34,6 +34,7 @@ import java.util.Optional;
 @RequestMapping("/boards")
 public class BoardController {
     private final BoardService boardService;
+    private final CommentService commentService;
     private final HttpSession httpSession;
 
     //목록 조회
@@ -65,7 +66,7 @@ public class BoardController {
     //게시글 조회(게시글 상세)
     //Long형의 uid가 의미하는 것은 게시판의 uid값에 해당(해당 uid의 게시판을 찾기 위해서 받아주는 파라미터)
     @GetMapping("/{uid}")
-    public String board(@PathVariable("uid") Long uid, Model model, Authentication authentication) {
+    public String board(@PathVariable("uid") Long uid, Model model, Authentication authentication, @PageableDefault Pageable pageable) {
         MemberDto.UserSessionDto user = (MemberDto.UserSessionDto) httpSession.getAttribute("user");
         Long id = null;
         // 구글 로그인일때(session의 유무로 로그인 상태를 판단하고 각 상태에 따라 코딩을 해주었다.) -> 내가 모를 원인이 있을수도 있음.
@@ -83,14 +84,13 @@ public class BoardController {
                 model.addAttribute("userid", member);
             }
         }
+        Page<Comment> list = null;
         boardService.viewCount(uid);
         Optional<Board> result = boardService.BoardOne(uid);
         Board board = result.get();
-        /* 댓글 조회 관련*/
-        List<Comment> comments = board.getComments();
-        // 댓글 작성자랑 로그인한 사람이랑 같은지 하나하나 확인을 위해 List로 선언하자.
-        if (comments != null && !comments.isEmpty()) {
-            model.addAttribute("comments", comments);
+        list = commentService.commentpageList(pageable, board);
+        if (list != null && !list.isEmpty()) {
+            model.addAttribute("comments", list);
         }
 //        board의 외래키인 u_no와 Long형에 해당하는 로그인한 아이디의 u_no와 비교(name으로 비교시 동명이인이 있을 수 있기떄문에 불가)
         if (id != null) {
