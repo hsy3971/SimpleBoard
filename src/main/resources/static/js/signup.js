@@ -5,9 +5,6 @@ function usernameCheck() {
         $("#uid").focus();
         return false;
     }
-//    https://kuzuro.blogspot.com/2018/04/16.html
-// 문제점 : 편법으로 사용가능한 아이디를 치고 중복체크를 한다음에 다시 중복되는 아이디를 치고 가입을 하면 가입이 완료
-// 위의 문제점을 막기위해 keyup을 통해서 값을 치기만 하더라도 회원가입 버튼을 막는다.
     $("#uid").keyup(function(){
          $("#submit").attr("disabled", "disabled");
     });

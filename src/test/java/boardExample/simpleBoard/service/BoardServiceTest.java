@@ -25,7 +25,6 @@ public class BoardServiceTest {
     @Autowired BoardService boardService;
     @Autowired MemberRepository memberRepository;
 
-//    Board의 uid는 자동으로 생성되기때문에 null값을 주어 순차적인 수에 그대로 할당할려고 했는데 null값을 줘버리면 boards.getUid조회가 안됨
     @Test
     public void 게시글생성() throws Exception {
         Member member = Member.builder().uname("HongSung").uid("foodb00").u_pw("0000").email("foodb00@naver.com").u_auth("USER").build();
@@ -88,7 +87,6 @@ public class BoardServiceTest {
                 .viewcnt(0)
                 .member(member)
                 .build();
-//        왜 update를 시켜주는데 값이 안변하지? 이전 값이 그대로있는데 뭘 잘못해준건가 -> BoardUpdate구문도 되게 이상하다...(이게 아마 ajax때문에 이렇게 바꿨을 확률도 있어서 웬만하면 건들지마라)
         boardService.BoardUpdate(save.getUid(), boards2);
         System.out.println("save getSub = " + save.getSubject());
         System.out.println("savee getCont = " + save.getContent());

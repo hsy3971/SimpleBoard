@@ -33,9 +33,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * @param http
      * @throws Exception
      */
-    // Encoded password does not look like BCrypt 에러발생
-    // 패스워드를 암호화시키는 것이 안된다는 소리... 한참을 헤메다 오류발견
-    // 코드에는 문제가 없었으나 밑에 메서드인 configure안에 http밑의 코드들이 알맞게 들여쓰기가 되어있지 않았다...(ㅈㄴ허무하네)
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -43,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable() //로그인 창(사이트 간 요청 위조(Cross-Site Request Forgery) 공격 방지 기능 키기)
                 .authorizeRequests()
-                    .antMatchers( "/login", "/signup","/boards", "/access_denied", "/resources/**").permitAll() // 로그인 권한은 누구나, resources파일도 모든권한
+                    .antMatchers( "/login", "/signup","/boards", "/access_denied", "/resources/**").permitAll()
                     // USER, ADMIN 접근 허용(보류)
                     .antMatchers("/userAccess").hasRole("USER")
                     .antMatchers("/userAccess").hasRole("ADMIN")
@@ -53,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .loginPage("/login")
                     //구현한 로그인 페이지
                     .loginProcessingUrl("/login_proc")
-                    //로그인성공시 제공할 페이지
+                    //로그인 성공시 제공할 페이지
                     .defaultSuccessUrl("/boards")
                     .and()
                 .logout()

@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-
 import javax.persistence.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -32,8 +30,6 @@ public class Member implements UserDetails {
     private String append_date;
     private String update_date;
 
-//    Spring은 Front로 데이터를 보낼 때 Json으로 보내야하는 상황(RESTAPI postman)이면 Jackson을 통해 Json 형태로 변환하는데 순환구조일 경우 에러가 떠버린다.
-//    위의 코드처럼 해당 연관관계 매핑 부분에 @JsonIgnore을 붙여주면 순환 참조 관계를 막을 수 있다
     @JsonIgnore
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
@@ -50,9 +46,8 @@ public class Member implements UserDetails {
         this.email = email;
     }
 
-//  이미 여기서부터 잘못됨... 오류가 Timestamp 솰라솰라했는데 여기부터 천천히 다시 실행보기
 
-    /* 해당 엔티티를 저장하기 이전에 실행 */
+    // 해당 엔티티를 저장하기 이전에 실행
     @PrePersist
     public void onPrePersist(){
         SimpleDateFormat format = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:sss");
@@ -60,7 +55,7 @@ public class Member implements UserDetails {
         this.append_date = format.format(time);
         this.update_date = this.append_date;
     }
-    /* 해당 엔티티를 업데이트 하기 이전에 실행*/
+    // 해당 엔티티를 업데이트 하기 이전에 실행
     @PreUpdate
     public void onPreUpdate(){
         SimpleDateFormat format = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:sss");
@@ -74,7 +69,7 @@ public class Member implements UserDetails {
         return this;
     }
 
-    /* 유저의 권한 목록 */
+    // 유저의 권한 목록
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority(this.u_auth));
@@ -85,14 +80,11 @@ public class Member implements UserDetails {
         return this.u_pw;
     }
 
-    // 시큐리티의 userName
-    // -> 따라서 얘는 인증할 때 id를 봄
     @Override
     public String getUsername() {
         return this.uid;
     }
 
-    // Vo의 userName
     public String getUserName(){
         return this.uname;
     }

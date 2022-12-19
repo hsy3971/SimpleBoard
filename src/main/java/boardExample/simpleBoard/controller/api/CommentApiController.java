@@ -18,7 +18,7 @@ import java.util.List;
 public class CommentApiController {
     private final CommentService commentService;
     private final HttpSession httpSession;
-// RequestBody : JSON데이터를 원하는 타입의 객체로 변환해야하는 경우 주로 사용.
+
     //create
     @PostMapping("/boards/{id}/comments")
     public ResponseEntity commentSave(@PathVariable("id") Long id, @RequestBody CommentDto commentDto, Authentication authentication) {
@@ -46,6 +46,25 @@ public class CommentApiController {
     public ResponseEntity delete(@PathVariable Long bid, @PathVariable Long cid) {
         commentService.delete(cid);
         return ResponseEntity.ok(cid);
+    }
+
+    @PostMapping(value = "/boards/{boardId}/comments/reply")
+    public ResponseEntity findAllCommentsByBoardId(@PathVariable("boardId") Long boardId, @RequestBody CommentDto commentDto, Authentication authentication) {
+        MemberDto.UserSessionDto user = (MemberDto.UserSessionDto) httpSession.getAttribute("user");
+        String uid = null;
+
+        if (user != null) {
+            uid = user.getUid();
+        }
+        else {
+            Member member = (Member) authentication.getPrincipal();  //userDetail 객체를 가져옴
+            uid = member.getUid();
+        }
+        Long result = commentService.parentSave(uid, boardId, commentDto.getId(), commentDto);
+
+        List<CommentDto> list = commentService.findCommentsByTicketId(boardId);
+        System.out.println("list = " + list);
+        return ResponseEntity.ok(result);
     }
 
 //    // read

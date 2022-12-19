@@ -8,8 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
@@ -20,17 +18,12 @@ public class BoardDto{
     private String subject;
     private String content;
     private String name;
-    //viewcnt가 DB에서는 int형으로 null값을 허용했는데 자바에서는 Primitive Type(boolean, byte, short, int, long, float, double, char)으로 되어있기 때문에 null값을 허용하면 안된다.
-    //그래서 int->Integer로 변경하니 오류가 해결되었다.
     private Integer viewcnt;
 
     private String regdate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
     private String updatedate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
     private Member member;
 
-    //필요한 Entity는 toEntity()로 추가하면 됩니다.
-    //dto에서 필요한 부분을 빌더패턴을 통해 entity로 만듭니다.
-    //dto가 저장될 때 entity로 변환되어 저장되어야 하기 때문에 toEntity 메소드도 만들어줬다.
 //    dto -> entity
     public Board toEntity() {
         Board build = Board.builder()

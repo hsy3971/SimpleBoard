@@ -4,8 +4,7 @@
     <meta charset="utf-8">
     <link th:href="@{/css/bootstrap.min.css}"
           href="../css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap cdn 설정 -->
-    <!--    깔쌈한 스타일(전체 html에 적용시켜줌)-->
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -18,8 +17,6 @@
         <div class="text-right">
             <ul>
                 <span th:if="${info} != null" class="mx-3" th:text="|${info} 님 안녕하세요!!!|"></span>
-                <!--                <a class="nav-link btn btn-warning" sec:authorize="isAnonymous()" th:href="@{/login}">로그인</a>-->
-                <!--                <a class="nav-link btn btn-warning" sec:authorize="isAuthenticated()" th:href="@{/logout}">로그아웃</a>-->
             </ul>
         </div>
     </nav>
@@ -32,7 +29,6 @@
     </br>
     <nav id ="nav2">
         <div class="text-right">
-            <!--                /oauth2/authorization/google : 스프링 시큐리티에서 기본적으로 제공하는 로그인 URL-->
             <a href="/oauth2/authorization/google" sec:authorize="isAnonymous()" role="button" class="btn btn-outline-danger"><img id="img1" src="/img/google.ico" style="display: block; margin: 0 auto; width:25px; height:25px;"/>로그인</a>
             <a href="/oauth2/authorization/naver" sec:authorize="isAnonymous()" role="button" class="btn btn-outline-success"><img id="img2" src="/img/naver2.ico" style="display: block; margin: 0 auto; width:25px; height:25px;"/>로그인</a>
             <a class="nav-link btn btn-outline-warning" sec:authorize="isAnonymous()" th:href="@{/signup}"><img id="img3" src="/img/signup3.ico" style="display: block; margin: 0 auto; width:25px; height:25px;"/>회원가입</a>

@@ -15,7 +15,6 @@ public class MemberDto {
     private Long uno;
     @NotEmpty(message = "아이디를 입력해주세요")
     private String uid;
-//    @Size(min = 4, max = 20, message = "비밀번호는 4자 이상 20자 이하로 입력해주세요.")
     @NotEmpty(message = "비밀번호를 입력해주세요")
     private String u_pw;
     @NotEmpty(message = "이름을 입력해주세요")
@@ -53,7 +52,7 @@ public class MemberDto {
         this.email = email;
     }
 
-//    잘되나 확인해보기 -> CustomOAuth2UserService에 세션을 저장하기 위한 dto
+//  CustomOAuth2UserService에 세션을 저장하기 위한 dto
     @Getter
     public static class UserSessionDto implements Serializable {
 

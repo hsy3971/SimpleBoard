@@ -11,9 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-//rest api에서는 @controller @restcontroller 선언한 두 개의 클래스를 만들고
-//@controller 클레스는 view만 처리하고 @restcontroller 클래스는 데이터 처리에 사용하면 된다.
-// RestController는 단순문자열, JSON, XML을 반환한다.
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
