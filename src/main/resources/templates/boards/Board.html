@@ -19,7 +19,7 @@
     </style>
 </head>
 <body>
-<div class="container">
+<div class="container" style="max-width: 1000px">
     <div th:replace="fragments/navbar :: navbarFragment"></div>
     <!--추가-->
     <h2 th:if="${param.status}" th:text="'저장 완료'"></h2>
@@ -68,20 +68,22 @@
     <br/>
     <div class="card">
         <div class="card-header">댓글 목록</div>
-        <div th:each="comment:${comments}">
+        <div th:each="comment:${comments}" th:with="step=${comment.step}">
             <ul id="comment-box" class="list-group">
                 <li id="comment--1" class="list-group-item d-flex justify-content-between">
+<!--                step만큼 반복하여 -> 기호를 달아준다-->
+                    <div th:if="${comment.step}!=0" th:each="page: ${#numbers.sequence(0, step-1)}" class="bi bi-arrow-return-right"></div>
                     <p th:attr="class = 'collapse multi-collapse'+${comment.id}+' show'" th:text="${comment.comment}"></p>
                     <div class="d-flex">
                         <p style="font-size:8px;" class="font-italic" th:text="${comment.member.uname}"></p>
                         &nbsp;
                         <p style="font-size:8px;" class="font-italic" th:text="${comment.modified_date}"></p>
                         &nbsp;
-                        <span><a th:if="${comment.member.uid} == ${userid?.uid}" type="button" data-toggle="collapse" th:attr="data-target='.multi-collapse'+${comment.id}" class="bi bi-pencil-square"></a></span>
+                        <span><a th:if="${comment.member.uid} == ${userid?.uid}" type="button" data-toggle="collapse" th:attr="data-target='.multi-collapse'+${comment.id}" class="btn btn-light btn-xs">수정</a></span>
                         &nbsp;
-                        <span><a th:if="${comment.member.uid} == ${userid?.uid}" type="button" class="bi bi-x-square" th:bid="${board.uid}" th:cid="${comment.id}" th:onclick="main.commentDelete(this.getAttribute('bid'),this.getAttribute('cid'))"></a></span>
+                        <span><a th:if="${comment.member.uid} == ${userid?.uid}" type="button" class="btn btn-light btn-xs" th:bid="${board.uid}" th:cid="${comment.id}" th:onclick="main.commentDelete(this.getAttribute('bid'),this.getAttribute('cid'))">삭제</a></span>
                         &nbsp;&nbsp;
-                        <span><a th:if="${comment.member.uid} == ${userid?.uid}" type="button" data-toggle="collapse" th:attr="data-target='.multi-collapse'+${comment.id}+${comment.board.uid}" class="bi bi-pencil-square"></a></span>
+                        <span><a th:if="${comment.member.uid} == ${userid?.uid}" type="button" data-toggle="collapse" th:attr="data-target='.multi-collapse'+${comment.id}+${comment.board.uid}" class="btn btn-light btn-xs">답글</a></span>
                         <form id="form1">
                             <input type="hidden" id="cId" th:value="${comment.id}">
                             <input type="hidden" id="pId" th:value="${board.uid}">
@@ -107,30 +109,29 @@
         <nav th:if="${comments} != null" aria-label="Page navigation" style="text-align: center;">
         <ul class="pagination"
             th:with="start=${T(java.lang.Math).floor(comments.number/10) * 10 + 1},
-                    last=(${start + 9 < comments.totalPages ? start + 9 : comments.totalPages})">
+                    last=(${start + 9 < totalPages ? start + 9 : totalPages})">
             <li>
-                <a th:href="@{/boards/{uid}(uid=${board.uid}, page=1)}" aria-label="First">
+                <a th:href="@{/boards/{uid}(uid=${board.uid}, page=0)}" aria-label="First">
                     <span aria-hidden="true">First</span>
                 </a>
             </li>
-
-            <li th:class="${comments.first} ? 'disabled'">
-                <a th:href="${comments.first} ? '#' :@{/boards/{uid}(uid=${board.uid}, page=${comments.number})}" aria-label="Previous">
+            <li th:class="${comments.number==0} ? 'disabled'">
+                <a th:href="${comments.number==0} ? '#' :@{/boards/{uid}(uid=${board.uid}, page=${comments.number-1})}" aria-label="Previous">
                     <span aria-hidden="true">&lt;</span>
                 </a>
             </li>
-            <li th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == comments.number + 1} ? 'active'">
-                <a th:href="@{/boards/{uid}(uid=${board.uid}, page=${page})}" th:text="${page}"></a>
+            <li th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == comments.number+1} ? 'active'">
+                <a th:href="@{/boards/{uid}(uid=${board.uid}, page=${page-1})}" th:text="${page}"></a>
             </li>
 
-            <li th:class="${comments.last} ? 'disabled'">
-                <a th:href="${comments.last} ? '#' : @{/boards/{uid}(uid=${board.uid}, page=${comments.number + 2})}" aria-label="Next">
+            <li th:class="${totalPages==comments.number+1} ? 'disabled'">
+                <a th:href="${totalPages==comments.number+1} ? '#' : @{/boards/{uid}(uid=${board.uid}, page=${comments.number + 1})}" aria-label="Next">
                     <span aria-hidden="true">&gt;</span>
                 </a>
             </li>
 
             <li>
-                <a th:href="@{/boards/{uid}(uid=${board.uid}, page=${comments.totalPages})}" aria-label="Last">
+                <a th:href="@{/boards/{uid}(uid=${board.uid}, page=${totalPages-1})}" aria-label="Last">
                     <span aria-hidden="true">Last</span>
                 </a>
             </li>
@@ -151,6 +152,7 @@
         </div>
     </div>
     </br>
+
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" src="/js/comment.js"></script>

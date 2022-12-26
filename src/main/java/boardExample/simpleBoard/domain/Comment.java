@@ -35,32 +35,36 @@ public class Comment {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Enumerated(value = EnumType.STRING)
-    private DeleteStatus isdeleted;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Comment parent;
 
     @OneToMany(mappedBy = "parent", orphanRemoval = true)
     private List<Comment> children = new ArrayList<>();
-
+//  그륩
+    private Long ref;
+//  그룹순서
+    private Long reforder;
+//  단계
+    private Long step;
+//  자식수
+    private Long answernum;
 
     @Builder
-    public Comment(Long id, String comment, Board board, Member member, Comment parent) {
+    public Comment(Long id, String comment, Board board, Member member, Comment parent, Long ref, Long reforder, Long step, Long answernum) {
         this.id = id;
         this.comment = comment;
         this.board = board;
         this.member = member;
         this.parent = parent;
+        this.ref = ref;
+        this.reforder = reforder;
+        this.step = step;
+        this.answernum = answernum;
     }
     public void update(String comment, String modified_date) {
         this.comment = comment;
         this.modified_date = modified_date;
-    }
-
-    public void changeDeletedStatus(DeleteStatus deleteStatus) {
-        this.isdeleted = deleteStatus;
     }
 
 }

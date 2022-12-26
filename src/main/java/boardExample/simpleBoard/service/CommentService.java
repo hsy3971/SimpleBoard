@@ -2,7 +2,6 @@ package boardExample.simpleBoard.service;
 
 import boardExample.simpleBoard.domain.Board;
 import boardExample.simpleBoard.domain.Comment;
-import boardExample.simpleBoard.domain.DeleteStatus;
 import boardExample.simpleBoard.domain.Member;
 import boardExample.simpleBoard.dto.CommentDto;
 import boardExample.simpleBoard.repository.BoardRepository;
@@ -10,9 +9,7 @@ import boardExample.simpleBoard.repository.CommentRepository;
 import boardExample.simpleBoard.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,37 +24,91 @@ public class CommentService {
     private final MemberRepository memberRepository;
     private final BoardRepository boardRepository;
 
-//    CREATE
+    //    CREATE
     @Transactional
     public Long commentSave(String uid, Long id, CommentDto dto) {
         Optional<Member> userid = memberRepository.findByUid(uid);
         Member member = userid.get();
         Board board = boardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("댓글 쓰기 실패: 해당 게시글이 존재하지 않습니다." + id));
+//      ref의 제일 큰값을 찾고 있다면 MAX값을, 없다면 0을 return
+        Long commentRef = commentRepository.findByRef(board.getUid());
 
-        Comment parent = null;
         dto.setMember(member);
         dto.setBoard(board);
-//      자식 댓글인 경우
-        if (dto.getParent() != null) {
-            parent = commentRepository.findCommentByIdWithParent(dto.getId()).get();
-            dto.updateParent(parent);
-        }
+        dto.setRef(commentRef+1L);
+        dto.setStep(0L);
+        dto.setReforder(0L);
+        dto.setAnswernum(0L);
+
         Comment comment = dto.toEntity();
         commentRepository.save(comment);
         return dto.getId();
     }
-
-    public Long parentSave(String uid, Long id, Long cid, CommentDto dto) {
+    //  cid가 해당 부모댓글이다. 삭제할때만 최상의 루트노드를 삭제하면 다같이 삭제되게끔? 하면 될듯
+    public Long parentSave(String uid, Long id, Long cid, CommentDto.Response response) {
         Member member = memberRepository.findByUid(uid).get();
         Board board = boardRepository.findById(id).get();
+        CommentDto dto = CommentDto.builder()
+                .comment(response.getComment())
+                .board(board)
+                .member(member)
+                .build();
         dto.setMember(member);
         dto.setBoard(board);
+
 //      부모인 댓글을 찾아서 updateParent에 넣어준다
         Comment comment = commentRepository.findById(cid).get();
+//      대댓글 처음 시작부분에 commentId는 부모댓글id 이겠지?
+        Long refOrderResult  = refOrderAndUpdate(comment);
+        if (refOrderResult == null) {
+            return null;
+        }
+//      cid가 null일수가 없다.
         dto.updateParent(comment);
+        dto.setRef(comment.getRef());
+        dto.setStep(comment.getStep()+1L);
+        dto.setReforder(refOrderResult);
+        dto.setAnswernum(0L);
+        //부모댓글의 자식컬럼수 + 1 업데이트
+        commentRepository.updateAnswerNum(comment.getId(), comment.getAnswernum());
         Comment cmt = dto.toEntity();
         commentRepository.save(cmt);
         return cmt.getId();
+    }
+
+    private Long refOrderAndUpdate(Comment comment) {
+
+        Long saveStep = comment.getStep() + 1l;
+        Long refOrder = comment.getReforder();
+        Long answerNum = comment.getAnswernum();
+        Long ref = comment.getRef();
+
+        //부모 댓글그룹의 answerNum(자식수)
+        Long answerNumSum = commentRepository.findBySumAnswerNum(ref);
+        //SELECT SUM(answerNum) FROM BOARD_COMMENTS WHERE ref = ?1
+        //부모 댓글그룹의 최댓값 step
+        Long maxStep = commentRepository.findByNvlMaxStep(ref);
+        //SELECT MAX(step) FROM BOARD_COMMENTS WHERE ref = ?1
+
+        //저장할 대댓글 step과 그룹내의최댓값 step의 조건 비교
+        /*
+        step + 1 < 그룹리스트에서 max step값  AnswerNum sum + 1 * NO UPDATE
+        step + 1 = 그룹리스트에서 max step값  refOrder + AnswerNum + 1 * UPDATE
+        step + 1 > 그룹리스트에서 max step값  refOrder + 1 * UPDATE
+        */
+        if (saveStep < maxStep) {
+            return answerNumSum + 1l;
+        } else if (saveStep == maxStep) {
+            commentRepository.updateRefOrderPlus(ref, refOrder + answerNum);
+            //UPDATE BOARD_COMMENTS SET refOrder = refOrder + 1 WHERE ref = ?1 AND refOrder > ?2
+            return refOrder + answerNum + 1l;
+        } else if (saveStep > maxStep) {
+            commentRepository.updateRefOrderPlus(ref, refOrder);
+            //UPDATE BOARD_COMMENTS SET refOrder = refOrder + 1 WHERE ref = ?1 AND refOrder > ?2
+            return refOrder + 1l;
+        }
+
+        return null;
     }
 
     /* UPDATE */
@@ -73,50 +124,24 @@ public class CommentService {
     @Transactional
     public void delete(Long id) {
         Comment comment = commentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다. id=" + id));
-
+        if (comment.getParent() != null) {
+            Long parentId = comment.getParent().getId();
+            commentRepository.updateAnswerNumMinus(parentId);
+        }
+//        commentRepository.updateRefOrderMinus(comment.getRef(), comment.getReforder());
         commentRepository.delete(comment);
     }
-    @Transactional
-    public Page<Comment> commentpageList(Pageable pageable, Board board) {
-        int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
-        pageable = PageRequest.of(page, 3, Sort.by(Sort.Direction.DESC, "id"));
-        return commentRepository.findAllByBoard(board, pageable);
-    }
-    private List<CommentDto> convertNestedStructure(List<Comment> comments) {
-        List<CommentDto> result = new ArrayList<>();
-        Map<Long, CommentDto> map = new HashMap<>();
-        comments.stream().forEach(c -> {
-            CommentDto dto = CommentDto.convertCommentToDto(c);
-            map.put(dto.getId(), dto);
-            if(c.getParent() != null) map.get(c.getParent().getId()).getChildren().add(dto);
-            else result.add(dto);
-        });
-        System.out.println("result = " + result);
-        System.out.println("map = " + map);
-        return result;
-    }
+//    @Transactional
+//    public Page<Comment> commentpageList(Pageable pageable, Board board) {
+//        int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
+////        페이지 번호(0부터 시작하기때문에 ex) 1이라면 0으로 저장된다?), 페이지당 데이터의 수, 정렬방향, uid별로 정렬하라
+//        pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "id"));
+//        return commentRepository.findAllByBoard(board, pageable);
+//    }
 
     @Transactional
-    public void deleteComment(Long commentId) {
-        Comment comment = commentRepository.findCommentByIdWithParent(commentId).orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다. id=" + commentId));
-//      여기 한줄 공백
-        if(comment.getChildren().size() != 0) { // 자식이 있으면 상태만 변경
-            comment.changeDeletedStatus(DeleteStatus.YES);
-        } else { // 삭제 가능한 조상 댓글을 구해서 삭제
-            commentRepository.delete(getDeletableAncestorComment(comment));
-        }
-    }
-
-    private Comment getDeletableAncestorComment(Comment comment) { // 삭제 가능한 조상 댓글을 구함
-        Comment parent = comment.getParent(); // 현재 댓글의 부모를 구함
-        if(parent != null && parent.getChildren().size() == 1 && parent.getIsdeleted() == DeleteStatus.YES)
-            // 부모가 있고, 부모의 자식이 1개(지금 삭제하는 댓글)이고, 부모의 삭제 상태가 TRUE인 댓글이라면 재귀
-            return getDeletableAncestorComment(parent);
-        return comment; // 삭제해야하는 댓글 반환
-    }
-    @Transactional
-    public List<CommentDto> findCommentsByTicketId(Long boardId) {
+    public Page<Comment> findBoardByComments(Long boardId, Pageable pageable) {
         boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다. boardId: " + boardId));
-        return convertNestedStructure(commentRepository.findCommentByTicketId(boardId));
+        return commentRepository.findAllByBoardByComments(boardId, pageable);
     }
 }

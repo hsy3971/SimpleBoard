@@ -6,6 +6,7 @@ import boardExample.simpleBoard.domain.Member;
 import boardExample.simpleBoard.dto.BoardDto;
 import boardExample.simpleBoard.dto.MemberDto;
 import boardExample.simpleBoard.exception.BadRequestException;
+import boardExample.simpleBoard.repository.CommentRepository;
 import boardExample.simpleBoard.repository.MemberRepository;
 import boardExample.simpleBoard.service.BoardService;
 import boardExample.simpleBoard.service.CommentService;
@@ -61,7 +62,7 @@ public class BoardController {
     }
     //게시글 조회(게시글 상세)
     @GetMapping("/{uid}")
-    public String board(@PathVariable("uid") Long uid, Model model, Authentication authentication, @PageableDefault Pageable pageable) {
+    public String board(@PathVariable("uid") Long uid, Model model, Authentication authentication,@PageableDefault Pageable pageable) {
         MemberDto.UserSessionDto user = (MemberDto.UserSessionDto) httpSession.getAttribute("user");
         Long id = null;
 
@@ -79,13 +80,22 @@ public class BoardController {
         }
         Page<Comment> list = null;
         boardService.viewCount(uid);
-        Optional<Board> result = boardService.BoardOne(uid);
-        Board board = result.get();
-        list = commentService.commentpageList(pageable, board);
+        Board board = boardService.BoardOne(uid).get();
+        list = commentService.findBoardByComments(board.getUid(), pageable);
+//        list = commentService.commentpageList(pageable, board);
+        List<Comment> cnt = board.getComments();
+        int cnt_size = cnt.size();
+        int list_size = list.getSize();
+        int mok = cnt_size / list_size;
+        int res = cnt_size % list_size;
 
-        if (list != null && !list.isEmpty()) {
+        if (res != 0) {
+            mok += 1;
+        }
+        if (cnt_size != 0) {
             model.addAttribute("comments", list);
         }
+        model.addAttribute("totalPages", mok);
 
         if (id != null) {
             if (id.equals(board.getMember().getUno())) {

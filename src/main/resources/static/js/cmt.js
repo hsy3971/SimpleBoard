@@ -44,7 +44,7 @@ const main = {
         const data = {
             postsId: form2.querySelector('#boardsId').value,
             comment: form2.querySelector('#comment-content2').value,
-            id: form2.querySelector('#parentsId').value,
+            parentId: form2.querySelector('#parentsId').value,
         }
         if (!data.comment || data.comment.trim() === "") {
             alert("공백 또는 입력하지 않은 부분이 있습니다.");
