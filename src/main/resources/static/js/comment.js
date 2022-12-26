@@ -8,7 +8,9 @@ function commentCreate() {
     if (!data.comment || data.comment.trim() === "") {
         alert("댓글을 입력해주세요!!");
         return false;
-    } else {
+    }
+    const con_check = confirm("등록하시겠습니까?");
+    if (con_check == true) {
         $.ajax({
             type: 'POST',
             url: '/api/boards/' + data.postsId + '/comments',
