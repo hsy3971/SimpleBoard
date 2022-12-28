@@ -5,7 +5,9 @@ import lombok.Getter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 //@NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,6 +24,9 @@ public class Board {
     @Column(columnDefinition = "integer default 0", length = 11)
     private Integer viewcnt;
 
+    @Column(columnDefinition = "integer default 0")
+    private Integer likecnt;
+
     private String regdate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
 
     private String updatedate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
@@ -31,6 +36,9 @@ public class Board {
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
+
+    @OneToMany(mappedBy = "likeBoard", cascade = CascadeType.ALL)
+    Set<Like> likes = new HashSet<>();
 
     public Board(){
 

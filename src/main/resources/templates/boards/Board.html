@@ -23,6 +23,19 @@
     <div th:replace="fragments/navbar :: navbarFragment"></div>
     <!--추가-->
     <h2 th:if="${param.status}" th:text="'저장 완료'"></h2>
+    <!-- 로그인 유저와 작성자가 동일하지 않다면-->
+    <div th:if="${writer} != true and ${userid} != null">
+        <!-- 좋아요 -->
+        <input type="hidden" id="like_check" th:value="${like}">
+        <img th:id="likeImg" src="/img/heart.ico" alt="" width="30px" height="30px">
+        <span th:text="${board.likecnt}"></span>
+    </div>
+    <!-- 로그인하지 않은 유저라면 -->
+    <div th:if="${userid} == null">
+        <img id="loginCheck" src="/img/heart.ico" alt="" width="30px" height="30px">
+        <span th:text="${board.likecnt}"></span>
+    </div>
+    &nbsp;
     <form class="card text-dark bg-light">
         <div class="card-header d-flex justify-content-between">
             <label for="boardId" th:text="|번호 : ${board.uid}|"></label>
@@ -158,5 +171,6 @@
 <script type="text/javascript" src="/js/comment.js"></script>
 <script type="text/javascript" src="/js/cmt.js"></script>
 <script type="text/javascript" src="/js/board.js"></script>
+<script type="text/javascript" src="/js/likecnt.js"></script>
 </body>
 </html>

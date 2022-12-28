@@ -22,7 +22,7 @@ public class CommentDto{
     private Member member;
     //  둘다 commentDto로 선언하는게 맞나?
     private Comment parent;
-    //    스읍...좀그렇다
+    //  <CommentDto>형인거 맞냐? parent는 Comment인데... 생각해보기
     private List<CommentDto> children = new ArrayList<>();
     private Long ref;
     private Long reforder;

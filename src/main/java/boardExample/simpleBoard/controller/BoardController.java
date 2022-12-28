@@ -22,6 +22,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +33,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @RequestMapping("/boards")
 public class BoardController {
+    private final MemberService memberService;
     private final BoardService boardService;
     private final CommentService commentService;
     private final HttpSession httpSession;
@@ -62,26 +65,36 @@ public class BoardController {
     }
     //게시글 조회(게시글 상세)
     @GetMapping("/{uid}")
-    public String board(@PathVariable("uid") Long uid, Model model, Authentication authentication,@PageableDefault Pageable pageable) {
+    public String board(@PathVariable("uid") Long uid, Model model, Authentication authentication, @PageableDefault Pageable pageable, HttpServletRequest request, HttpServletResponse response) {
         MemberDto.UserSessionDto user = (MemberDto.UserSessionDto) httpSession.getAttribute("user");
+        Board board = boardService.BoardOne(uid).get();
         Long id = null;
+        boolean like = false;
 
         if (user != null) {
             id = user.getUno();
+            Member likeMember = memberService.findByUno(id);
             model.addAttribute("userid", user);
+//            현재 로그인한 유저가 이 게시물을 좋아요 했는지 안 했는지 여부 확인
+            like = boardService.findLike(board, likeMember);
         }
         // 일반 로그인일때
         else {
             if (authentication != null) {
                 Member member = (Member) authentication.getPrincipal();
                 id = member.getUno();
+                Member likeMember = memberService.findByUno(id);
                 model.addAttribute("userid", member);
+//                현재 로그인한 유저가 이 게시물을 좋아요 했는지 안 했는지 여부 확인
+                like = boardService.findLike(board, likeMember);
             }
         }
         Page<Comment> list = null;
-        boardService.viewCount(uid);
-        Board board = boardService.BoardOne(uid).get();
-        list = commentService.findBoardByComments(board.getUid(), pageable);
+//        boardService.viewCount(uid);
+//        uid:게시판의 id
+        Long bId = board.getUid();
+        boardService.updateView(bId, request, response);
+        list = commentService.findBoardByComments(bId, pageable);
 //        list = commentService.commentpageList(pageable, board);
         List<Comment> cnt = board.getComments();
         int cnt_size = cnt.size();
@@ -103,7 +116,7 @@ public class BoardController {
             }
         }
         model.addAttribute("board", board);
-
+        model.addAttribute("like", like);
         return "boards/Board";
     }
 
