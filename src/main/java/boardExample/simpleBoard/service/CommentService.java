@@ -58,12 +58,10 @@ public class CommentService {
 
 //      부모인 댓글을 찾아서 updateParent에 넣어준다
         Comment comment = commentRepository.findById(cid).get();
-//      대댓글 처음 시작부분에 commentId는 부모댓글id 이겠지?
         Long refOrderResult  = refOrderAndUpdate(comment);
         if (refOrderResult == null) {
             return null;
         }
-//      cid가 null일수가 없다.
         dto.updateParent(comment);
         dto.setRef(comment.getRef());
         dto.setStep(comment.getStep()+1L);
@@ -131,13 +129,6 @@ public class CommentService {
 //        commentRepository.updateRefOrderMinus(comment.getRef(), comment.getReforder());
         commentRepository.delete(comment);
     }
-//    @Transactional
-//    public Page<Comment> commentpageList(Pageable pageable, Board board) {
-//        int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
-////        페이지 번호(0부터 시작하기때문에 ex) 1이라면 0으로 저장된다?), 페이지당 데이터의 수, 정렬방향, uid별로 정렬하라
-//        pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "id"));
-//        return commentRepository.findAllByBoard(board, pageable);
-//    }
 
     @Transactional
     public Page<Comment> findBoardByComments(Long boardId, Pageable pageable) {

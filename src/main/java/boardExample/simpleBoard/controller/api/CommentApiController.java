@@ -21,7 +21,6 @@ import javax.servlet.http.HttpSession;
 public class CommentApiController {
     private final CommentService commentService;
     private final HttpSession httpSession;
-    // RequestBody : JSON데이터를 원하는 타입의 객체로 변환해야하는 경우 주로 사용.
     //create
     @PostMapping("/boards/{id}/comments")
     public ResponseEntity commentSave(@PathVariable("id") Long id, @RequestBody CommentDto commentDto, Authentication authentication) {

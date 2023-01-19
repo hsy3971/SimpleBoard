@@ -20,9 +20,8 @@ public class CommentDto{
     private String modified_date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
     private Board board;
     private Member member;
-    //  둘다 commentDto로 선언하는게 맞나?
     private Comment parent;
-    //  <CommentDto>형인거 맞냐? parent는 Comment인데... 생각해보기
+
     private List<CommentDto> children = new ArrayList<>();
     private Long ref;
     private Long reforder;
@@ -51,7 +50,6 @@ public class CommentDto{
         this.board = board;
         this.member = member;
     }
-    // 금단의 setter...
     public void setBoard(Board board) {
         this.board = board;
     }

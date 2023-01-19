@@ -1,17 +1,11 @@
 package boardExample.simpleBoard.repository;
 
-import boardExample.simpleBoard.domain.Board;
 import boardExample.simpleBoard.domain.Comment;
-import boardExample.simpleBoard.domain.Member;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 public interface CommentRepository extends JpaRepository<Comment, Long>, CustomCommentRepository {
 //  댓글 페이징(게시판별 페이징을 위해 findAllBy를 씀)
