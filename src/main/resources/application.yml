@@ -8,8 +8,21 @@ spring:
         format_sql: true
   profiles:
     include: oauth, secret
+  servlet:
+    multipart:
+      # 파일 업로드 기능여부 선택
+      enabled: true
+      # 파일 하나의 최대 크기
+      max-file-size: 100MB
+      # 한번에 최대 업로드 가능 용량
+      max-request-size: 100MB
+      location: C:\tempImg
 #server:
 #  port: 8083
 logging.level:
   org.hibernate.SQL: debug
   org.hibernate.type: trace
+com:
+  example:
+    upload:
+      path: C:\tempImg\

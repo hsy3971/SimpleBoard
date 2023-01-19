@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8">
     <link th:href="@{/css/bootstrap.min.css}"
@@ -17,27 +17,30 @@
 </head>
 <body>
 
-<div class="container">
+<div class="container" style="max-width: 1000px">
     <div th:replace="fragments/navbar :: navbarFragment"> </div>
-    <form th:action th:object="${board}">
-        <div>
-            <input type="hidden" id="member" class="form-control"  th:field="*{member}">
-        </div>
-
+    <form id="createForm" th:object="${board}" enctype="multipart/form-data">
         <div>
             <label for="subject" th:text="#{label.board.subject}">제목</label>
-            <input type="text" id="subject" th:field="*{subject}" class="form-control" placeholder="제목을 입력하세요.">
+            <input type="text" id="subject" name="subject" th:field="*{subject}" class="form-control" placeholder="제목을 입력하세요.">
             <br/>
         </div>
         <div>
             <label for="name" th:text="|작성자 : ${board.name}|"></label>
-            <input type="hidden" id="name" class="form-control"  th:field="*{name}">
+            <input type="hidden" id="name" name="name" class="form-control"  th:field="*{name}">
         </div>
         <div>
             <label for="content" th:text="#{label.board.contents}">내용</label>
-            <textarea cols="150" rows="10" id="content" th:field="*{content}" class="form-control" placeholder="내용을 입력하세요.">
+            <textarea cols="150" rows="10" id="content" name="content" th:field="*{content}" class="form-control" placeholder="내용을 입력하세요.">
             </textarea>
         </div>
+        <div>
+            <label for="imageFiles[]" th:text="#{label.board.image}">이미지</label>
+            <input id="imageFiles[]" type="file" name="imageFiles[]" multiple="multiple"/>
+            <label for="generalFiles[]" th:text="#{label.board.file}">첨부파일</label>
+            <input id="generalFiles[]" type="file" name="generalFiles[]" multiple="multiple"/>
+        </div>
+    </form>
         <hr class="my-4">
 
         <div class="row">
@@ -51,7 +54,6 @@
                         type="button" th:text="#{button.cancel}">취소</button>
             </div>
         </div>
-    </form>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" src="/js/board.js"></script>

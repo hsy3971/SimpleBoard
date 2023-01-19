@@ -1,17 +1,12 @@
 package boardExample.simpleBoard.controller;
 
-import boardExample.simpleBoard.domain.Board;
-import boardExample.simpleBoard.domain.Comment;
-import boardExample.simpleBoard.domain.Member;
+import boardExample.simpleBoard.domain.*;
 import boardExample.simpleBoard.dto.BoardDto;
 import boardExample.simpleBoard.dto.MemberDto;
 import boardExample.simpleBoard.exception.BadRequestException;
 import boardExample.simpleBoard.repository.CommentRepository;
 import boardExample.simpleBoard.repository.MemberRepository;
-import boardExample.simpleBoard.service.BoardService;
-import boardExample.simpleBoard.service.CommentService;
-import boardExample.simpleBoard.service.MemberDetailsServiceImpl;
-import boardExample.simpleBoard.service.MemberService;
+import boardExample.simpleBoard.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -26,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -90,12 +86,10 @@ public class BoardController {
             }
         }
         Page<Comment> list = null;
-//        boardService.viewCount(uid);
 //        uid:게시판의 id
         Long bId = board.getUid();
         boardService.updateView(bId, request, response);
         list = commentService.findBoardByComments(bId, pageable);
-//        list = commentService.commentpageList(pageable, board);
         List<Comment> cnt = board.getComments();
         int cnt_size = cnt.size();
         int list_size = list.getSize();

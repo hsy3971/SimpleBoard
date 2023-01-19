@@ -79,6 +79,18 @@
         </div>
     </div>
     <br/>
+    <div >
+        <img th:each="imageFile : ${board.attachedFiles}"
+             th:if="${imageFile.attachmenttype == T(boardExample.simpleBoard.domain.AttachmentType).IMAGE}"
+             th:src="@{/images/{imageFile}(imageFile=${imageFile.storefilename})}" width="300" height="300" style="margin-right: 5px"/>
+    </div>
+    <div>
+        <a th:each="generalFile : ${board.attachedFiles}"
+           th:if="${generalFile.attachmenttype == T(boardExample.simpleBoard.domain.AttachmentType).GENERAL}"
+           th:href="@{/attaches/{generalFile}(generalFile=${generalFile.storefilename}, originName=${generalFile.originfilename})}"
+           th:text="${generalFile.originfilename}" style="margin-right: 5px"/><br/>
+    </div>
+    <br/>
     <div class="card">
         <div class="card-header">댓글 목록</div>
         <div th:each="comment:${comments}" th:with="step=${comment.step}">
@@ -96,7 +108,7 @@
                         &nbsp;
                         <span><a th:if="${comment.member.uid} == ${userid?.uid}" type="button" class="btn btn-light btn-xs" th:bid="${board.uid}" th:cid="${comment.id}" th:onclick="main.commentDelete(this.getAttribute('bid'),this.getAttribute('cid'))">삭제</a></span>
                         &nbsp;&nbsp;
-                        <span><a th:if="${comment.member.uid} == ${userid?.uid}" type="button" data-toggle="collapse" th:attr="data-target='.multi-collapse'+${comment.id}+${comment.board.uid}" class="btn btn-light btn-xs">답글</a></span>
+                        <span><a type="button" data-toggle="collapse" th:attr="data-target='.multi-collapse'+${comment.id}+${comment.board.uid}" class="btn btn-light btn-xs">답글</a></span>
                         <form id="form1">
                             <input type="hidden" id="cId" th:value="${comment.id}">
                             <input type="hidden" id="pId" th:value="${board.uid}">

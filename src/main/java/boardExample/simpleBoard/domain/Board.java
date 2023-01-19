@@ -1,10 +1,12 @@
 package boardExample.simpleBoard.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Builder;
 import lombok.Getter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -39,18 +41,23 @@ public class Board {
 
     @OneToMany(mappedBy = "likeBoard", cascade = CascadeType.ALL)
     Set<Like> likes = new HashSet<>();
-
+    @OneToMany(mappedBy = "attachmentBoard", cascade = CascadeType.ALL)
+    @JsonBackReference //순환참조 방지
+    private List<Attachment> attachedFiles = new ArrayList<>();
     public Board(){
 
     }
     @Builder
-    public Board(Long uid, String subject, String content, Member member, String name, Integer viewcnt) {
+    public Board(Long uid, String subject, String content, Member member, String name, Integer viewcnt, Integer likecnt, List<Attachment> attachedFiles, String updatedate) {
         this.uid = uid;
         this.subject = subject;
         this.content = content;
         this.member = member;
         this.name = name;
         this.viewcnt = viewcnt;
+        this.likecnt = likecnt;
+        this.attachedFiles = attachedFiles;
+        this.updatedate = updatedate;
     }
     public void setName(String username) {
         this.name = username;
@@ -58,6 +65,12 @@ public class Board {
 
     public void setMember(Member member) {
         this.member = member;
+    }
+
+//  보류
+    public void setAttachment(Attachment attachment) {
+        this.attachedFiles.add(attachment);
+        attachment.setAttachmentBoard(this);
     }
 
     public void updateBoard(String subject, String content, String updatedate) {

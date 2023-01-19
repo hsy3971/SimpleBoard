@@ -16,45 +16,63 @@
     </style>
 </head>
 <body>
-
-<div class="container">
-    <div th:replace="fragments/navbar :: navbarFragment"></div>
-    <form th:action th:object="${board}">
+<!-- id가 updateForm-->
+<div class="container" style="max-width: 1000px">
+    <div th:replace="fragments/navbar :: navbarFragment"> </div>
+    <form id="updateForm" th:object="${board}" enctype="multipart/form-data">
         <div>
             <input type="hidden" id="bid" class="form-control"  th:field="*{uid}">
         </div>
-
         <div>
             <label for="subject" th:text="#{label.board.subject}">제목</label>
-            <input type="text" id="subject" th:field="*{subject}" class="form-control" placeholder="제목을 입력하세요.">
+            <input type="text" id="subject" name="subject" th:field="*{subject}" class="form-control" placeholder="제목을 입력하세요.">
             <br/>
         </div>
         <div>
             <label for="name" th:text="|작성자 : ${board.name}|"></label>
-            <input type="hidden" id="name" class="form-control"  th:field="*{name}">
+            <input type="hidden" id="name" name="name" class="form-control"  th:field="*{name}">
         </div>
         <div>
             <label for="content" th:text="#{label.board.contents}">내용</label>
-            <textarea cols="150" rows="10" id="content" th:field="*{content}" class="form-control" placeholder="내용을 입력하세요.">
-
+            <textarea cols="150" rows="10" id="content" name="content" th:field="*{content}" class="form-control" placeholder="내용을 입력하세요.">
             </textarea>
-
         </div>
-        <hr class="my-4">
-
-        <div class="row">
-            <div class="col">
-                <input class="w-100 btn btn-primary btn-lg" type="button" onclick="boardUpdate()" value="수정"/>
-            </div>
-            <div class="col">
-                <button class="w-100 btn btn-danger btn-lg"
-                        onclick="location.href='Board.html'"
-                        th:onclick="|location.href='@{/boards/{uid}(uid=${board.uid})}'|"
-                        type="button" th:text="#{button.cancel}">취소</button>
-            </div>
+        <div>
+            <label for="imageFiles[]" th:text="#{label.board.image}">이미지</label>
+            <input id="imageFiles[]" type="file" name="imageFiles[]" multiple="multiple"/>
+            <label for="generalFiles[]" th:text="#{label.board.file}">첨부파일</label>
+            <input id="generalFiles[]" type="file" name="generalFiles[]" multiple="multiple"/>
+        </div>
+        <div th:each="imageFile : ${board.attachedFiles}">
+            <img th:if="${imageFile.attachmenttype == T(boardExample.simpleBoard.domain.AttachmentType).IMAGE}"
+                 th:src="@{/images/{imageFile}(imageFile=${imageFile.storefilename})}" width="300" height="300" style="margin-right: 5px"/>
+            <button th:if="${imageFile.attachmenttype == T(boardExample.simpleBoard.domain.AttachmentType).IMAGE}"
+                    th:attr="class='removeButton'+${imageFile.storefilename}" th:sid="${imageFile.storefilename}" th:tid="${imageFile.attachmenttype}" type="button" onclick="removeBtn(this.getAttribute('sid'), this.getAttribute('tid'))">REMOVE</button>
+        </div>
+        &nbsp;
+        <div th:each="generalFile : ${board.attachedFiles}">
+            <a th:if="${generalFile.attachmenttype == T(boardExample.simpleBoard.domain.AttachmentType).GENERAL}"
+               th:text="${generalFile.originfilename}" style="margin-right: 5px"/><br/>
+            <button th:if="${generalFile.attachmenttype == T(boardExample.simpleBoard.domain.AttachmentType).GENERAL}"
+                    th:attr="class='removeButton2'+${generalFile.storefilename}" th:sid="${generalFile.storefilename}" th:tid="${generalFile.attachmenttype}" type="button" onclick="removeBtn2(this.getAttribute('sid'), this.getAttribute('tid'))">REMOVE</button>
         </div>
     </form>
+    <hr class="my-4">
+
+    <div class="row">
+        <div class="col">
+            <input class="w-100 btn btn-primary btn-lg" type="button" onclick="boardUpdate()" value="수정"/>
+        </div>
+        <div class="col">
+            <button class="w-100 btn btn-danger btn-lg"
+                    onclick="location.href='Board.html'"
+                    th:onclick="|location.href='@{/boards}'|"
+                    type="button" th:text="#{button.cancel}">취소</button>
+        </div>
+    </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" src="/js/board.js"></script>
+
 </body>
+</html>

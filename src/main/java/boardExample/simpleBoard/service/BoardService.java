@@ -1,12 +1,10 @@
 package boardExample.simpleBoard.service;
 
-import boardExample.simpleBoard.domain.Board;
-import boardExample.simpleBoard.domain.Like;
-import boardExample.simpleBoard.domain.Member;
+import boardExample.simpleBoard.domain.*;
 import boardExample.simpleBoard.dto.BoardDto;
+import boardExample.simpleBoard.repository.AttachmentRepository;
 import boardExample.simpleBoard.repository.BoardRepository;
 import boardExample.simpleBoard.repository.LikeRepository;
-import boardExample.simpleBoard.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -30,13 +30,14 @@ import java.util.Optional;
 public class BoardService {
 
     private final BoardRepository boardRepository;
-    private final MemberRepository memberRepository;
     private final LikeRepository likeRepository;
+    private final AttachmentService attachmentService;
+
+    private final AttachmentRepository attachmentRepository;
+
+    private final FileStore fileStore;
     private final static String VIEWCOOKIENAME = "alreadyViewCookie";
 
-    public List<Board> BoardList() {
-        return boardRepository.findAll();
-    }
     // 페이징
     @Transactional
     public Page<Board> pageList(Pageable pageable) {
@@ -49,24 +50,48 @@ public class BoardService {
         return boardRepository.findById(uid);
     }
     @Transactional
-    public Long BoardAdd(BoardDto board) {
-        Member num = memberRepository.findByUno(board.getMember().getUno());
-        Board data = board.toEntity();
-        return boardRepository.save(data).getUid();
+    public Board BoardAdd(BoardDto dto) throws IOException {
+        List<Attachment> attachments = attachmentService.saveAttachments(dto.getAttachmentFiles());
+//        Board board = boardPostDto.createBoard();
+        Board board = dto.toEntity();
+        attachments.stream()
+                .forEach(attachment -> board.setAttachment(attachment));
+        Board saveBoard = boardRepository.save(board);
+        for (Attachment attachment : attachments) {
+            attachmentRepository.save(attachment);
+        }
+        return saveBoard;
     }
-
     public void BoardDelete(Long uid) {
+        Board id = boardRepository.findById(uid).get();
+        List<Attachment> attachedFiles = id.getAttachedFiles();
+        for (Attachment attachedFile : attachedFiles) {
+            String path = fileStore.createPath(attachedFile.getStorefilename(), attachedFile.getAttachmenttype());
+            File file = new File(path);
+            if (file.exists() == true) {
+                file.delete();
+            }
+        }
         boardRepository.deleteById(uid);
     }
 
     @Transactional
-    public Long BoardUpdate(Long uid, BoardDto boardDto) {
+    public Long BoardUpdate(Long uid, BoardDto dto) throws IOException {
         SimpleDateFormat format = new SimpleDateFormat ( "yyyy-MM-dd HH:mm");
         Date time = new Date();
         String localTime = format.format(time);
-        // updateBoard를 통해서 제목과 내용만 바꿀 수 있게 설정
+        // updateBoard를 통해서 제목,내용,이미지,일반파일 업데이트
         Board board = boardRepository.findById(uid).orElseThrow(()->new IllegalArgumentException("해당 게시글이 없습니다. id = " + uid));
-        board.updateBoard(boardDto.getSubject(), boardDto.getContent(), localTime);
+//      텍스트 업데이트
+        board.updateBoard(dto.getSubject(), dto.getContent(), localTime);
+        //      실제 파일로 저장
+        List<Attachment> attachments = attachmentService.saveAttachments(dto.getAttachmentFiles());
+//        attachment DB 저장
+        for (Attachment attachment : attachments) {
+//          set을 통해 boardid 외래키를 초기화
+            attachment.setAttachmentBoard(board);
+            attachmentRepository.save(attachment);
+        }
         return uid;
     }
 
@@ -76,10 +101,6 @@ public class BoardService {
         pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "uid"));
         return boardRepository.findBySubjectContaining(searchKeyword, pageable);
     }
-//    @Transactional
-//    public int viewCount(Long uid) {
-//        return boardRepository.viewCount(uid);
-//    }
 //    조회수 중복 카운트 방지
 //    1. 글을 조회 요청이 오면 HttpServletRequest에 글의 고유 ID를 키(Key)로 하는 쿠키가 존재하는지 확인합니다.
 //    2. 글의 고유ID 쿠키가 존재하지 않는다면 글의 고유 ID를 Key로 쿠키를 추가하고 글의 조회수를 증가시키고 글의 정보를 응답해줍니다.
@@ -138,10 +159,6 @@ public class BoardService {
 
         /** 로그인한 유저가 해당 게시물을 좋아요 했는지 안 했는지 확인 **/
         if(!findLike(likeBoard, likeMember)){
-
-            /* 좋아요 하지 않은 게시물이면 좋아요 추가, true 반환 */
-//            Member member = memberRepository.findByUno(likeMember.getUno()).orElseThrow(() -> new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
-//            Board board = boardRepository.findById(likeBoard.getUid()).orElseThrow(()->new IllegalArgumentException("해당 게시물이 없습니다."));
             /* 좋아요 엔티티 생성 */
             Like memberLikeBoard = new Like(likeMember, likeBoard);
             likeRepository.save(memberLikeBoard);
