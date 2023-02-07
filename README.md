@@ -69,7 +69,11 @@ Basic Board Project
 <details markdown="1">
 <summary>게시글</summary>
 
-<img src=
+#### 게시글 전체 목록
+<img width="800" src="https://user-images.githubusercontent.com/85252989/217251082-d7a02735-53b2-4109-9ee2-70c4a06d5121.PNG">
+<img width="800" src="https://user-images.githubusercontent.com/85252989/217251082-d7a02735-53b2-4109-9ee2-70c4a06d5121.PNG">
+<img width="800" src="https://user-images.githubusercontent.com/85252989/217251082-d7a02735-53b2-4109-9ee2-70c4a06d5121.PNG">
+
 
 </details>
 
