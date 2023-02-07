@@ -66,11 +66,26 @@ Basic Board Project
 
 ### 4. 실행 화면
 
-▶ 게시글
+<details markdown="1">
+<summary>게시글</summary>
 
-▶ 회원
+<img src=
 
-▶ 댓글
+</details>
+
+<details markdown="1">
+<summary>회원</summary>
+
+<!--내용 적는공간-->
+
+</details>
+
+<details markdown="1">
+<summary>댓글</summary>
+
+<!--내용 적는공간-->
+
+</details>
 
 ## 구조 및 설계
 
