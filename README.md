@@ -71,8 +71,9 @@ Basic Board Project
 
 #### 게시글 전체 목록
 <img width="800" src="https://user-images.githubusercontent.com/85252989/217251082-d7a02735-53b2-4109-9ee2-70c4a06d5121.PNG">
-<img width="800" src="https://user-images.githubusercontent.com/85252989/217251082-d7a02735-53b2-4109-9ee2-70c4a06d5121.PNG">
-<img width="800" src="https://user-images.githubusercontent.com/85252989/217251082-d7a02735-53b2-4109-9ee2-70c4a06d5121.PNG">
+<img width="800" src="https://user-images.githubusercontent.com/85252989/217253992-c552728f-6f12-4940-b20d-913b9b4bfc55.PNG">
+<img width="800" src="https://user-images.githubusercontent.com/85252989/217254011-161b6523-d944-4846-a203-213058094e50.PNG">
+<img width="800" src="https://user-images.githubusercontent.com/85252989/217254037-71f25082-1a64-4b73-9cce-f90806c0cd07.PNG">
 
 
 </details>
