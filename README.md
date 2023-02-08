@@ -128,8 +128,8 @@ Basic Board Project
 회원가입시 가입완료버튼은 비활성화되어있고 중복체크가 되어야지만 가입완료버튼이 활성화가 된다.
 
 #### 중복확인 및 유효성검사
-<img width="500" src="https://user-images.githubusercontent.com/85252989/217258925-c79707b4-acfc-43bf-b440-2a0ea7add4ba.PNG">
-<img width="500" src="https://user-images.githubusercontent.com/85252989/217405519-cf838b16-c94e-4972-a4b3-4a4678b9bef2.PNG">
+<img width="450" src="https://user-images.githubusercontent.com/85252989/217258925-c79707b4-acfc-43bf-b440-2a0ea7add4ba.PNG">
+<img width="450" src="https://user-images.githubusercontent.com/85252989/217405519-cf838b16-c94e-4972-a4b3-4a4678b9bef2.PNG">
 
 아이디 중복체크시 이미 사용중인 아이디라면 이미 사용중인 아이디라는 문구가 뜨게 된다. 이름, 비밀번호, 이메일을 입력하지 않을 시 해당 데이터를 입력해주세요라는 문구가 뜨게 된다. 아이디 중복체크시 중복되지 않았다면 사용 가능한 아이디라는 문구가 뜨고 가입완료버튼이 활성화가 된다. 
 
