@@ -113,6 +113,10 @@ Basic Board Project
 
 본인이 올린 글을 제외한 게시글에만 좋아요를 할 수 있고 본인이 올린글에는 추천을 할수없습니다. 상세화면에서 빈하트가 노말 상태이고 검쟁색하트가 좋아요인 상태입니다. 빈하트를 클릭시에 확인창이 뜨고 확인을 누를시에 좋아요 표시가 되면서 하트옆에 숫자가 +1이 됩니다.
 
+<img width="800" src="https://user-images.githubusercontent.com/85252989/217405395-1bb1a76b-03a5-4651-a308-705eb6ac699c.PNG">
+
+검정색하트를 다시 누르면 취소 확인창이 뜨고 확인을 누를시에 다시 빈하트가 되고 숫자는 -1이 됩니다.
+
 </details>
 
 <details markdown="1">
@@ -122,7 +126,8 @@ Basic Board Project
 <img width="800" src="https://user-images.githubusercontent.com/85252989/217258912-61d4dedc-c53d-4632-9123-0e5a3f2be3a3.PNG">
 
 #### 중복확인 및 유효성검사
-<img width="800" src="https://user-images.githubusercontent.com/85252989/217258925-c79707b4-acfc-43bf-b440-2a0ea7add4ba.PNG">
+<img width="500" src="https://user-images.githubusercontent.com/85252989/217258925-c79707b4-acfc-43bf-b440-2a0ea7add4ba.PNG">
+<img width="500" src="https://user-images.githubusercontent.com/85252989/217405519-cf838b16-c94e-4972-a4b3-4a4678b9bef2.PNG">
 
 #### 로그인
 <img width="800" src="https://user-images.githubusercontent.com/85252989/217258935-bbe51e17-2dad-4c69-be8f-5c0097e6e33f.PNG">
