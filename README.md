@@ -72,26 +72,46 @@ Basic Board Project
 #### 게시글 전체 목록
 <img width="800" src="https://user-images.githubusercontent.com/85252989/217251082-d7a02735-53b2-4109-9ee2-70c4a06d5121.PNG">
 
+게시판 전체 목록을 페이징처리하여 조회가능하다.
+
 #### 게시글 등록
 <img width="800" src="https://user-images.githubusercontent.com/85252989/217258038-65a401b3-7137-4093-b7ff-c4d98b0ceb52.PNG">
 
+로그인한 사용자만 게시글을 등록할 수 있으며 저장시 alert문이 뜨고 확인을 누르면 게시글이 등록된다.
+
 #### 게시글 상세보기
 <img width="800" src="https://user-images.githubusercontent.com/85252989/217254011-161b6523-d944-4846-a203-213058094e50.PNG">
+
+작성자와 로그인한 유저가 같으면 수정과 삭제 버튼이 뜬다
+
 <img width="800" src="https://user-images.githubusercontent.com/85252989/217254037-71f25082-1a64-4b73-9cce-f90806c0cd07.PNG">
+
+비로그인 or 다른 유저라면 목록버튼만 뜨게 된다.
 
 #### 게시글 수정
 <img width="800" src="https://user-images.githubusercontent.com/85252989/217254695-e9558599-b436-4726-8d70-922a3b4d6ccc.PNG">
+
+게시글 수정시 기존에 넣었던데로 입력이 되어있고 텍스트, 이미지, 첨부파일을 수정하면 된다. 특히 이미지와 첨부파일은 옆에 REMOVE라는 버튼이 존재하는데 누를시에 기존에 들어가있던 데이터가 사라지고 새롭게 이미지와 첨부파일을 등록할 수 있다.
+
 <img width="800" src="https://user-images.githubusercontent.com/85252989/217254721-46b3c0ff-1812-462b-b9b3-9d9522d2ef4e.PNG">
+
+수정시 수정하시겠습니까라는 확인창이 뜨게 되고 확인을 누를시 수정된다.
 
 #### 게시글 삭제
 <img width="800" src="https://user-images.githubusercontent.com/85252989/217254747-eb3a3a1d-0401-4e42-9acb-f5f9c35f9ef1.PNG">
 
+작성자와 로그인한 유저가 같다면 수정,삭제버튼이 뜨는데 삭제버튼을 누르게되면 삭제하시겠습니까라는 확인창이 뜨게 되고 확인을 누를시 삭제된다.
+
 #### 게시글 검색
 <img width="800" src="https://user-images.githubusercontent.com/85252989/217254784-38472554-2495-41ea-a060-bd7dab5eba6e.PNG">
+
+검색키워드에 포함된 모든 글들을 보여줍니다.
 
 #### 게시글 추천
 <img width="800" src="https://user-images.githubusercontent.com/85252989/217254805-975be855-1182-40cb-ac4d-410c2b676e64.PNG">
 <img width="800" src="https://user-images.githubusercontent.com/85252989/217254824-d3859c26-e09e-46fd-af64-5d1bc8fc5a23.PNG">
+
+본인이 올린 글을 제외한 게시글에만 좋아요를 할 수 있고 본인이 올린글에는 추천을 할수없습니다. 상세화면에서 빈하트가 노말 상태이고 검쟁색하트가 좋아요인 상태입니다. 빈하트를 클릭시에 확인창이 뜨고 확인을 누를시에 좋아요 표시가 되면서 하트옆에 숫자가 +1이 됩니다.
 
 </details>
 
