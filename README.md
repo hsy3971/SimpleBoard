@@ -125,22 +125,31 @@ Basic Board Project
 #### 회원가입
 <img width="800" src="https://user-images.githubusercontent.com/85252989/217258912-61d4dedc-c53d-4632-9123-0e5a3f2be3a3.PNG">
 
+회원가입시 가입완료버튼은 비활성화되어있고 중복체크가 되어야지만 가입완료버튼이 활성화가 된다.
+
 #### 중복확인 및 유효성검사
 <img width="500" src="https://user-images.githubusercontent.com/85252989/217258925-c79707b4-acfc-43bf-b440-2a0ea7add4ba.PNG">
 <img width="500" src="https://user-images.githubusercontent.com/85252989/217405519-cf838b16-c94e-4972-a4b3-4a4678b9bef2.PNG">
 
+아이디 중복체크시 이미 사용중인 아이디라면 이미 사용중인 아이디라는 문구가 뜨게 된다. 이름, 비밀번호, 이메일을 입력하지 않을 시 해당 데이터를 입력해주세요라는 문구가 뜨게 된다. 아이디 중복체크시 중복되지 않았다면 사용 가능한 아이디라는 문구가 뜨고 가입완료버튼이 활성화가 된다. 
+
 #### 로그인
 <img width="800" src="https://user-images.githubusercontent.com/85252989/217258935-bbe51e17-2dad-4c69-be8f-5c0097e6e33f.PNG">
+
+로그인창에 해당하고 아이디, 비밀번호를 입력하면 된다.
 
 #### 로그인실패
 <img width="800" src="https://user-images.githubusercontent.com/85252989/217258950-3ae5b1f8-481f-4405-a5ed-66b6719e58e6.PNG">
 
+아이디가 틀렸거나 비밀번호가 틀렸을시 사용자ID 또는 비밀번호를 확인해주세요라는 문구가 뜨게 된다.
+
 #### 구글로그인
-<img width="800" src="https://user-images.githubusercontent.com/85252989/217258960-a10549d9-9c18-42d8-a25e-0dafcbe8fd5e.PNG">
+<img width="800" src="https://user-images.githubusercontent.com/85252989/217407448-8f73958c-315b-42ef-bc3f-ab32d87dc74a.png">
 
 #### 네이버로그인
 <img width="800" src="https://user-images.githubusercontent.com/85252989/217258976-8990c60b-2756-4eed-9154-7e89d852116a.PNG">
 
+구글로그인과 네이버로그인이 가능하다.
 
 </details>
 
@@ -150,29 +159,47 @@ Basic Board Project
 #### 미로그인 사용자 댓글작성
 <img width="800" src="https://user-images.githubusercontent.com/85252989/217266665-0dacd38c-5d8b-4557-945e-2bc237a7aaf3.PNG">
 
+미로그인시 로그인을 해야 댓글을 등록할 수 있다는 문구가 뜨게 됩니다.
+
 #### 로그인 사용자 댓글작성
 <img width="800" src="https://user-images.githubusercontent.com/85252989/217266701-fc5d38e2-ec39-4bb4-aa96-83b0acde91e6.PNG">
+
+로그인이 되었을때는 댓글작성을 할 수 있는 텍스트박스와 버튼이 뜨게 됩니다.
 
 #### 댓글목록
 <img width="800" src="https://user-images.githubusercontent.com/85252989/217266729-e7eebf3e-1168-4542-b61d-d80a40cefb4b.PNG">
 
+게시글과 마찬가지로 페이징 처리되어 댓글들을 볼 수 있습니다.
+
 #### 댓글수정
 <img width="800" src="https://user-images.githubusercontent.com/85252989/217260716-c9a0a599-be71-47fa-b5b1-e80c36eb0be4.PNG">
+
+댓글작성자와 유저가 같아야하고 댓글수정시 수정하시겠습니까?라는 확인창이 뜨고 확인시 수정이 됩니다.
 
 #### 댓글삭제
 <img width="800" src="https://user-images.githubusercontent.com/85252989/217260738-006d4587-c26a-4c08-8b0d-b3115bfc822d.PNG">
 
+댓글작성자와 유저가 같아야하고 댓글삭제시 삭제하시겠습니까?라는 확인창이 뜨고 확인시 삭제가 됩니다.
+
 #### 댓글에 답글작성 
 <img width="800" src="https://user-images.githubusercontent.com/85252989/217260756-96fc17dd-1cb0-4980-9fc0-62bf05eb1881.PNG">
 
-#### 대댓글
+달린댓글에 답글이라는 버튼을 누를시 텍스트박스가 열리게 되고 답글을 작성후 완료버튼을 누르면 답글이 등록이 됩니다.
+
+#### 답글작성후
 <img width="800" src="https://user-images.githubusercontent.com/85252989/217260774-cdfb3252-d6c9-42b9-b509-1b3ff10f419c.PNG">
 
-#### 대대댓글 
+답글 작성시 텍스트 옆에 화살표로 달리게 되고
+
+#### 대대댓글작성시
 <img width="800" src="https://user-images.githubusercontent.com/85252989/217260791-dc09ceb8-4ebc-4e21-90e9-e41a14cb3b5e.PNG">
+
+그 답글에 다시 답글을 작성시 화살표가 또 증가하며 화살표 갯수로 대댓글을 표시하였습니다.
 
 #### 대댓글에서 새로운 댓글 등록시
 <img width="800" src="https://user-images.githubusercontent.com/85252989/217260802-7236ed97-6c6d-4647-b007-2b93f821d12d.PNG">
+
+위 상태에서 일반 댓글등록시 윗칸에 새롭게 할당이 되고 그 댓글에 답글이 달릴시 바로 밑에 대댓글이 달리게 된다.
 
 </details>
 
