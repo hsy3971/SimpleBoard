@@ -209,6 +209,12 @@ Basic Board Project
 
 ### 2. DB 설계
 
+<img width="800" src="https://user-images.githubusercontent.com/85252989/217438795-677cd303-74a5-4ce9-bbf7-8f0977486332.PNG">
+<img width="800" src="https://user-images.githubusercontent.com/85252989/217438815-f936a74c-c38d-47b1-9b66-b46c2f227eca.PNG">
+<img width="800" src="https://user-images.githubusercontent.com/85252989/217438832-4401ee11-cc9e-43ae-aaf3-5fb43b991f7b.PNG">
+<img width="800" src="https://user-images.githubusercontent.com/85252989/217438855-2a0122a6-e567-4163-8847-eb76fd6b6de4.PNG">
+<img width="800" src="https://user-images.githubusercontent.com/85252989/217438875-c7ae5c22-f234-43e8-9143-b2d3c1dd2497.PNG">
+
 ### 3. API 설계
 
 ## 개발 내용
