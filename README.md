@@ -208,7 +208,7 @@ Basic Board Project
 ### 1. 패키지 구조
 
 ### 2. DB 설계
-<img width="800" src="https://user-images.githubusercontent.com/85252989/217452826-e1d2a4ca-8f88-4e22-a03a-04453aaea903.PNG">
+<img width="800" src="https://user-images.githubusercontent.com/85252989/217453913-56df4ceb-ed32-4786-846f-b38739a4c75c.PNG">
 <img width="800" src="https://user-images.githubusercontent.com/85252989/217438795-677cd303-74a5-4ce9-bbf7-8f0977486332.PNG">
 <img width="800" src="https://user-images.githubusercontent.com/85252989/217438815-f936a74c-c38d-47b1-9b66-b46c2f227eca.PNG">
 <img width="800" src="https://user-images.githubusercontent.com/85252989/217438832-4401ee11-cc9e-43ae-aaf3-5fb43b991f7b.PNG">
