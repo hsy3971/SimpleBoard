@@ -216,10 +216,10 @@ Basic Board Project
 <img width="800" src="https://user-images.githubusercontent.com/85252989/217438875-c7ae5c22-f234-43e8-9143-b2d3c1dd2497.PNG">
 
 ### 3. API 설계
-<img width="800" src="https://user-images.githubusercontent.com/85252989/218686064-896eb03c-17d3-4fd5-9889-794a66f8b682.PNG">
-<img width="800" src="https://user-images.githubusercontent.com/85252989/218686189-46bd8d13-a649-41a4-96e2-398a29d1f4c5.PNG">
-<img width="800" src="https://user-images.githubusercontent.com/85252989/218686289-63076a42-ae72-475b-9179-1c91dcdc4539.PNG">
-<img width="800" src="https://user-images.githubusercontent.com/85252989/218686360-cd82f710-981a-4801-aa21-bca91bde60c2.PNG">
+<img width="800" src="https://user-images.githubusercontent.com/85252989/218687820-0417d922-7a07-4fec-9dff-ea3fd6754348.PNG">
+<img width="800" src="https://user-images.githubusercontent.com/85252989/218687901-aee89b0d-7f3a-46fd-bcfe-8d289dd3da74.PNG">
+<img width="800" src="https://user-images.githubusercontent.com/85252989/218687955-6b72e8b5-9e33-4415-963c-27af36998a26.PNG">
+<img width="800" src="https://user-images.githubusercontent.com/85252989/218687992-4a64a56e-6a17-4a64-96e2-bc3d04dfcbcc.PNG">
 
 ## 개발 내용
 
