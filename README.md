@@ -217,7 +217,7 @@ Basic Board Project
 
 ### 3. API 설계
 <img width="800" src="https://user-images.githubusercontent.com/85252989/218687820-0417d922-7a07-4fec-9dff-ea3fd6754348.PNG">
-<img width="800" src="https://user-images.githubusercontent.com/85252989/218687901-aee89b0d-7f3a-46fd-bcfe-8d289dd3da74.PNG">
+<img width="800" src="https://user-images.githubusercontent.com/85252989/218688863-40b44363-3e8e-4717-9e4f-18fd1625cb0d.PNG">
 <img width="800" src="https://user-images.githubusercontent.com/85252989/218687955-6b72e8b5-9e33-4415-963c-27af36998a26.PNG">
 <img width="800" src="https://user-images.githubusercontent.com/85252989/218687992-4a64a56e-6a17-4a64-96e2-bc3d04dfcbcc.PNG">
 
