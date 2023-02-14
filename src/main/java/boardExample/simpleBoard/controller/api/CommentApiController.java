@@ -6,14 +6,12 @@ import boardExample.simpleBoard.dto.CommentDto;
 import boardExample.simpleBoard.dto.MemberDto;
 import boardExample.simpleBoard.service.CommentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -21,9 +19,14 @@ import javax.servlet.http.HttpSession;
 public class CommentApiController {
     private final CommentService commentService;
     private final HttpSession httpSession;
+    //read
+    @GetMapping("/boards/{bid}/comments")
+    public List<Comment> read(@PathVariable Long bid) {
+        return commentService.findAll(bid);
+    }
     //create
-    @PostMapping("/boards/{id}/comments")
-    public ResponseEntity commentSave(@PathVariable("id") Long id, @RequestBody CommentDto commentDto, Authentication authentication) {
+    @PostMapping("/boards/{bid}/comments")
+    public ResponseEntity commentSave(@PathVariable("bid") Long id, @RequestBody CommentDto commentDto, Authentication authentication) {
         MemberDto.UserSessionDto user = (MemberDto.UserSessionDto) httpSession.getAttribute("user");
         String uid = null;
 //        세션일때와 아닐때로 구글로그인연동인지 일반 로그인인지를 구분
@@ -48,19 +51,5 @@ public class CommentApiController {
     public ResponseEntity delete(@PathVariable Long bid, @PathVariable Long cid) {
         commentService.delete(cid);
         return ResponseEntity.ok(cid);
-    }
-    @PostMapping(value = "/boards/{boardId}/comments/reply")
-    public ResponseEntity replySave(@PathVariable("boardId") Long boardId, @RequestBody CommentDto.Response response, Authentication authentication, @PageableDefault Pageable pageable) {
-        MemberDto.UserSessionDto user = (MemberDto.UserSessionDto) httpSession.getAttribute("user");
-        String uid = null;
-//        세션일때와 아닐때로 구글로그인연동인지 일반 로그인인지를 구분
-        if (user != null) {
-            uid = user.getUid();
-        }
-        else {
-            Member member = (Member) authentication.getPrincipal();  //userDetail 객체를 가져옴
-            uid = member.getUid();
-        }
-        return ResponseEntity.ok(commentService.parentSave(uid, boardId, response.getParentId(), response));
     }
 }

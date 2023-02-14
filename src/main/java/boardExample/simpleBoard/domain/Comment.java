@@ -27,18 +27,22 @@ public class Comment {
     private String modified_date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
 
     // 외래키
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "board_id")
     private Board board;
+//    JsonIgnore를 통해 무한참조 방지
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Comment parent;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "parent", orphanRemoval = true)
     private List<Comment> children = new ArrayList<>();
 //  그륩

@@ -1,4 +1,4 @@
-package boardExample.simpleBoard.controller.api;
+package boardExample.simpleBoard.controller;
 
 import boardExample.simpleBoard.domain.Attachment;
 import boardExample.simpleBoard.domain.AttachmentType;
@@ -19,12 +19,11 @@ import java.nio.charset.StandardCharsets;
 
 @RestController
 @RequiredArgsConstructor
-public class AttachmentApiController {
+public class AttachmentController {
 
     private final FileStore fileStore;
     private final AttachmentRepository attachmentRepository;
 
-    @ResponseBody
     @GetMapping("/images/{filename}")
     public Resource processImg(@PathVariable String filename) throws MalformedURLException {
         return new UrlResource("file:" + fileStore.createPath(filename, AttachmentType.IMAGE));

@@ -23,6 +23,11 @@ public class BoardApiController {
     private final BoardService boardService;
     private final HttpSession httpSession;
 
+    /* 비동기 게시글 조회 */
+    @GetMapping("/boards/{uid}")
+    public ResponseEntity read(@PathVariable Long uid) {
+        return ResponseEntity.ok(boardService.BoardOne(uid).get());
+    }
     // 비동기 게시글 저장
     @PostMapping("/boards")
     public ResponseEntity create(@ModelAttribute BoardAddForm boardAddForm, Authentication authentication) throws IOException {
@@ -52,23 +57,5 @@ public class BoardApiController {
     public ResponseEntity delete(@PathVariable Long uid) {
         boardService.BoardDelete(uid);
         return ResponseEntity.ok(uid);
-    }
-    // 글 좋아요
-    @PostMapping("/boards/{uid}/like")
-    public boolean like(@PathVariable Long uid, Authentication authentication){
-        MemberDto.UserSessionDto user = (MemberDto.UserSessionDto) httpSession.getAttribute("user");
-        Long uno = null;
-        if (user != null) {
-            uno = user.getUno();
-        }
-        else {
-            Member member = (Member) authentication.getPrincipal();
-            uno = member.getUno();
-        }
-        Board board = boardService.BoardOne(uid).get();
-        Member member = memberService.findByUno(uno);
-        // 저장 true, 삭제 false
-        boolean result = boardService.saveLike(board, member);
-        return result;
     }
 }

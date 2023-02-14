@@ -32,7 +32,7 @@ $('#likeImg').click(function() {
             console.log("추천 취소 진입");
             $.ajax({
                 type: 'POST',
-                url: '/api/boards/' + postId + '/like',
+                url: '/boards/' + postId + '/like',
                 contentType: 'application/json; charset=utf-8',
             }).done(function () {
                 $('#likeImg').attr("src", emptyLikeUrl);
@@ -47,7 +47,7 @@ $('#likeImg').click(function() {
             console.log("추천 진입");
             $.ajax({
                 type: 'POST',
-                url: '/api/boards/' + postId + '/like',
+                url: '/boards/' + postId + '/like',
                 contentType: 'application/json; charset=utf-8',
             }).done(function () {
                 $('#likeImg').attr("src", clickLikeUrl);

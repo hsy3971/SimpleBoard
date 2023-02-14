@@ -1,8 +1,12 @@
 package boardExample.simpleBoard.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -12,7 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-//@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Board {
 
@@ -34,8 +38,11 @@ public class Board {
     private String updatedate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_no")
+//  응답데이터에서 제외(LAZY에서 EAGER로 바꾸면 해결되지만 LAZY를 유지하기위해 @JsonIgnore사용
+    @JsonIgnore
     private Member member;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
 
@@ -44,9 +51,6 @@ public class Board {
     @OneToMany(mappedBy = "attachmentBoard", cascade = CascadeType.ALL)
     @JsonBackReference //순환참조 방지
     private List<Attachment> attachedFiles = new ArrayList<>();
-    public Board(){
-
-    }
     @Builder
     public Board(Long uid, String subject, String content, Member member, String name, Integer viewcnt, Integer likecnt, List<Attachment> attachedFiles, String updatedate) {
         this.uid = uid;

@@ -54,7 +54,7 @@ const main = {
         if (con_check === true) {
             $.ajax({
                 type: 'POST',
-                url: '/api/boards/' + data.postsId + '/comments/reply',
+                url: '/boards/' + data.postsId + '/comments/reply',
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify(data)
             }).done(function () {

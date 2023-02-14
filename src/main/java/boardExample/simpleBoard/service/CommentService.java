@@ -44,7 +44,7 @@ public class CommentService {
         commentRepository.save(comment);
         return dto.getId();
     }
-    //  cid가 해당 부모댓글이다. 삭제할때만 최상의 루트노드를 삭제하면 다같이 삭제되게끔? 하면 될듯
+    //  cid가 해당 부모댓글이다. 최상의 루트노드를 삭제하면 다같이 삭제된다.
     public Long parentSave(String uid, Long id, Long cid, CommentDto.Response response) {
         Member member = memberRepository.findByUid(uid).get();
         Board board = boardRepository.findById(id).get();
@@ -134,5 +134,12 @@ public class CommentService {
     public Page<Comment> findBoardByComments(Long boardId, Pageable pageable) {
         boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다. boardId: " + boardId));
         return commentRepository.findAllByBoardByComments(boardId, pageable);
+    }
+
+    @Transactional
+    public List<Comment> findAll(Long id) {
+        Board board = boardRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("해당 게시글이 존재하지 않습니다. id: " + id));
+        return board.getComments();
     }
 }

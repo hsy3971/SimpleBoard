@@ -3,9 +3,6 @@ package boardExample.simpleBoard.controller;
 import boardExample.simpleBoard.domain.*;
 import boardExample.simpleBoard.dto.BoardDto;
 import boardExample.simpleBoard.dto.MemberDto;
-import boardExample.simpleBoard.exception.BadRequestException;
-import boardExample.simpleBoard.repository.CommentRepository;
-import boardExample.simpleBoard.repository.MemberRepository;
 import boardExample.simpleBoard.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -139,5 +135,26 @@ public class BoardController {
         Board board = result.get();
         model.addAttribute("board", board);
         return "boards/editForm";
+    }
+
+    // 게시글 좋아요
+    @PostMapping("/{uid}/like")
+//    api호출을 위해 선언
+    @ResponseBody
+    public boolean like(@PathVariable Long uid, Authentication authentication){
+        MemberDto.UserSessionDto user = (MemberDto.UserSessionDto) httpSession.getAttribute("user");
+        Long uno = null;
+        if (user != null) {
+            uno = user.getUno();
+        }
+        else {
+            Member member = (Member) authentication.getPrincipal();
+            uno = member.getUno();
+        }
+        Board board = boardService.BoardOne(uid).get();
+        Member member = memberService.findByUno(uno);
+        // 저장 true, 삭제 false
+        boolean result = boardService.saveLike(board, member);
+        return result;
     }
 }

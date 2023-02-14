@@ -86,9 +86,6 @@ public class CommentDto{
     public static class Response {
         private Long id;
         private String comment;
-//        private String createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
-//        private String modifiedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
-//        private String username;
         private Long userId;
         private Long postsId;
         private Long parentId;
@@ -96,9 +93,6 @@ public class CommentDto{
         public Response(Comment comment) {
             this.id = comment.getId();
             this.comment = comment.getComment();
-//            this.createdDate = comment.getCreated_date();
-//            this.modifiedDate = comment.getModified_date();
-//            this.username = comment.getMember().getUserName();
             this.userId = comment.getMember().getUno();
             this.postsId = comment.getBoard().getUid();
             this.parentId = comment.getParent().getId();

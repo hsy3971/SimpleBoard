@@ -1,14 +1,9 @@
 package boardExample.simpleBoard.controller.api;
 
-import boardExample.simpleBoard.domain.Member;
-import boardExample.simpleBoard.dto.BoardDto;
-import boardExample.simpleBoard.dto.MemberDto;
 import boardExample.simpleBoard.exception.BadRequestException;
-import boardExample.simpleBoard.repository.MemberRepository;
 import boardExample.simpleBoard.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
