@@ -26,7 +26,6 @@ public class FileStore {
                 attachments.add(attachment);
             }
         }
-
         return attachments;
     }
     //  파일 저장 로직
