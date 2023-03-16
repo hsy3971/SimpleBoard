@@ -3,7 +3,6 @@ package boardExample.simpleBoard.config;
 //import boardExample.simpleBoard.service.CustomOAuth2UserService;
 import boardExample.simpleBoard.service.CustomOAuth2UserService;
 import boardExample.simpleBoard.service.MemberDetailsServiceImpl;
-import boardExample.simpleBoard.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
