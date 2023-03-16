@@ -9,7 +9,7 @@ $(function(){
     let likeVal = $('#like_check').val(); // 데이터가 있으면 true
     const likeImg = $('#likeImg');
 
-    console.log("likeVal : " + likeVal);
+//    console.log("likeVal : " + likeVal);
 
     if(likeVal === 'true'){
         // 데이터가 존재하면 화면에 채워진 하트 보여줌

@@ -1,6 +1,7 @@
 package boardExample.simpleBoard.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,11 +19,11 @@ public class Like {
     @JoinColumn(name = "uid")
     private Member likeMember;
 
-//  like_board만 양방향으로 연결함.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bid")
     private Board likeBoard;
 
+    @Builder
     public Like(Member likeMember, Board likeBoard) {
         this.likeMember = likeMember;
         this.likeBoard = likeBoard;
