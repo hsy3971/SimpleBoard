@@ -25,7 +25,7 @@ public class MemberDto {
     private String append_date;
     private String update_date;
 
-//    dto -> Entity
+    //    dto -> Entity
     public Member toEntity() {
         Member build = Member.builder()
                 .uno(uno)
@@ -52,7 +52,7 @@ public class MemberDto {
         this.email = email;
     }
 
-//  CustomOAuth2UserService에 세션을 저장하기 위한 dto
+    //  CustomOAuth2UserService에 세션을 저장하기 위한 dto
     @Getter
     public static class UserSessionDto implements Serializable {
 
