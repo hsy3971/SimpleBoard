@@ -46,8 +46,8 @@ public class Board {
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "likeBoard", cascade = CascadeType.ALL)
-    Set<Like> likes = new HashSet<>();
+    //    @OneToMany(mappedBy = "likeBoard", cascade = CascadeType.ALL)
+//    Set<Like> likes = new HashSet<>();
     @OneToMany(mappedBy = "attachmentBoard", cascade = CascadeType.ALL)
     @JsonBackReference //순환참조 방지
     private List<Attachment> attachedFiles = new ArrayList<>();
@@ -71,7 +71,6 @@ public class Board {
         this.member = member;
     }
 
-//  보류
     public void setAttachment(Attachment attachment) {
         this.attachedFiles.add(attachment);
         attachment.setAttachmentBoard(this);

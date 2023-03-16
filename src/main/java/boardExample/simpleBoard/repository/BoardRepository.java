@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface BoardRepository extends JpaRepository<Board, Long> {
     @Modifying
     @Query("update Board p set p.viewcnt = p.viewcnt + 1 where p.uid = :uid")
-    // 자바 8버전이상에서는 @Param을 붙여줘야 한다.
+        // 자바 8버전이상에서는 @Param을 붙여줘야 한다.
     int updateView(@Param("uid") Long uid);
 
     /** 좋아요 추가 **/

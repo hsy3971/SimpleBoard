@@ -52,7 +52,6 @@ public class BoardService {
     @Transactional
     public Board BoardAdd(BoardDto dto) throws IOException {
         List<Attachment> attachments = attachmentService.saveAttachments(dto.getAttachmentFiles());
-//        Board board = boardPostDto.createBoard();
         Board board = dto.toEntity();
         attachments.stream()
                 .forEach(attachment -> board.setAttachment(attachment));
@@ -63,8 +62,8 @@ public class BoardService {
         return saveBoard;
     }
     public void BoardDelete(Long uid) {
-        Board id = boardRepository.findById(uid).get();
-        List<Attachment> attachedFiles = id.getAttachedFiles();
+        Board board = boardRepository.findById(uid).get();
+        List<Attachment> attachedFiles = board.getAttachedFiles();
         for (Attachment attachedFile : attachedFiles) {
             String path = fileStore.createPath(attachedFile.getStorefilename(), attachedFile.getAttachmenttype());
             File file = new File(path);
@@ -88,7 +87,7 @@ public class BoardService {
         List<Attachment> attachments = attachmentService.saveAttachments(dto.getAttachmentFiles());
 //        attachment DB 저장
         for (Attachment attachment : attachments) {
-//          set을 통해 boardid 외래키를 초기화
+//          boardid 외래키를 초기화(새로 넣을 attachment에다가 board를 초기화시켜줌)
             attachment.setAttachmentBoard(board);
             attachmentRepository.save(attachment);
         }
@@ -101,7 +100,7 @@ public class BoardService {
         pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "uid"));
         return boardRepository.findBySubjectContaining(searchKeyword, pageable);
     }
-//    조회수 중복 카운트 방지
+    //    조회수 중복 카운트 방지
 //    1. 글을 조회 요청이 오면 HttpServletRequest에 글의 고유 ID를 키(Key)로 하는 쿠키가 존재하는지 확인합니다.
 //    2. 글의 고유ID 쿠키가 존재하지 않는다면 글의 고유 ID를 Key로 쿠키를 추가하고 글의 조회수를 증가시키고 글의 정보를 응답해줍니다.
 //    3. 글의 고유ID 쿠키가 존재한다면 글의 조회수를 증가시키지 않고 글의 정보만 응답합니다.
@@ -134,6 +133,7 @@ public class BoardService {
      * @return
      * */
     private Cookie createCookieForForNotOverlap(Long bId) {
+//        쿠키 이름을 alreadyViewCookie + 게시글번호로 구분한다.
         Cookie cookie = new Cookie(VIEWCOOKIENAME+bId, String.valueOf(bId));
         cookie.setComment("조회수 중복 증가 방지 쿠키");	// 쿠키 용도 설명 기재
         cookie.setMaxAge(getRemainSecondForTommorow()); 	// 하루를 준다.
@@ -160,7 +160,7 @@ public class BoardService {
         /** 로그인한 유저가 해당 게시물을 좋아요 했는지 안 했는지 확인 **/
         if(!findLike(likeBoard, likeMember)){
             /* 좋아요 엔티티 생성 */
-            Like memberLikeBoard = new Like(likeMember, likeBoard);
+            Like memberLikeBoard = Like.builder().likeBoard(likeBoard).likeMember(likeMember).build();
             likeRepository.save(memberLikeBoard);
             boardRepository.plusLike(likeBoard.getUid());
             return true;

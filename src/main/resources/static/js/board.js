@@ -24,39 +24,53 @@ function boardCreate() {
     }
 };
 
-function removeBtn(id, attachmentType) {
-    var fileName = id;
+function removeBtn(id) {
 //  removeId를 통해 각 id별로 클래스명을 달리한다.
     var removeId = "removeButton"+id;
-    var className = document.getElementsByClassName(removeId);
-    var fileType = attachmentType;
+    var idName = document.getElementById(removeId);
+    var targetDiv = idName.closest("div");
 
-    $.post('/removeFile',{fileName : fileName, fileType : fileType}, function(result){
-        console.log(result);
-        if(result === true){
-            className[0].style.display = 'none';
-        }
-    })
+//    console.log(target);
+    const con_check = confirm("삭제하시겠습니까?");
+    if (con_check === true) {
+//      가장 가까운 div 태그모두를 지운다.
+        targetDiv.remove();
+    }
 };
 
-function removeBtn2(id, attachmentType) {
-    var fileName = id;
+function removeBtn2(id) {
     var removeId = "removeButton2"+id;
-    var className = document.getElementsByClassName(removeId);
-    var fileType = attachmentType;
-
-    $.post('/removeFile',{fileName : fileName, fileType : fileType}, function(result){
-        console.log(result);
-        if(result === true){
-            className[0].style.display = 'none';
-        }
-    })
+    var idName = document.getElementById(removeId);
+    var targetDiv = idName.closest("div");
+    const con_check = confirm("삭제하시겠습니까?");
+    if (con_check === true) {
+//      가장 가까운 div 태그모두를 지운다.
+        targetDiv.remove();
+    }
 };
 
 function boardUpdate() {
+//
+    var list = new Array();
+    $("input[name=imageone]").each(function(index, item){
+        list.push($(item).val());
+    });
+    $("#image_list").val(list);
+
+    var list2 = new Array();
+    $("input[name=generalone]").each(function(index, item){
+        list2.push($(item).val());
+    });
+    $("#general_list").val(list2);
+
     const uid = $("#bid").val();
     const updateForm = $('#updateForm');
     const boardAddForm = new FormData(updateForm[0]);
+
+//  formData를 확인할수있는 출력문(formData의 정책상 안의 구조를 알수없기 떄문에 이런식으로 출력문을 작성해줘야 한다.)
+//    for (var pair of boardAddForm.entries()) {
+//        console.log(pair[0] + ', ' + pair[1]);
+//    }
     const con_check = confirm("수정하시겠습니까?");
     if (con_check === true) {
         if(!boardAddForm.get('subject') || !boardAddForm.get('content')) {
@@ -73,7 +87,7 @@ function boardUpdate() {
                 data: boardAddForm,
             }).done(function () {
                 alert('수정되었습니다.');
-                window.location.href = "/boards";
+                window.location.href = "/boards/" + uid;
             }).fail(function (error) {
                 alert(JSON.stringify(error));
             });

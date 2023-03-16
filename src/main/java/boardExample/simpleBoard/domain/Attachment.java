@@ -16,14 +16,14 @@ import javax.persistence.*;
 public class Attachment {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-//  원본이름
+    //  원본이름
     private String originfilename;
-//  파일저장한이름
+    //  파일저장한이름
     private String storefilename;
     @Enumerated(EnumType.STRING)
     private AttachmentType attachmenttype;
 
-//    JsonIgnore: 무한참조 방지
+    //    JsonIgnore: 무한참조 방지
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonManagedReference
     @JsonIgnore

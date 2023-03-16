@@ -9,13 +9,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Getter
 @NoArgsConstructor
@@ -29,9 +28,9 @@ public class BoardDto{
     private String regdate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
     private String updatedate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
     private Member member;
-    private Map<AttachmentType, List<MultipartFile>> attachmentFiles = new ConcurrentHashMap<>();
+    private Map<AttachmentType, List<MultipartFile>> attachmentFiles = new HashMap<>();
 
-//    dto -> entity
+    //    dto -> entity
     public Board toEntity() {
         Board build = Board.builder()
                 .subject(subject)

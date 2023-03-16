@@ -96,7 +96,7 @@
         <div th:each="comment:${comments}" th:with="step=${comment.step}">
             <ul id="comment-box" class="list-group">
                 <li id="comment--1" class="list-group-item d-flex justify-content-between">
-<!--                step만큼 반복하여 -> 기호를 달아준다-->
+                    <!--                step만큼 반복하여 -> 기호를 달아준다-->
                     <div th:if="${comment.step}!=0" th:each="page: ${#numbers.sequence(0, step-1)}" class="bi bi-arrow-return-right"></div>
                     <p th:attr="class = 'collapse multi-collapse'+${comment.id}+' show'" th:text="${comment.comment}"></p>
                     <div class="d-flex">
@@ -108,7 +108,7 @@
                         &nbsp;
                         <span><a th:if="${comment.member.uid} == ${userid?.uid}" type="button" class="btn btn-light btn-xs" th:bid="${board.uid}" th:cid="${comment.id}" th:onclick="main.commentDelete(this.getAttribute('bid'),this.getAttribute('cid'))">삭제</a></span>
                         &nbsp;&nbsp;
-                        <span><a type="button" data-toggle="collapse" th:attr="data-target='.multi-collapse'+${comment.id}+${comment.board.uid}" class="btn btn-light btn-xs">답글</a></span>
+                        <span><a th:if="${userid} != null" type="button" data-toggle="collapse" th:attr="data-target='.multi-collapse'+${comment.id}+${comment.board.uid}" class="btn btn-light btn-xs">답글</a></span>
                         <form id="form1">
                             <input type="hidden" id="cId" th:value="${comment.id}">
                             <input type="hidden" id="pId" th:value="${board.uid}">
@@ -132,35 +132,35 @@
             </ul>
         </div>
         <nav th:if="${comments} != null" aria-label="Page navigation" style="text-align: center;">
-        <ul class="pagination"
-            th:with="start=${T(java.lang.Math).floor(comments.number/10) * 10 + 1},
+            <ul class="pagination"
+                th:with="start=${T(java.lang.Math).floor(comments.number/10) * 10 + 1},
                     last=(${start + 9 < totalPages ? start + 9 : totalPages})">
-            <li>
-                <a th:href="@{/boards/{uid}(uid=${board.uid}, page=0)}" aria-label="First">
-                    <span aria-hidden="true">First</span>
-                </a>
-            </li>
-            <li th:class="${comments.number==0} ? 'disabled'">
-                <a th:href="${comments.number==0} ? '#' :@{/boards/{uid}(uid=${board.uid}, page=${comments.number-1})}" aria-label="Previous">
-                    <span aria-hidden="true">&lt;</span>
-                </a>
-            </li>
-            <li th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == comments.number+1} ? 'active'">
-                <a th:href="@{/boards/{uid}(uid=${board.uid}, page=${page-1})}" th:text="${page}"></a>
-            </li>
+                <li>
+                    <a th:href="@{/boards/{uid}(uid=${board.uid}, page=0)}" aria-label="First">
+                        <span aria-hidden="true">First</span>
+                    </a>
+                </li>
+                <li th:class="${comments.number==0} ? 'disabled'">
+                    <a th:href="${comments.number==0} ? '#' :@{/boards/{uid}(uid=${board.uid}, page=${comments.number-1})}" aria-label="Previous">
+                        <span aria-hidden="true">&lt;</span>
+                    </a>
+                </li>
+                <li th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == comments.number+1} ? 'active'">
+                    <a th:href="@{/boards/{uid}(uid=${board.uid}, page=${page-1})}" th:text="${page}"></a>
+                </li>
 
-            <li th:class="${totalPages==comments.number+1} ? 'disabled'">
-                <a th:href="${totalPages==comments.number+1} ? '#' : @{/boards/{uid}(uid=${board.uid}, page=${comments.number + 1})}" aria-label="Next">
-                    <span aria-hidden="true">&gt;</span>
-                </a>
-            </li>
+                <li th:class="${totalPages==comments.number+1} ? 'disabled'">
+                    <a th:href="${totalPages==comments.number+1} ? '#' : @{/boards/{uid}(uid=${board.uid}, page=${comments.number + 1})}" aria-label="Next">
+                        <span aria-hidden="true">&gt;</span>
+                    </a>
+                </li>
 
-            <li>
-                <a th:href="@{/boards/{uid}(uid=${board.uid}, page=${totalPages-1})}" aria-label="Last">
-                    <span aria-hidden="true">Last</span>
-                </a>
-            </li>
-        </ul>
+                <li>
+                    <a th:href="@{/boards/{uid}(uid=${board.uid}, page=${totalPages-1})}" aria-label="Last">
+                        <span aria-hidden="true">Last</span>
+                    </a>
+                </li>
+            </ul>
         </nav>
         <div class="card-footer">Board Service</div>
     </div>

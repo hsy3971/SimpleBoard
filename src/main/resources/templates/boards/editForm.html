@@ -44,18 +44,25 @@
             <input id="generalFiles[]" type="file" name="generalFiles[]" multiple="multiple"/>
         </div>
         <div th:each="imageFile : ${board.attachedFiles}">
+            <!--            hidden-->
+            <!--            value로 하니까 텍스트그대로 출력했는데 th:value하니까 값을 제대로 읽음-->
+            <input th:if="${imageFile.attachmenttype == T(boardExample.simpleBoard.domain.AttachmentType).IMAGE}" type="hidden" name="imageone" th:value="${imageFile.storefilename}">
             <img th:if="${imageFile.attachmenttype == T(boardExample.simpleBoard.domain.AttachmentType).IMAGE}"
                  th:src="@{/images/{imageFile}(imageFile=${imageFile.storefilename})}" width="300" height="300" style="margin-right: 5px"/>
             <button th:if="${imageFile.attachmenttype == T(boardExample.simpleBoard.domain.AttachmentType).IMAGE}"
-                    th:attr="class='removeButton'+${imageFile.storefilename}" th:sid="${imageFile.storefilename}" th:tid="${imageFile.attachmenttype}" type="button" onclick="removeBtn(this.getAttribute('sid'), this.getAttribute('tid'))">REMOVE</button>
+                    th:attr="id='removeButton'+${imageFile.storefilename}" th:sid="${imageFile.storefilename}" type="button" onclick="removeBtn(this.getAttribute('sid'))">REMOVE</button>
         </div>
+        <input type="hidden" name="image_list" id="image_list">
         &nbsp;
         <div th:each="generalFile : ${board.attachedFiles}">
+            <!--            hidden-->
+            <input th:if="${generalFile.attachmenttype == T(boardExample.simpleBoard.domain.AttachmentType).GENERAL}" type="hidden" name="generalone" th:value="${generalFile.storefilename}">
             <a th:if="${generalFile.attachmenttype == T(boardExample.simpleBoard.domain.AttachmentType).GENERAL}"
                th:text="${generalFile.originfilename}" style="margin-right: 5px"/><br/>
             <button th:if="${generalFile.attachmenttype == T(boardExample.simpleBoard.domain.AttachmentType).GENERAL}"
-                    th:attr="class='removeButton2'+${generalFile.storefilename}" th:sid="${generalFile.storefilename}" th:tid="${generalFile.attachmenttype}" type="button" onclick="removeBtn2(this.getAttribute('sid'), this.getAttribute('tid'))">REMOVE</button>
+                    th:attr="id='removeButton2'+${generalFile.storefilename}" th:sid="${generalFile.storefilename}" type="button" onclick="removeBtn2(this.getAttribute('sid'))">REMOVE</button>
         </div>
+        <input type="hidden" name="general_list" id="general_list">
     </form>
     <hr class="my-4">
 

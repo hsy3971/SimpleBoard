@@ -5,7 +5,6 @@ import boardExample.simpleBoard.dto.BoardDto;
 import boardExample.simpleBoard.dto.MemberDto;
 import boardExample.simpleBoard.service.*;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -20,7 +19,6 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 
-@Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/boards")
@@ -131,8 +129,7 @@ public class BoardController {
     // 게시글 수정
     @GetMapping("/{uid}/edit")
     public String editForm(@PathVariable("uid") Long uid, Model model) {
-        Optional<Board> result = boardService.BoardOne(uid);
-        Board board = result.get();
+        Board board = boardService.BoardOne(uid).get();
         model.addAttribute("board", board);
         return "boards/editForm";
     }

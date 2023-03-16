@@ -22,7 +22,6 @@ import java.nio.charset.StandardCharsets;
 public class AttachmentController {
 
     private final FileStore fileStore;
-    private final AttachmentRepository attachmentRepository;
 
     @GetMapping("/images/{filename}")
     public Resource processImg(@PathVariable String filename) throws MalformedURLException {
@@ -39,18 +38,5 @@ public class AttachmentController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
                 .body(urlResource);
-    }
-
-    @PostMapping("/removeFile")
-    public ResponseEntity<Boolean> removeFile(String fileName, AttachmentType fileType){
-        boolean result;
-//      파일삭제
-        File file = new File(fileStore.createPath(fileName, fileType));
-        result = file.delete();
-//      DB삭제(이미지)
-        Attachment attachment = attachmentRepository.findByStorefilename(fileName).get();
-        attachmentRepository.delete(attachment);
-
-        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
