@@ -62,19 +62,13 @@ public class CommentDto{
     public void updateParent(Comment parent){
         this.parent = parent;
     }
-    public void setRef(Long ref) {
+
+    public void setRef(Long ref, Long reforder, Long step, Long answernum) {
         this.ref = ref;
-    }
-    public void setReforder(Long reforder) {
         this.reforder = reforder;
-    }
-    public void setStep(Long step) {
         this.step = step;
-    }
-    public void setAnswernum(Long answernum) {
         this.answernum = answernum;
     }
-
     // 추가했지만 보류
     /**
      * 댓글 정보를 리턴할 응답(Response) 클래스

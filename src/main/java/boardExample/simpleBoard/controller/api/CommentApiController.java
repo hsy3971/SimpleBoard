@@ -26,7 +26,7 @@ public class CommentApiController {
     }
     //create
     @PostMapping("/boards/{bid}/comments")
-    public ResponseEntity commentSave(@PathVariable("bid") Long id, @RequestBody CommentDto commentDto, Authentication authentication) {
+    public ResponseEntity commentSave(@PathVariable("bid") Long id, @RequestBody CommentDto.Response response, Authentication authentication) {
         MemberDto.UserSessionDto user = (MemberDto.UserSessionDto) httpSession.getAttribute("user");
         String uid = null;
 //        세션일때와 아닐때로 구글로그인연동인지 일반 로그인인지를 구분
@@ -37,7 +37,7 @@ public class CommentApiController {
             Member member = (Member) authentication.getPrincipal();  //userDetail 객체를 가져옴
             uid = member.getUid();
         }
-        return ResponseEntity.ok(commentService.commentSave(uid, id, commentDto));
+        return ResponseEntity.ok(commentService.commentSave(uid, id, response));
     }
     //update
     @PutMapping({"/boards/{bid}/comments/{cid}"})

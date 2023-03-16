@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface CommentRepository extends JpaRepository<Comment, Long>, CustomCommentRepository {
-//  댓글 페이징(게시판별 페이징을 위해 findAllBy를 씀)
+    //  댓글 페이징(게시판별 페이징을 위해 findAllBy를 씀)
 //    Page<Comment> findAllByBoard(Board board, Pageable pageable);
     @Query("select CAST(NVL(MAX(ref),0) as java.lang.Long) from Comment b where b.board.uid = :bId")
     Long findByRef(@Param("bId") Long bId);
@@ -23,11 +23,12 @@ public interface CommentRepository extends JpaRepository<Comment, Long>, CustomC
     @Modifying
     @Query("update Comment c set c.reforder = c.reforder + 1 where c.ref = :ref AND c.reforder > :num")
     public void updateRefOrderPlus(@Param("ref") Long ref, @Param("num") Long num);
-//  새롭게 넣어준 쿼리문\
+    //  새롭게 넣어준 쿼리문\
     @Transactional
     @Modifying
     @Query("update Comment c set c.answernum = c.answernum + 1 where c.id = :parentId AND c.answernum = :answerNumber")
     public void updateAnswerNum(@Param("parentId") Long parentId, @Param("answerNumber") Long answerNumber);
+    //  삭제시 부모 자식수 -1
     @Transactional
     @Modifying
     @Query("update Comment c set c.answernum = c.answernum - 1 where c.id = :parentId")

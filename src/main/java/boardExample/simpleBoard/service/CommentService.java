@@ -26,19 +26,24 @@ public class CommentService {
 
     //    CREATE
     @Transactional
-    public Long commentSave(String uid, Long id, CommentDto dto) {
+    public Long commentSave(String uid, Long id, CommentDto.Response response) {
         Optional<Member> userid = memberRepository.findByUid(uid);
         Member member = userid.get();
         Board board = boardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("댓글 쓰기 실패: 해당 게시글이 존재하지 않습니다." + id));
 //      ref의 제일 큰값을 찾고 있다면 MAX값을, 없다면 0을 return
         Long commentRef = commentRepository.findByRef(board.getUid());
-
-        dto.setMember(member);
-        dto.setBoard(board);
-        dto.setRef(commentRef+1L);
-        dto.setStep(0L);
-        dto.setReforder(0L);
-        dto.setAnswernum(0L);
+        CommentDto dto = CommentDto.builder()
+                .comment(response.getComment())
+                .board(board)
+                .member(member)
+                .build();
+        Long ref = commentRef+1L;
+        Long step = 0L;
+        Long refOrder = 0L;
+        Long answerNum = 0L;
+//        commentsave에선 dto의 set함수를 통해 초기화를 시켜주고 toEntity를 통해서 comment를 초기화시키고 save로 넘겨줫다
+//        parentsave에선 dto의 builder함수를 통해 comment를 초기화하고 member,board를 초기화 해줬다.
+        dto.setRef(ref,step,refOrder,answerNum);
 
         Comment comment = dto.toEntity();
         commentRepository.save(comment);
@@ -53,8 +58,6 @@ public class CommentService {
                 .board(board)
                 .member(member)
                 .build();
-        dto.setMember(member);
-        dto.setBoard(board);
 
 //      부모인 댓글을 찾아서 updateParent에 넣어준다
         Comment comment = commentRepository.findById(cid).get();
@@ -63,10 +66,11 @@ public class CommentService {
             return null;
         }
         dto.updateParent(comment);
-        dto.setRef(comment.getRef());
-        dto.setStep(comment.getStep()+1L);
-        dto.setReforder(refOrderResult);
-        dto.setAnswernum(0L);
+        Long ref = comment.getRef();
+        Long step = comment.getStep()+1L;
+        Long refOrder = refOrderResult;
+        Long answerNum = 0L;
+        dto.setRef(ref,refOrder,step,answerNum);
         //부모댓글의 자식컬럼수 + 1 업데이트
         commentRepository.updateAnswerNum(comment.getId(), comment.getAnswernum());
         Comment cmt = dto.toEntity();
@@ -118,7 +122,7 @@ public class CommentService {
         Comment comment = commentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다." + id));
         comment.update(commentDto.getComment(), localTime);
     }
-
+    /* Delete */
     @Transactional
     public void delete(Long id) {
         Comment comment = commentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다. id=" + id));
@@ -126,7 +130,6 @@ public class CommentService {
             Long parentId = comment.getParent().getId();
             commentRepository.updateAnswerNumMinus(parentId);
         }
-//        commentRepository.updateRefOrderMinus(comment.getRef(), comment.getReforder());
         commentRepository.delete(comment);
     }
 

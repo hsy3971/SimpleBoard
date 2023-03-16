@@ -30,7 +30,7 @@ public class CommentRepositoryImpl implements CustomCommentRepository{
                 ).fetch();
     }
 
-//  querydsl에서 원하는 값들을 찾고 페이징하자(PageImpl을 쓰는게 최선일지 생각해보기) -> offset~limit까지
+    //  querydsl에서 원하는 값들을 찾고 페이징하자(PageImpl을 쓰는게 최선일지 생각해보기) -> offset~limit까지
 //  기존에는 Pageable의 PageRequest.of를 통해 uid별로 정렬후 페이징을 해줬다.
     public Page<Comment> findAllByBoardByComments(Long boardId, Pageable pageable) {
         List<Comment> comments = queryFactory.selectFrom(comment1)

@@ -31,7 +31,7 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "board_id")
     private Board board;
-//    JsonIgnore를 통해 무한참조 방지
+    //    JsonIgnore를 통해 무한참조 방지
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "member_id")
@@ -45,13 +45,13 @@ public class Comment {
     @JsonIgnore
     @OneToMany(mappedBy = "parent", orphanRemoval = true)
     private List<Comment> children = new ArrayList<>();
-//  그륩
+    //  그륩
     private Long ref;
-//  그룹순서
+    //  같은 그룹내의 순서
     private Long reforder;
-//  단계
+    //  단계
     private Long step;
-//  자식수
+    //  자식수
     private Long answernum;
 
     @Builder
