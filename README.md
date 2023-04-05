@@ -223,43 +223,38 @@ Basic Board Project
 
 ## 개발 내용
 
-● 게시판 조회수 기능 추가
+● [구글 로그인 구현](https://flaxen-cucumber-c3a.notion.site/4fd4fb06db154c79810cacab9a30b790)
 
 
-● 게시판 검색처리 및 페이지 구현
+● [네이버 로그인 구현](https://flaxen-cucumber-c3a.notion.site/40775649d8ec40d5949c156969882856)
 
 
-● Spring Securtiy 회원가입 및 로그인 구현
+● [회원가입과 로그인 기능 구현](https://flaxen-cucumber-c3a.notion.site/b439fd634516460487a0d341fc2d7abc)
 
 
-● 회원가입 Validation 유효성 검사
+● [댓글 페이징 구현](https://flaxen-cucumber-c3a.notion.site/e4841c2dab89421888482734393a9743)
 
 
-● 회원가입 아이디 중복체크
+● [게시판 페이징 처리와 검색처리 구현](https://flaxen-cucumber-c3a.notion.site/195a051fc9584f868f2a9ec5d33b3b5a)
 
 
-● OAuth 2.0 구글 로그인 구현
+● [게시글 등록 구현](https://flaxen-cucumber-c3a.notion.site/2cac292f44d246ee98305ed4ece8c13a)
 
 
-● OAuth 2.0 네이버 로그인 구현
+● [게시글 수정과 삭제 구현](https://flaxen-cucumber-c3a.notion.site/2e409411341c49a4ab1e1ba6cee98f48)
 
 
-● 게시판 CRUD
+● [댓글 수정과 삭제 구현](https://flaxen-cucumber-c3a.notion.site/09efea51199a4ffbb2317fb26dca7edd)
 
 
-● 댓글 CRUD
+● [좋아요 기능 구현](https://flaxen-cucumber-c3a.notion.site/72edd38ba0d94675b6c765356a74206f)
 
 
-● 댓글페이징
+● [댓글작성과 대댓글 기능 구현](https://flaxen-cucumber-c3a.notion.site/08a8273dc01848e4b6f2f5ff663b4ac5)
 
 
-● 대댓글 기능구현
+● [조회수 기능 구현(중복방지)](https://flaxen-cucumber-c3a.notion.site/79d06b80e4614f82aee7838ba861e049)
 
-
-● 조회수 중복 방지
-
-
-● 좋아요 기능 추가
 
 ## 마치며
 
