@@ -61,7 +61,7 @@ public class CommentService {
 
 //      부모인 댓글을 찾아서 updateParent에 넣어준다
         Comment comment = commentRepository.findById(cid).get();
-        Long refOrderResult  = refOrderAndUpdate(comment);
+        Long refOrderResult  = refOrderAndUpdate(comment, board);
         if (refOrderResult == null) {
             return null;
         }
@@ -78,35 +78,24 @@ public class CommentService {
         return cmt.getId();
     }
 
-    private Long refOrderAndUpdate(Comment comment) {
+    private Long refOrderAndUpdate(Comment comment, Board board) {
 
         Long saveStep = comment.getStep() + 1l;
         Long refOrder = comment.getReforder();
         Long answerNum = comment.getAnswernum();
         Long ref = comment.getRef();
-
         //부모 댓글그룹의 answerNum(자식수)
-        Long answerNumSum = commentRepository.findBySumAnswerNum(ref);
-        //SELECT SUM(answerNum) FROM BOARD_COMMENTS WHERE ref = ?1
+        Long answerNumSum = commentRepository.findBySumAnswerNum(ref, board);
         //부모 댓글그룹의 최댓값 step
-        Long maxStep = commentRepository.findByNvlMaxStep(ref);
-        //SELECT MAX(step) FROM BOARD_COMMENTS WHERE ref = ?1
-
+        Long maxStep = commentRepository.findByNvlMaxStep(ref, board);
         //저장할 대댓글 step과 그룹내의최댓값 step의 조건 비교
-        /*
-        step + 1 < 그룹리스트에서 max step값  AnswerNum sum + 1 * NO UPDATE
-        step + 1 = 그룹리스트에서 max step값  refOrder + AnswerNum + 1 * UPDATE
-        step + 1 > 그룹리스트에서 max step값  refOrder + 1 * UPDATE
-        */
         if (saveStep < maxStep) {
             return answerNumSum + 1l;
         } else if (saveStep == maxStep) {
-            commentRepository.updateRefOrderPlus(ref, refOrder + answerNum);
-            //UPDATE BOARD_COMMENTS SET refOrder = refOrder + 1 WHERE ref = ?1 AND refOrder > ?2
+            commentRepository.updateRefOrderPlus(ref, refOrder + answerNum, board);
             return refOrder + answerNum + 1l;
         } else if (saveStep > maxStep) {
-            commentRepository.updateRefOrderPlus(ref, refOrder);
-            //UPDATE BOARD_COMMENTS SET refOrder = refOrder + 1 WHERE ref = ?1 AND refOrder > ?2
+            commentRepository.updateRefOrderPlus(ref, refOrder, board);
             return refOrder + 1l;
         }
 

@@ -85,7 +85,9 @@ public class BoardController {
         boardService.updateView(bId, request, response);
         list = commentService.findBoardByComments(bId, pageable);
         List<Comment> cnt = board.getComments();
+        // 해당 게시물의 댓글의 갯수
         int cnt_size = cnt.size();
+        // 한 페이지의 댓글 갯수
         int list_size = list.getSize();
         int mok = cnt_size / list_size;
         int res = cnt_size % list_size;

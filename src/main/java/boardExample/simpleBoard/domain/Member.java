@@ -69,7 +69,7 @@ public class Member implements UserDetails {
         return this;
     }
 
-    // 유저의 권한 목록
+    // 유저의 권한 목록(어떤 권한을 가졌는지 return해준다.)
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority(this.u_auth));
@@ -85,9 +85,6 @@ public class Member implements UserDetails {
         return this.uid;
     }
 
-    public String getUserName(){
-        return this.uname;
-    }
     /* 계정 만료 여부
      *  true : 만료 안됨
      *  false : 만료
