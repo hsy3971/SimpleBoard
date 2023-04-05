@@ -223,7 +223,7 @@ Basic Board Project
 
 ## 개발 내용
 
-● 구글 로그인 구현
+● [구글 로그인 구현](https://flaxen-cucumber-c3a.notion.site/4fd4fb06db154c79810cacab9a30b790)
 
 
 ● 네이버 로그인 구현
