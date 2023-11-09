@@ -37,7 +37,6 @@ public class BoardAddForm {
         this.general_list = general_list;
     }
 
-
     public BoardDto createBoardDto(Member member) {
         Map<AttachmentType, List<MultipartFile>> attachments = getAttachmentTypeListMap();
         return BoardDto.builder()

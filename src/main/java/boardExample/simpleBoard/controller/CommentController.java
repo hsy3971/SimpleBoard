@@ -26,7 +26,7 @@ public class CommentController {
 
     @PostMapping(value = "/boards/{boardId}/comments/reply")
     @ResponseBody
-    public ResponseEntity replySave(@PathVariable("boardId") Long boardId, @RequestBody CommentDto.Response response, Authentication authentication, @PageableDefault Pageable pageable) {
+    public ResponseEntity replySave(@PathVariable("boardId") Long boardId, @RequestBody CommentDto.Response response, Authentication authentication) {
         MemberDto.UserSessionDto user = (MemberDto.UserSessionDto) httpSession.getAttribute("user");
         String uid = null;
 //        세션일때와 아닐때로 구글로그인연동인지 일반 로그인인지를 구분
