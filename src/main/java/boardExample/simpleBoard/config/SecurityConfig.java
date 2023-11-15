@@ -37,10 +37,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .httpBasic()
                 .and()
-                .csrf().disable() //로그인 창(사이트 간 요청 위조(Cross-Site Request Forgery) 공격 방지 기능 키기)
+                //로그인 창(사이트 간 요청 위조(Cross-Site Request Forgery) 공격 방지 기능 해제)
+                .csrf().disable()
+//              요청에 대한 권한 지정. Security 처리에 HttpServletRequest를 이용한다는 것을 의미
                 .authorizeRequests()
+//              어떤 사용자든지 접근할 수 있다.
                     .antMatchers( "/login", "/signup","/boards", "/access_denied", "/resources/**").permitAll()
-                    // USER, ADMIN 접근 허용(보류)
+                    // USER, ADMIN, SOCIAL 접근 허용(보류)
                     .antMatchers("/userAccess").hasRole("USER")
                     .antMatchers("/userAccess").hasRole("ADMIN")
                     .antMatchers("/userAccess").hasRole("SOCIAL")
@@ -53,20 +56,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .defaultSuccessUrl("/boards")
                     .and()
                 .logout()
-                // 로그아웃을 실행할 주소
+                // 로그아웃을 실행할 주소( AntPathRequestMatcher : HTTP 메서드와 일치하는 특정 패턴으로 Matcher를 작성한다.)
                     .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                     .logoutSuccessUrl("/")
                 // 로그아웃시 쿠키 삭제
                     .deleteCookies("JSESSIONID", "remember-me")
-                // 로그아웃 이후 세션 전체 삭제 여부
+                // 로그아웃 시 인증정보를 지우고 설정된 세션을 무효화 시킨다.
                 .invalidateHttpSession(true)
                     .and()
                 /* OAuth */
                 .oauth2Login()
                     .loginPage("/login")
                     .defaultSuccessUrl("/boards")
-                    .userInfoEndpoint() // OAuth2 로그인 성공 후 가져올 설정들
-                    .userService(customOAuth2UserService); // 서버에서 사용자 정보를 가져온 상태에서 추가로 진행하고자 하는 기능 명시
+                    .userInfoEndpoint() // OAuth2 로그인 성공 후 사용자 정보를 가져올 때 설정을 담당한다.
+                    // 리소스 서버(Google, Naver)에서 사용자 정보를 가져온 상태에서 추가 진행하고자 하는 기능을 구현한다.
+                    .userService(customOAuth2UserService);
     }
 
     /**

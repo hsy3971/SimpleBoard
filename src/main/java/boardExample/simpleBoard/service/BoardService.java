@@ -41,7 +41,7 @@ public class BoardService {
     // 페이징
     @Transactional
     public Page<Board> pageList(Pageable pageable) {
-        int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
+        int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber());
         pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "uid"));
         return boardRepository.findAll(pageable);
     }
@@ -96,7 +96,7 @@ public class BoardService {
 
     @Transactional
     public Page<Board> findBySubjectContaining(String searchKeyword, Pageable pageable) {
-        int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
+        int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber());
         pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "uid"));
         return boardRepository.findBySubjectContaining(searchKeyword, pageable);
     }

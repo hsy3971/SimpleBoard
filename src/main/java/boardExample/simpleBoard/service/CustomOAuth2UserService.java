@@ -27,24 +27,26 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+        //DefaultOAuth2UserService를 통해 User 정보를 가져와야 하기 때문에 대리자 생성
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
-        // OAuth2 서비스 id 구분코드 ( 구글, 카카오, 네이버 )
+        // OAuth2 서비스 id 구분코드 ( 구글, 네이버 )
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
 
         // OAuth2 로그인 진행시 키가 되는 필드 값 (PK) (구글의 기본 코드는 "sub")
         String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails()
                 .getUserInfoEndpoint().getUserNameAttributeName();
 
-        // OAuth2UserService
+        // OAuth2UserService를 통해 가져온 데이터를 담을 클래스
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
+        // 로그인 한 유저 정보
         Member member = saveOrUpdate(attributes);
 
-        // 세션 정보를 저장하는 직렬화된 dto 클래스
+        // httpSession의 유저 속성을 설정
         session.setAttribute("user", new MemberDto.UserSessionDto(member));
-
+        // 로그인한 유저를 리턴함
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(Role.SOCIAL.getValue())),
                 attributes.getAttributes(),

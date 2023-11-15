@@ -74,29 +74,29 @@
                     last=(${start + 9 < boards.totalPages ? start + 9 : boards.totalPages})">
             <!--            수정-->
             <li>
-                <a th:href="@{/boards(page=1)}" aria-label="First">
+                <a th:href="@{/boards(page=0)}" aria-label="First">
                     <span aria-hidden="true">First</span>
                 </a>
             </li>
 
-            <li th:class="${boards.first} ? 'disabled'">
-                <a th:href="${boards.first} ? '#' :@{/boards(page=${boards.number}, searchKeyword=${param.searchKeyword})}" aria-label="Previous">
+            <li th:class="${boards.number == 0} ? 'disabled'">
+                <a th:href="${boards.number == 0} ? '#' :@{/boards(page=${boards.number-1}, searchKeyword=${param.searchKeyword})}" aria-label="Previous">
                     <span aria-hidden="true">&lt;</span>
                 </a>
             </li>
 
             <li th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'active'">
-                <a th:href="@{/boards(page=${page}, searchKeyword=${param.searchKeyword})}" th:text="${page}"></a>
+                <a th:href="@{/boards(page=${page-1}, searchKeyword=${param.searchKeyword})}" th:text="${page}"></a>
             </li>
 
-            <li th:class="${boards.last} ? 'disabled'">
-                <a th:href="${boards.last} ? '#' : @{/boards(page=${boards.number + 2}, searchKeyword=${param.searchKeyword})}" aria-label="Next">
+            <li th:class="${boards.totalPages==boards.number+1} ? 'disabled'">
+                <a th:href="${boards.totalPages==boards.number+1} ? '#' : @{/boards(page=${boards.number + 1}, searchKeyword=${param.searchKeyword})}" aria-label="Next">
                     <span aria-hidden="true">&gt;</span>
                 </a>
             </li>
 
             <li>
-                <a th:href="@{/boards(page=${boards.totalPages})}" aria-label="Last">
+                <a th:href="@{/boards(page=${boards.totalPages-1})}" aria-label="Last">
                     <span aria-hidden="true">Last</span>
                 </a>
             </li>

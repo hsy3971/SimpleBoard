@@ -37,17 +37,16 @@ public class Board {
 
     private String updatedate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
     @ManyToOne(fetch = FetchType.LAZY)
+//  조인컬럼을 뭘로 정할거냐?
     @JoinColumn(name = "user_no")
 //  응답데이터에서 제외(LAZY에서 EAGER로 바꾸면 해결되지만 LAZY를 유지하기위해 @JsonIgnore사용
     @JsonIgnore
     private Member member;
 
     @JsonIgnore
+//  mappedBy : 연결된 테이블의 해당 테이블을 지정한 객체 변수명
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
-    private List<Comment> comments;
-
-    //    @OneToMany(mappedBy = "likeBoard", cascade = CascadeType.ALL)
-//    Set<Like> likes = new HashSet<>();
+    private List<Comment> comments = new ArrayList<>();
     @OneToMany(mappedBy = "attachmentBoard", cascade = CascadeType.ALL)
     @JsonBackReference //순환참조 방지
     private List<Attachment> attachedFiles = new ArrayList<>();

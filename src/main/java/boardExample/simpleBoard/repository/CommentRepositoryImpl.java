@@ -18,7 +18,7 @@ import static boardExample.simpleBoard.domain.QMember.member;
 @RequiredArgsConstructor
 public class CommentRepositoryImpl implements CustomCommentRepository{
     private final JPAQueryFactory queryFactory;
-
+//  사용 X
     @Override
     public List<Comment> findCommentByTicketId(Long boardId) {
         return queryFactory.selectFrom(comment1)
@@ -30,14 +30,12 @@ public class CommentRepositoryImpl implements CustomCommentRepository{
                         comment1.modified_date.asc()
                 ).fetch();
     }
-
+//  게시물에 해당되는 댓글을 가져오고 시작 지점과 페이지 사이즈를 지정하고 정렬하여 return한다.
     public Page<Comment> findAllByBoardByComments(Long boardId, Pageable pageable) {
         List<Comment> comments = queryFactory.selectFrom(comment1)
-                .innerJoin(comment1.board, board)
-                .innerJoin(comment1.member, member)
                 .where(comment1.board.uid.eq(boardId))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())   // 시작 지점(default)
+                .limit(pageable.getPageSize())  // 페이지 사이즈(default)
                 .orderBy(comment1.ref.desc(),
                         comment1.reforder.asc())
                 .fetch();

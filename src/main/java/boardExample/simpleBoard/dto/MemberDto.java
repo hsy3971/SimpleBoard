@@ -65,7 +65,6 @@ public class MemberDto {
         private final String update_date;
         private final String email;
 
-        /* Entity -> dto (Response) */
         public UserSessionDto(Member member) {
             this.uno = member.getUno();
             this.uid = member.getUid();

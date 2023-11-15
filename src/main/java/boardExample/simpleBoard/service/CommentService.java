@@ -26,14 +26,14 @@ public class CommentService {
 
     //    CREATE
     @Transactional
-    public Long commentSave(String uid, Long id, CommentDto.Response response) {
+    public Long commentSave(String uid, Long id, CommentDto.Request req) {
         Optional<Member> userid = memberRepository.findByUid(uid);
         Member member = userid.get();
         Board board = boardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("댓글 쓰기 실패: 해당 게시글이 존재하지 않습니다." + id));
 //      ref의 제일 큰값을 찾고 있다면 MAX값을, 없다면 0을 return
         Long commentRef = commentRepository.findByRef(board.getUid());
         CommentDto dto = CommentDto.builder()
-                .comment(response.getComment())
+                .comment(req.getComment())
                 .board(board)
                 .member(member)
                 .build();
@@ -44,17 +44,16 @@ public class CommentService {
 //        commentsave에선 dto의 set함수를 통해 초기화를 시켜주고 toEntity를 통해서 comment를 초기화시키고 save로 넘겨줫다
 //        parentsave에선 dto의 builder함수를 통해 comment를 초기화하고 member,board를 초기화 해줬다.
         dto.setRef(ref,step,refOrder,answerNum);
-
         Comment comment = dto.toEntity();
         commentRepository.save(comment);
         return dto.getId();
     }
     //  cid가 해당 부모댓글이다. 최상의 루트노드를 삭제하면 다같이 삭제된다.
-    public Long parentSave(String uid, Long id, Long cid, CommentDto.Response response) {
+    public Long parentSave(String uid, Long id, Long cid, CommentDto.Request req) {
         Member member = memberRepository.findByUid(uid).get();
         Board board = boardRepository.findById(id).get();
         CommentDto dto = CommentDto.builder()
-                .comment(response.getComment())
+                .comment(req.getComment())
                 .board(board)
                 .member(member)
                 .build();

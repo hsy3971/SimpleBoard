@@ -17,6 +17,9 @@ import java.util.Optional;
 public class MemberDetailsServiceImpl implements UserDetailsService {
     private final MemberRepository memberRepository;
 
+//    loadUserByUsername 메소드에서 유저의 id를 통해 member를 찾고 그 값이 없으면
+//    UsernameNotFoundException예외를 발생시킨다.
+//    그렇지 않은 경우에는 UserDetails(Member) 객체를 생성해서 리턴한다.
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<Member> name = memberRepository.findByUid(username);

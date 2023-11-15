@@ -44,10 +44,12 @@ public class MemberService {
     public boolean existsByMemberId(String uid){
         return memberRepository.existsByUid(uid);
     }
+//  회원가입시 유효성 검사
     @Transactional
     public Map<String, String> validateHandling(Errors errors) {
         Map<String, String> validatorResult = new HashMap<>();
 
+        // 유효성 검사에 실패한 필드 목록을 받음
         for(FieldError error : errors.getFieldErrors()) {
             String validKeyName = String.format("valid_%s", error.getField());
             validatorResult.put(validKeyName, error.getDefaultMessage());

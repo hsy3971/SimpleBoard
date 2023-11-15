@@ -82,7 +82,9 @@ public class BoardController {
         Page<Comment> list = null;
 //        uid:게시판의 id
         Long bId = board.getUid();
+//      조회수 증가
         boardService.updateView(bId, request, response);
+//      해당 게시물의 1페이지의 갯수만큼 list에 저장된다(만약 1페이지당 10개로 지정했다면 10개에 해당되는 댓글들이 저장된다.)
         list = commentService.findBoardByComments(bId, pageable);
         List<Comment> cnt = board.getComments();
         // 해당 게시물의 댓글의 갯수
@@ -91,7 +93,6 @@ public class BoardController {
         int list_size = list.getSize();
         int mok = cnt_size / list_size;
         int res = cnt_size % list_size;
-
         if (res != 0) {
             mok += 1;
         }

@@ -31,7 +31,6 @@ public class AttachmentService {
         return result;
     }
     //  board별 전체 첨부파일(이미지, 일반)
-//  지금 DB에서만 파일이 삭제되고 있다.(파일에서도 삭제가 되어야한다)
     public void findBoardAttachments(Long id, HashMap<String, AttachmentType> updateFile) {
         Board board = boardRepository.findById(id).get();
 //      board 전체 파일(이미지,일반)

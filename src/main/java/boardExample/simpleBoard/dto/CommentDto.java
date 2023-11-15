@@ -69,22 +69,15 @@ public class CommentDto{
         this.step = step;
         this.answernum = answernum;
     }
-    // 추가했지만 보류
-    /**
-     * 댓글 정보를 리턴할 응답(Response) 클래스
-     * Entity 클래스를 생성자 파라미터로 받아 데이터를 Dto로 변환하여 응답
-     * 별도의 전달 객체를 활용해 연관관계를 맺은 엔티티간의 무한참조를 방지
-     */
     @RequiredArgsConstructor
     @Getter
-    public static class Response {
+    public static class Request {
         private Long id;
         private String comment;
         private Long userId;
         private Long postsId;
         private Long parentId;
-        /* Entity -> Dto*/
-        public Response(Comment comment) {
+        public Request(Comment comment) {
             this.id = comment.getId();
             this.comment = comment.getComment();
             this.userId = comment.getMember().getUno();
