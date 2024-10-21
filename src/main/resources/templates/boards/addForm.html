@@ -17,8 +17,8 @@
 </head>
 <body>
 
-<div class="container" style="max-width: 1000px">
-    <div th:replace="fragments/navbar :: navbarFragment"> </div>
+<div class="container">
+    <div th:replace="fragments/header :: headerFragment"> </div>
     <form id="createForm" th:object="${board}" enctype="multipart/form-data">
         <div>
             <label for="subject" th:text="#{label.board.subject}">제목</label>

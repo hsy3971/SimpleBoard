@@ -17,6 +17,11 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    @GetMapping("/home")
+    public String home() {
+        return "home/home";
+    }
+
     @GetMapping("/signup")
     public String signupForm(Model model) {
         model.addAttribute("signupForm", MemberDto.builder().build().toEntity());
@@ -46,7 +51,7 @@ public class MemberController {
      */
     @GetMapping
     public String root() {
-        return "redirect:/boards";
+        return "redirect:/home";
     }
 
     /**

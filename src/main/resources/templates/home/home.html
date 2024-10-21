@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <meta charset="UTF-8">
+    <title>홈페이지</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar, .footerbar {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            padding-left: 15%;
+        }
+
+        .navbar a {
+            color: white;
+            padding: 14px 20px;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .content {
+            flex: 1; /* This makes the content area take up all available space */
+            padding: 20px;
+            text-align: center;
+        }
+
+        .start-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .start-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .intro-text {
+            font-size: 1.2em;
+            margin: 20px 0;
+        }
+
+        .image-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+<!-- 헤더바 -->
+<div th:replace="fragments/header :: headerFragment"> </div>
+<!-- 본문 -->
+<div class="content">
+    <div class="image-container">
+        <img src="/img/board.png" alt="게시판 이미지" width="300">
+    </div>
+
+    <div class="intro-text">
+        <p>안녕하세요! 사람들과 자유롭게 소통하고 싶으신가요?</p>
+        <p>저희 게시판은 다양한 연령대가 함께 어우러져 재미있고 의미 있는 대화를 나눌 수 있는 공간입니다.</p>
+        <p>관심사를 나누고, 새로운 사람들과 연결되는 즐거움을 경험해보세요.</p>
+        <p>망설이지 말고, 지금 바로 함께 소통해보세요! 시작해볼까요?</p>
+    </div>
+    <button class="start-btn">시작하기</button>
+</div>
+<!-- 푸터바 -->
+<div th:replace="fragments/footer :: footerFragment"> </div>
+</body>
+</html>

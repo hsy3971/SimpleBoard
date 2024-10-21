@@ -19,8 +19,8 @@
     </style>
 </head>
 <body>
-<div class="container" style="max-width: 1000px">
-    <div th:replace="fragments/navbar :: navbarFragment"></div>
+<div class="container">
+    <div th:replace="fragments/header :: headerFragment"></div>
     <!--추가-->
     <h2 th:if="${param.status}" th:text="'저장 완료'"></h2>
     <!-- 로그인 유저와 작성자가 동일하지 않다면-->

@@ -17,8 +17,8 @@
 </head>
 <body>
 <!-- id가 updateForm-->
-<div class="container" style="max-width: 1000px">
-    <div th:replace="fragments/navbar :: navbarFragment"> </div>
+<div class="container">
+    <div th:replace="fragments/header :: headerFragment"> </div>
     <form id="updateForm" th:object="${board}" enctype="multipart/form-data">
         <div>
             <input type="hidden" id="bid" class="form-control"  th:field="*{uid}">
