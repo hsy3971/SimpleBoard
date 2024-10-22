@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
     <link th:href="@{/css/bootstrap.min.css}"
@@ -8,11 +8,62 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* 전체 뷰포트 높이를 차지 */
+        }
+
+        .content {
+            flex: 1; /* 본문 영역이 확장되도록 설정 */
+            padding: 20px;
+
+        }
+
+        .navbar, .footerbar {
+            background-color: #6c757d;
+            color: white;
+            padding: 10px;
+            padding-left: 7%;
+            width: 100%;
+            box-sizing: border-box;
+            flex-shrink: 0;
+        }
+
+        .navbar a {
+            color: white;
+            padding: 14px 20px;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .container-fluid {
+            max-width: 1200px; /* 내용의 최대 너비를 제한하여 가독성 개선 */
+            margin: 0 auto;
+        }
+    </style>
+
 </head>
 <body>
-<div class="container">
-    <div th:replace="fragments/header :: headerFragment"> </div>
-    <nav id ="nav">
+
+<!-- 헤더바 -->
+<div th:replace="fragments/header :: headerFragment"></div>
+
+<!-- 본문 내용 -->
+<div class="container content">
+    <nav id="nav">
         <div class="text-right">
             <ul>
                 <span th:if="${info} != null" class="mx-3" th:text="|${info} 님 안녕하세요!!!|"></span>
@@ -25,13 +76,21 @@
             <input type="submit" class="btn btn-dark mr-2" value="검색">
         </form>
     </div>
-    </br>
-    <nav id ="nav2">
+    <br>
+    <nav id="nav2">
         <div class="text-right">
-            <a href="/oauth2/authorization/google" sec:authorize="isAnonymous()" role="button" class="btn btn-outline-danger"><img id="img1" src="/img/google.ico" style="display: block; margin: 0 auto; width:25px; height:25px;"/>로그인</a>
-            <a href="/oauth2/authorization/naver" sec:authorize="isAnonymous()" role="button" class="btn btn-outline-success"><img id="img2" src="/img/naver2.ico" style="display: block; margin: 0 auto; width:25px; height:25px;"/>로그인</a>
-            <a class="nav-link btn btn-outline-warning" sec:authorize="isAnonymous()" th:href="@{/signup}"><img id="img3" src="/img/signup3.ico" style="display: block; margin: 0 auto; width:25px; height:25px;"/>회원가입</a>
-            <a class="nav-link btn btn-outline-info" sec:authorize="isAnonymous()" th:href="@{/login}"><img id="img4" src="/img/login.ico" style="display: block; margin: 0 auto; width:25px; height:25px;"/>로그인</a>
+            <a href="/oauth2/authorization/google" sec:authorize="isAnonymous()" role="button" class="btn btn-outline-danger">
+                <img id="img1" src="/img/google.ico" style="display: block; margin: 0 auto; width:25px; height:25px;"/>로그인
+            </a>
+            <a href="/oauth2/authorization/naver" sec:authorize="isAnonymous()" role="button" class="btn btn-outline-success">
+                <img id="img2" src="/img/naver2.ico" style="display: block; margin: 0 auto; width:25px; height:25px;"/>로그인
+            </a>
+            <a class="nav-link btn btn-outline-warning" sec:authorize="isAnonymous()" th:href="@{/signup}">
+                <img id="img3" src="/img/signup3.ico" style="display: block; margin: 0 auto; width:25px; height:25px;"/>회원가입
+            </a>
+            <a class="nav-link btn btn-outline-info" sec:authorize="isAnonymous()" th:href="@{/login}">
+                <img id="img4" src="/img/login.ico" style="display: block; margin: 0 auto; width:25px; height:25px;"/>로그인
+            </a>
         </div>
     </nav>
     <hr class="my-4">
@@ -49,7 +108,7 @@
             </thead>
             <tbody>
             <tr th:each="board : ${boards}">
-                <td th:text="${board.uid}">글 ID</a></td>
+                <td th:text="${board.uid}">글 ID</td>
                 <td><a href="board.html" th:href="@{/boards/{uid}(uid=${board.uid})}" th:text="${board.subject}">제목</a></td>
                 <td th:text="${board.name}">작성자</td>
                 <td th:text="${board.viewcnt}">조회수</td>
@@ -64,37 +123,32 @@
             <button th:if="${info} != null"
                     class="btn btn-primary float-end"
                     th:onclick="|location.href='@{/boards/add}'|"
-                    type="button" th:text="#{page.addBoard}">글 작성</button>
+                    type="button" th:text="#{page.addBoard}">글 작성
+            </button>
         </div>
     </div>
-
     <nav aria-label="Page navigation" style="text-align: center;">
         <ul class="pagination"
             th:with="start=${T(java.lang.Math).floor(boards.number/10) * 10 + 1},
-                    last=(${start + 9 < boards.totalPages ? start + 9 : boards.totalPages})">
-            <!--            수정-->
+                        last=(${start + 9 < boards.totalPages ? start + 9 : boards.totalPages})">
             <li>
                 <a th:href="@{/boards(page=0)}" aria-label="First">
                     <span aria-hidden="true">First</span>
                 </a>
             </li>
-
             <li th:class="${boards.number == 0} ? 'disabled'">
                 <a th:href="${boards.number == 0} ? '#' :@{/boards(page=${boards.number-1}, searchKeyword=${param.searchKeyword})}" aria-label="Previous">
                     <span aria-hidden="true">&lt;</span>
                 </a>
             </li>
-
             <li th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'active'">
                 <a th:href="@{/boards(page=${page-1}, searchKeyword=${param.searchKeyword})}" th:text="${page}"></a>
             </li>
-
             <li th:class="${boards.totalPages==boards.number+1} ? 'disabled'">
                 <a th:href="${boards.totalPages==boards.number+1} ? '#' : @{/boards(page=${boards.number + 1}, searchKeyword=${param.searchKeyword})}" aria-label="Next">
                     <span aria-hidden="true">&gt;</span>
                 </a>
             </li>
-
             <li>
                 <a th:href="@{/boards(page=${boards.totalPages-1})}" aria-label="Last">
                     <span aria-hidden="true">Last</span>
@@ -102,8 +156,10 @@
             </li>
         </ul>
     </nav>
-
 </div>
+
+<!-- 푸터바 -->
+<footer th:replace="fragments/footer :: footerFragment" class="footerbar"></footer>
 
 </body>
 </html>

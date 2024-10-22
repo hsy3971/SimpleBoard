@@ -2,60 +2,155 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="utf-8">
-    <link th:href="@{/css/bootstrap.min.css}"
-          href="../css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</head>
+    <style>
+        /* 전체 레이아웃 설정 */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
 
+        .navbar, .footerbar {
+            background-color: #6c757d;
+            color: white;
+            padding: 10px;
+            padding-left: 15%;
+            width: 100%;
+            box-sizing: border-box;
+            flex-shrink: 0;
+        }
+
+        .navbar a {
+            color: white;
+            padding: 14px 20px;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        /* 로그인 컨테이너 스타일 */
+        .login-container {
+            width: 350px; /* 기존보다 살짝 더 넓게 조정 */
+            padding: 30px; /* 패딩을 늘려 높이 조정 */
+            background-color: #cfcfcf;
+            border-radius: 10px; /* 모서리를 좀 더 부드럽게 */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* 그림자도 약간 더 강조 */
+            text-align: center;
+            margin: 120px auto; /* 헤더바 아래 공간을 조금 더 확보 */
+        }
+
+        .login-container h2 {
+            margin-bottom: 25px; /* 제목과 입력 필드 사이 간격을 넓혀 여유롭게 */
+            font-size: 26px; /* 제목 폰트 크기 약간 증가 */
+            font-weight: bold;
+        }
+
+        /* 입력 필드 및 버튼 스타일 */
+        .login-container input[type="text"],
+        .login-container input[type="password"],
+        .login-container .login-btn,
+        .login-container .google-login,
+        .login-container .naver-login,
+        .login-container .signup-btn {
+            width: 100%; /* 부모 요소의 너비를 모두 차지하도록 설정 */
+            padding: 12px; /* 패딩을 살짝 늘려 입력 필드와 버튼을 더 여유롭게 */
+            margin-top: 12px;
+            border: none;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .login-btn {
+            background-color: #0000FF;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .google-login {
+            background-color: #ff3333;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .naver-login {
+            background-color: #00c73c;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .signup-btn {
+            background-color: #0b0b0b;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 로고 이미지 스타일 */
+        .google-login img,
+        .naver-login img {
+            vertical-align: middle;
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+        }
+    </style>
+</head>
 <body>
-<div class="container">
-    <div th:replace="fragments/header :: headerFragment"> </div>
-    <nav id ="nav1">
-        <div class="text-right">
-            <ul>
-                <span th:if="${info} != null" class="mx-3" th:text="|${info} 님 안녕하세요!!!|"></span>
-            </ul>
+<div th:replace="fragments/header :: headerFragment"></div>
+
+<div class="login-container">
+    <h2>로그인</h2>
+    <form th:action="@{/login_proc}" method="post">
+        <div th:if="${param.error}">
+            <div class="alert alert-danger">
+                사용자ID 또는 비밀번호를 확인해 주세요.
+            </div>
         </div>
-    </nav>
-    <div>
-        <form class="d-flex justify-content-end" name="search-form" th:action="@{/boards}" method="get">
-            <input type="text" name="searchKeyword" th:value="${param.searchKeyword}">
-            <input type="submit" class="btn btn-dark mr-2" value="검색">
-        </form>
-    </div>
-    </br>
-    <nav id ="nav2">
-        <div class="text-right">
-            <a href="/oauth2/authorization/google" sec:authorize="isAnonymous()" role="button" class="btn btn-outline-danger"><img id="img1" src="/img/google.ico" style="display: block; margin: 0 auto; width:25px; height:25px;"/>로그인</a>
-            <a href="/oauth2/authorization/naver" sec:authorize="isAnonymous()" role="button" class="btn btn-outline-success"><img id="img2" src="/img/naver2.ico" style="display: block; margin: 0 auto; width:25px; height:25px;"/>로그인</a>
-            <a class="nav-link btn btn-outline-warning" sec:authorize="isAnonymous()" th:href="@{/signup}"><img id="img3" src="/img/signup3.ico" style="display: block; margin: 0 auto; width:25px; height:25px;"/>회원가입</a>
+        <div class="form-group">
+            <input type="text" name="username" class="form-control" placeholder="ID/아이디" required>
         </div>
-    </nav>
-    </br>
-    <div class="container" style="max-width: 500px">
-        <form th:action="@{/login_proc}" method="post">
-            <div th:if="${param.error}">
-                <div class="alert alert-danger">
-                    사용자ID 또는 비밀번호를 확인해 주세요.
-                </div>
-            </div>
-            <div class="form-group">
-                <label th:for="username">아이디</label>
-                <input type="text" name="username" class="form-control" placeholder="아이디 입력해주세요">
-            </div>
-            <div class="form-group">
-                <label th:for="password">비밀번호</label>
-                <input type="password" class="form-control" name="password" placeholder="비밀번호 입력해주세요">
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary form-control">로그인</button>
-            </div>
-        </form>
-        <br/>
-    </div>
+        <div class="form-group">
+            <input type="password" class="form-control" name="password" placeholder="PW/비밀번호" required>
+        </div>
+        <button type="submit" class="login-btn">Login/로그인</button>
+        <a href="/signup" class="signup-btn">Signup/회원가입</a>
+        <a href="/oauth2/authorization/google" class="google-login">
+            <img src="/img/google.ico" alt="Google Logo">
+            Google 로그인
+        </a>
+        <a href="/oauth2/authorization/naver" class="naver-login">
+            <img src="/img/naver2.ico" alt="Naver Logo">
+            Naver 로그인
+        </a>
+    </form>
 </div>
 
 </body>

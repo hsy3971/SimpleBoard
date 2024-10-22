@@ -1,7 +1,7 @@
 function usernameCheck() {
     const username = $("#uid").val();
     if (username == "") {
-        alert("아이디를 입력해주세요!. 필수항목입니다.");
+        alert("아이디를 입력해주세요! 필수항목입니다.");
         $("#uid").focus();
         return false;
     }
@@ -21,17 +21,19 @@ function usernameCheck() {
         },
 
         success: function (result) {
-            // 성공 시 실패 메시지 hide, 성공 메시지 show
-            $('#idNotAvailable').hide();
-            //성공시 가입버튼 활성화
+            const validationMessageElement = $('#username-validation');
+            validationMessageElement.removeClass("invalid-feedback").addClass("valid-feedback");
+            validationMessageElement.text("사용 가능한 아이디입니다.");
+            validationMessageElement.show();
+            // 성공 시 가입버튼 활성화
             $("#submit").removeAttr("disabled");
-            $('#idAvailable').show().text(result).append($('<br />'));
         }, error: function(error) {
-            // 실패 시 실패 메시지 show, 성공 메시지 hide
-            $('#idAvailable').hide();
-            //실패시 가입버튼 비활성화
-            $("#submit").attr("disabled","disabled");
-            $('#idNotAvailable').show().text('이미 사용중인 아이디 입니다.').append($('<br />'));
+            const validationMessageElement = $('#username-validation');
+            validationMessageElement.removeClass("valid-feedback").addClass("invalid-feedback");
+            validationMessageElement.text("이미 사용 중인 아이디입니다.");
+            validationMessageElement.show();
+            // 실패시 가입버튼 비활성화
+            $("#submit").attr("disabled", "disabled");
         }
     });
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <link th:href="@{/css/bootstrap.min.css}"
@@ -8,65 +8,147 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        /* 전체 레이아웃 설정 */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        .navbar, .footerbar {
+            background-color: #6c757d;
+            color: white;
+            padding: 10px;
+            padding-left: 15%;
+            width: 100%;
+            box-sizing: border-box;
+            flex-shrink: 0;
+        }
+
+        .navbar a {
+            color: white;
+            padding: 14px 20px;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        /* 회원가입 컨테이너 스타일 */
+        .signup-container {
+            width: 350px;
+            padding: 30px;
+            background-color: #cfcfcf;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            margin: 120px auto;
+        }
+
+        .signup-container h2 {
+            margin-bottom: 25px;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        /* 입력 필드 및 버튼 스타일 */
+        .signup-container input[type="text"],
+        .signup-container input[type="password"],
+        .signup-container input[type="email"] {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .dup-check-btn {
+            background-color: #ffeb3b;
+            color: black;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .action-btn {
+            width: 48%;
+            padding: 12px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            box-sizing: border-box;
+        }
+
+        .signup-btn {
+            background-color: #2196f3; /* 파란색 배경 */
+            color: white;
+        }
+
+        .cancel-btn {
+            background-color: #f44336; /* 빨간색 배경 */
+            color: white;
+        }
+
+        /* 중복 검사 결과 메시지 스타일 */
+        .validation-message {
+            margin-top: 5px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .valid-feedback {
+            color: #28a745; /* 초록색 */
+        }
+
+        .invalid-feedback {
+            color: #dc3545; /* 빨간색 */
+        }
+    </style>
 </head>
 
 <body>
-<div class="container">
-    <div th:replace="fragments/header :: headerFragment"> </div>
-    <nav id ="nav1">
-        <div class="text-right">
-            <ul>
-                <span th:if="${info} != null" class="mx-3" th:text="|${info} 님 안녕하세요!!!|"></span>
-            </ul>
-        </div>
-    </nav>
-    <div>
-        <form class="d-flex justify-content-end" name="search-form" th:action="@{/boards}" method="get">
-            <input type="text" name="searchKeyword" th:value="${param.searchKeyword}">
-            <input type="submit" class="btn btn-dark mr-2" value="검색">
-        </form>
-    </div>
-    </br>
-    <nav id ="nav2">
-        <div class="text-right">
-            <a href="/oauth2/authorization/google" sec:authorize="isAnonymous()" role="button" class="btn btn-outline-danger"><img id="img1" src="/img/google.ico" style="display: block; margin: 0 auto; width:25px; height:25px;"/>로그인</a>
-            <a href="/oauth2/authorization/naver" sec:authorize="isAnonymous()" role="button" class="btn btn-outline-success"><img id="img2" src="/img/naver2.ico" style="display: block; margin: 0 auto; width:25px; height:25px;"/>로그인</a>
-            <a class="nav-link btn btn-outline-info" sec:authorize="isAnonymous()" th:href="@{/login}"><img id="img4" src="/img/login.ico" style="display: block; margin: 0 auto; width:25px; height:25px;"/>로그인</a>
-        </div>
-    </nav>
+<div th:replace="fragments/header :: headerFragment"> </div>
+<div class="signup-container">
+    <h2>회원가입</h2>
     <form method="post" action="/signup" th:object="${signupForm}">
-        <div class="container" style="max-width: 700px">
-            <div class="form-group">
-                <label th:for="inputEmail4">아이디</label>
-                <input type="text" th:field="*{uid}" class="form-control" placeholder="아이디를 입력해주세요">
-                <span style="color: #fb0101;" th:text="${valid_uid}"></span>
-                <input class="btn btn-outline-warning btn-sm idCheck mx-1" type="button" id="usernameOverlay" onclick="usernameCheck()" value="아이디 중복체크"/>
-                <d id="idAvailable" class="valid-feedback" style="display: none;"></d>
-                <d id="idNotAvailable" class="invalid-feedback" style="display: none;"></d>
-            </div>
-            <div class="form-group">
-                <label th:for="inputAddress">이름</label>
-                <input type="text" th:field="*{uname}" class="form-control" placeholder="이름을 입력해주세요">
-                <span style="color: #fb0101;" th:text="${valid_uname}"></span>
-            </div>
-            <div class="form-group">
-                <label th:for="inputPassword4">비밀번호</label>
-                <input type="password" th:field="*{u_pw}" class="form-control" placeholder="비밀번호를 입력해주세요">
-                <span style="color: #fb0101;" th:text="${valid_u_pw}"></span>
-            </div>
-            <div class="form-group">
-                <label th:for="inputEmail">이메일</label>
-                <input type="text" th:field="*{email}" class="form-control" placeholder="이메일을 입력해주세요">
-                <span style="color: #fb0101;" th:text="${valid_email}"></span>
-            </div>
-            <div class="form-group">
-                <button id="submit" type="submit" class="btn btn-primary" disabled="disabled">가입 완료</button>
-                <button type="button" class="btn btn-danger" th:onclick="|location.href='@{/boards}'|">취 소</button>
-            </div>
+        <div class="form-group" style="display: flex; gap: 10px;">
+            <input type="text" id="uid" th:field="*{uid}" name="username" class="form-control" placeholder="아이디" required style="flex: 2;">
+            <button type="button" class="dup-check-btn" onclick="usernameCheck()">중복확인</button>
+        </div>
+        <div class="validation-message" id="username-validation"></div>
+        <div class="form-group">
+            <input type="password" th:field="*{u_pw}" name="password" class="form-control" placeholder="비밀번호" required>
+            <input type="password" name="passwordConfirm" class="form-control" placeholder="비밀번호 확인" required>
+            <span style="color: #fb0101;" th:text="${valid_u_pw}"></span>
+        </div>
+        <div class="form-group">
+            <input type="text" name="fullname" th:field="*{uname}" class="form-control" placeholder="이름" required>
+            <span style="color: #fb0101;" th:text="${valid_uname}"></span>
+        </div>
+        <div class="form-group">
+            <input type="email" name="email" th:field="*{email}" class="form-control" placeholder="이메일" required>
+            <span style="color: #fb0101;" th:text="${valid_email}"></span>
+        </div>
+        <div class="form-group">
+            <button id="submit" type="submit" class="action-btn signup-btn" disabled="disabled">가입</button>
+            <button type="button" class="action-btn cancel-btn" th:onclick="|location.href='@{/login}'|">취소</button>
         </div>
     </form>
 </div>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" src="/js/signup.js"></script>
 </body>

@@ -13,12 +13,56 @@
             border-color: #dc3545;
             color: #dc3545;
         }
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* 전체 뷰포트 높이를 차지 */
+        }
+
+        .content {
+            flex: 1; /* 본문 영역이 확장되도록 설정 */
+            padding: 20px;
+
+        }
+
+        .navbar, .footerbar {
+            background-color: #6c757d;
+            color: white;
+            padding: 10px;
+            padding-left: 7%;
+            width: 100%;
+            box-sizing: border-box;
+            flex-shrink: 0;
+        }
+
+        .navbar a {
+            color: white;
+            padding: 14px 20px;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .container-fluid {
+            max-width: 1200px; /* 내용의 최대 너비를 제한하여 가독성 개선 */
+            margin: 0 auto;
+        }
     </style>
 </head>
 <body>
+<div th:replace="fragments/header :: headerFragment"> </div>
 <!-- id가 updateForm-->
 <div class="container">
-    <div th:replace="fragments/header :: headerFragment"> </div>
     <form id="updateForm" th:object="${board}" enctype="multipart/form-data">
         <div>
             <input type="hidden" id="bid" class="form-control"  th:field="*{uid}">
@@ -78,6 +122,8 @@
         </div>
     </div>
 </div>
+<!-- 푸터바 -->
+<div th:replace="fragments/footer :: footerFragment"> </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" src="/js/board.js"></script>
 
