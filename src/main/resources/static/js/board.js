@@ -65,12 +65,8 @@ function boardUpdate() {
     const uid = $("#bid").val();
     const updateForm = $('#updateForm');
     const boardAddForm = new FormData(updateForm[0]);
-
-//  formData를 확인할수있는 출력문(formData의 정책상 안의 구조를 알수없기 떄문에 이런식으로 출력문을 작성해줘야 한다.)
-//    for (var pair of boardAddForm.entries()) {
-//        console.log(pair[0] + ', ' + pair[1]);
-//    }
     const con_check = confirm("수정하시겠습니까?");
+
     if (con_check === true) {
         if(!boardAddForm.get('subject') || !boardAddForm.get('content')) {
             alert("공백 또는 입력하지 않은 부분이 있습니다.");
