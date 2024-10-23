@@ -27,7 +27,7 @@ $('#likeImg').click(function() {
 
     console.log(likeVal);
     if (likeVal === 'true') {
-        const con_check = confirm("현재 게시물 추천을 취소하시겠습니까?")
+        const con_check = confirm("현재 게시물의 좋아요를 취소하시겠습니까?")
         if (con_check) {
             console.log("추천 취소 진입");
             $.ajax({
@@ -42,7 +42,7 @@ $('#likeImg').click(function() {
             })
         }
     } else if(likeVal === 'false'){
-        const con_check = confirm("현재 게시물을 추천하시겠습니까?");
+        const con_check = confirm("현재 게시물을 좋아요를 하시겠습니까?");
         if (con_check) {
             console.log("추천 진입");
             $.ajax({

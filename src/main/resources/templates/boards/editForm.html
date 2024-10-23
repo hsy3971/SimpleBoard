@@ -7,28 +7,27 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <style>
         .container {
-            max-width: 560px;
+            max-width: 760px;
+            margin-top: 40px;
         }
-        .field-error {
-            border-color: #dc3545;
-            color: #dc3545;
-        }
+
         html, body {
             height: 100%;
             margin: 0;
             padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
         }
 
         body {
             display: flex;
             flex-direction: column;
-            min-height: 100vh; /* 전체 뷰포트 높이를 차지 */
+            min-height: 100vh;
         }
 
         .content {
-            flex: 1; /* 본문 영역이 확장되도록 설정 */
+            flex: 1;
             padding: 20px;
-
         }
 
         .navbar, .footerbar {
@@ -53,9 +52,106 @@
             color: black;
         }
 
+        .card {
+            border-radius: 15px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            background-color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            font-weight: bold;
+            font-size: 24px;
+            color: #333;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .btn-primary, .btn-danger {
+            border-radius: 20px;
+            padding: 12px;
+            font-weight: bold;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            transform: translateY(-3px);
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+            transform: translateY(-3px);
+        }
+
         .container-fluid {
             max-width: 1200px; /* 내용의 최대 너비를 제한하여 가독성 개선 */
             margin: 0 auto;
+        }
+
+        .image-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .image-card {
+            width: 150px;
+            height: 150px;
+            overflow: hidden;
+            position: relative;
+            flex: 0 0 auto;
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: #ff0000;
+            color: #ffffff;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .file-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .file-card {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+            flex: 0 0 auto;
+        }
+
+        .file-card p {
+            margin: 0;
+            font-size: 14px;
+            color: #333;
         }
     </style>
 </head>
@@ -63,67 +159,61 @@
 <div th:replace="fragments/header :: headerFragment"> </div>
 <!-- id가 updateForm-->
 <div class="container">
-    <form id="updateForm" th:object="${board}" enctype="multipart/form-data">
-        <div>
-            <input type="hidden" id="bid" class="form-control"  th:field="*{uid}">
-        </div>
-        <div>
-            <label for="subject" th:text="#{label.board.subject}">제목</label>
-            <input type="text" id="subject" name="subject" th:field="*{subject}" class="form-control" placeholder="제목을 입력하세요.">
-            <br/>
-        </div>
-        <div>
-            <label for="name" th:text="|작성자 : ${board.name}|"></label>
-            <input type="hidden" id="name" name="name" class="form-control"  th:field="*{name}">
-        </div>
-        <div>
-            <label for="content" th:text="#{label.board.contents}">내용</label>
-            <textarea cols="150" rows="10" id="content" name="content" th:field="*{content}" class="form-control" placeholder="내용을 입력하세요.">
-            </textarea>
-        </div>
-        <div>
-            <label for="imageFiles[]" th:text="#{label.board.image}">이미지</label>
-            <input id="imageFiles[]" type="file" name="imageFiles[]" multiple="multiple"/>
-            <label for="generalFiles[]" th:text="#{label.board.file}">첨부파일</label>
-            <input id="generalFiles[]" type="file" name="generalFiles[]" multiple="multiple"/>
-        </div>
-        <div th:each="imageFile : ${board.attachedFiles}">
-            <!--            hidden-->
-            <!--            value로 하니까 텍스트그대로 출력했는데 th:value하니까 값을 제대로 읽음-->
-            <input th:if="${imageFile.attachmenttype == T(boardExample.simpleBoard.domain.AttachmentType).IMAGE}" type="hidden" name="imageone" th:value="${imageFile.storefilename}">
-            <img th:if="${imageFile.attachmenttype == T(boardExample.simpleBoard.domain.AttachmentType).IMAGE}"
-                 th:src="@{/images/{imageFile}(imageFile=${imageFile.storefilename})}" width="300" height="300" style="margin-right: 5px"/>
-            <button th:if="${imageFile.attachmenttype == T(boardExample.simpleBoard.domain.AttachmentType).IMAGE}"
-                    th:attr="id='removeButton'+${imageFile.storefilename}" th:sid="${imageFile.storefilename}" type="button" onclick="removeBtn(this.getAttribute('sid'))">REMOVE</button>
-        </div>
-        <input type="hidden" name="image_list" id="image_list">
-        &nbsp;
-        <div th:each="generalFile : ${board.attachedFiles}">
-            <!--            hidden-->
-            <input th:if="${generalFile.attachmenttype == T(boardExample.simpleBoard.domain.AttachmentType).GENERAL}" type="hidden" name="generalone" th:value="${generalFile.storefilename}">
-            <a th:if="${generalFile.attachmenttype == T(boardExample.simpleBoard.domain.AttachmentType).GENERAL}"
-               th:text="${generalFile.originfilename}" style="margin-right: 5px"/><br/>
-            <button th:if="${generalFile.attachmenttype == T(boardExample.simpleBoard.domain.AttachmentType).GENERAL}"
-                    th:attr="id='removeButton2'+${generalFile.storefilename}" th:sid="${generalFile.storefilename}" type="button" onclick="removeBtn2(this.getAttribute('sid'))">REMOVE</button>
-        </div>
-        <input type="hidden" name="general_list" id="general_list">
-    </form>
-    <hr class="my-4">
+    <div class="card">
+        <div class="card-header">게시글 수정하기</div>
+        <form id="updateForm" th:object="${board}" enctype="multipart/form-data">
+            <div>
+                <input type="hidden" id="bid" class="form-control"  th:field="*{uid}">
+            </div>
+            <div>
+                <input type="text" id="subject" name="subject" th:field="*{subject}" class="form-control" placeholder="제목을 입력하세요.">
+            </div>
+            <div>
+                <textarea cols="150" rows="10" id="content" name="content" th:field="*{content}" class="form-control" placeholder="내용을 입력하세요."></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="imageFiles[]" th:text="#{label.board.image}">이미지</label>
+                <input id="imageFiles[]" type="file" name="imageFiles[]" multiple="multiple" class="form-control"/>
+            </div>
+            <div class="mb-3">
+                <label for="generalFiles[]" th:text="#{label.board.file}">첨부파일</label>
+                <input id="generalFiles[]" type="file" name="generalFiles[]" multiple="multiple" class="form-control"/>
+            </div>
+            <div class="image-preview">
+                <div th:each="imageFile : ${board.attachedFiles}">
+                    <div th:if="${imageFile.attachmenttype == T(boardExample.simpleBoard.domain.AttachmentType).IMAGE}" class="image-card">
+                        <input type="hidden" name="imageone" th:value="${imageFile.storefilename}">
+                        <img th:src="@{/images/{imageFile}(imageFile=${imageFile.storefilename})}" alt="이미지">
+                        <button th:attr="id='removeButton'+${imageFile.storefilename}" th:sid="${imageFile.storefilename}" type="button" class="remove-btn" onclick="removeBtn(this.getAttribute('sid'))">&times;</button>
+                    </div>
+                </div>
+            </div>
 
+            <div class="file-preview">
+                <div th:each="generalFile : ${board.attachedFiles}">
+                    <div th:if="${generalFile.attachmenttype == T(boardExample.simpleBoard.domain.AttachmentType).GENERAL}" class="file-card">
+                        <input type="hidden" name="generalone" th:value="${generalFile.storefilename}">
+                        <p th:text="${generalFile.originfilename}"></p>
+                        <button th:attr="id='removeButton2'+${generalFile.storefilename}" th:sid="${generalFile.storefilename}" type="button" class="remove-btn" onclick="removeBtn2(this.getAttribute('sid'))">&times;</button>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" name="image_list" id="image_list">
+            <input type="hidden" name="general_list" id="general_list">
+        </form>
+    </div>
+    <hr class="my-4">
     <div class="row">
         <div class="col">
             <input class="w-100 btn btn-primary btn-lg" type="button" onclick="boardUpdate()" value="수정"/>
         </div>
         <div class="col">
             <button class="w-100 btn btn-danger btn-lg"
-                    onclick="location.href='Board.html'"
                     th:onclick="|location.href='@{/boards}'|"
                     type="button" th:text="#{button.cancel}">취소</button>
         </div>
     </div>
 </div>
-<!-- 푸터바 -->
-<div th:replace="fragments/footer :: footerFragment"> </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" src="/js/board.js"></script>
 

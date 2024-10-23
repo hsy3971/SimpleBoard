@@ -5,7 +5,10 @@
     <link th:href="@{/css/bootstrap.min.css}"
           href="../css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.0/font/bootstrap-icons.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
@@ -60,6 +63,137 @@
             max-width: 1200px; /* 내용의 최대 너비를 제한하여 가독성 개선 */
             margin: 0 auto;
         }
+
+        .card {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            background: white;
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: linear-gradient(90deg, #6a82fb, #fc5c7d);
+            color: white;
+            font-weight: bold;
+            padding: 15px;
+        }
+
+        .card-footer {
+            background: linear-gradient(90deg, #6a82fb, #fc5c7d);
+            color: white;
+            font-weight: bold;
+            padding: 15px;
+        }
+
+        .btn {
+            border-radius: 50px;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background-color: #6a82fb;
+            border: none;
+        }
+
+        .btn-success {
+            background-color: #4CAF50;
+            border: none;
+        }
+
+        .btn-danger {
+            background-color: #f44336;
+            border: none;
+        }
+
+        .comment-box {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        textarea {
+            border-radius: 10px;
+            resize: none;
+        }
+        /* 페이징 스타일 */
+        .pagination {
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination li a {
+            color: #0275d8;
+            border: 1px solid #dee2e6;
+            margin: 0 5px;
+            padding: 10px 15px;
+            border-radius: 50%;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .pagination li.active a {
+            background-color: #5bc0de;
+            color: white;
+            border: none;
+        }
+
+        .pagination li.disabled a {
+            color: #ccc;
+        }
+
+        .pagination li a:hover {
+            background-color: #0275d8;
+            color: white;
+        }
+
+        .btn-comment-submit {
+            background: #f7797d;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 5px 10px;
+            transition: background 0.3s ease;
+        }
+
+        .btn-comment-submit:hover {
+            background: #fa9a90;
+            color: white;
+        }
+
+        .image-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .image-card {
+            width: 150px;
+            height: 150px;
+            overflow: hidden;
+            position: relative;
+            flex: 0 0 auto;
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .file-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .file-card {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+            flex: 0 0 auto;
+        }
     </style>
 </head>
 <body>
@@ -67,38 +201,57 @@
 <div class="container">
     <!--추가-->
     <h2 th:if="${param.status}" th:text="'저장 완료'"></h2>
-    <!-- 로그인 유저와 작성자가 동일하지 않다면-->
-    <div th:if="${writer} != true and ${userid} != null">
-        <!-- 좋아요 -->
-        <input type="hidden" id="like_check" th:value="${like}">
-        <img th:id="likeImg" src="/img/heart.ico" alt="" width="30px" height="30px">
-        <span th:text="${board.likecnt}"></span>
-    </div>
-    <!-- 로그인하지 않은 유저라면 -->
-    <div th:if="${userid} == null">
-        <img id="loginCheck" src="/img/heart.ico" alt="" width="30px" height="30px">
-        <span th:text="${board.likecnt}"></span>
-    </div>
     &nbsp;
     <form class="card text-dark bg-light">
         <div class="card-header d-flex justify-content-between">
-            <label for="boardId" th:text="|번호 : ${board.uid}|"></label>
-            <input type="hidden" id="boardId" name="boardId" class="form-control" value="1" th:value="${board.uid}" readonly>
-            <label for="updatedate" th:text="${board.updatedate}"></label>
-            <input type="hidden" id="updatedate" name="updatedate" class="form-control" value="10" th:value="${board.updatedate}" readonly>
+            <!-- 로그인하지 않은 유저라면 -->
+            <div th:if="${userid} == null">
+                <div th:if="${board.likecnt} > 0">
+                    <img id="loginCheck1" src="/img/like.ico" alt="" width="30px" height="30px">
+                    <span th:text="${board.likecnt}"></span>
+                </div>
+                <div th:if="${board.likecnt} == 0">
+                    <img id="loginCheck2" src="/img/heart.ico" alt="" width="30px" height="30px">
+                    <span th:text="${board.likecnt}"></span>
+                </div>
+            </div>
+            <!-- 로그인을 한 유저라면-->
+            <div th:if="${userid} != null">
+<!--                본인의 게시글이 아닌 경우에만 좋아요 가능-->
+                <div th:if="${writer} != true">
+                    <!-- 좋아요 -->
+                    <input type="hidden" id="like_check" th:value="${like}">
+                    <img th:id="likeImg" src="/img/heart.ico" alt="" width="30px" height="30px">
+                    <span th:text="${board.likecnt}"></span>
+                </div>
+<!--                본인의 게시글인 경우 좋아요 횟수 확인 가능-->
+                <div th:if="${writer} == true">
+                    <div th:if="${board.likecnt} > 0">
+                        <img src="/img/like.ico" alt="" width="30px" height="30px">
+                        <span th:text="${board.likecnt}"></span>
+                    </div>
+                    <div th:if="${board.likecnt} == 0">
+                        <img src="/img/heart.ico" alt="" width="30px" height="30px">
+                        <span th:text="${board.likecnt}"></span>
+                    </div>
+                </div>
+            </div>
+            <label for="regdate" th:text="${board.regdate}"></label>
+            <input type="hidden" id="regdate" name="regdate" class="form-control" value="10" th:value="${board.regdate}" readonly>
         </div>
         <div class="card-header d-flex justify-content-between">
-            <label for="name" th:text="|작성자 : ${board.name}|"></label>
+            <label for="name" th:text="${board.name}"></label>
             <input type="hidden" id="name" name="name" class="form-control" value="작성자" th:value="${board.name}" readonly>
             <label for="viewcnt" th:text="|조회수 : ${board.viewcnt}|"></label>
             <input type="hidden" id="viewcnt" name="viewcnt" class="form-control" value="10" th:value="${board.viewcnt}" readonly>
+
         </div>
         <div class="card-body">
-            <label for="boardSubject" th:text="#{label.board.subject}">제목</label>
-            <input type="text" id="boardSubject" name="boardSubject" class="form-control" value="상품A" th:value="${board.subject}" readonly>
+<!--            <label for="boardSubject" th:text="#{label.board.subject}">제목</label>-->
+            <input type="text" id="boardSubject" name="boardSubject" class="form-control" th:value="${board.subject}" readonly>
             <br/>
-            <label for="content" th:text="#{label.board.contents}">글 내용</label>
-            <textarea rows="5" type="text" id="content" name="content" class="form-control" value="10" th:value="${board.content}" th:text="${board.content}" readonly></textarea>
+<!--            <label for="content" th:text="#{label.board.contents}">글 내용</label>-->
+            <textarea rows="5" type="text" id="content" name="content" class="form-control" th:value="${board.content}" th:text="${board.content}" readonly></textarea>
         </div>
     </form>
 
@@ -123,36 +276,43 @@
         </div>
     </div>
     <br/>
-    <div >
-        <img th:each="imageFile : ${board.attachedFiles}"
-             th:if="${imageFile.attachmenttype == T(boardExample.simpleBoard.domain.AttachmentType).IMAGE}"
-             th:src="@{/images/{imageFile}(imageFile=${imageFile.storefilename})}" width="300" height="300" style="margin-right: 5px"/>
+    <div class="image-preview">
+        <div th:each="imageFile : ${board.attachedFiles}">
+            <div th:if="${imageFile.attachmenttype == T(boardExample.simpleBoard.domain.AttachmentType).IMAGE}" class="image-card">
+                <img th:src="@{/images/{imageFile}(imageFile=${imageFile.storefilename})}">
+            </div>
+        </div>
     </div>
-    <div>
-        <a th:each="generalFile : ${board.attachedFiles}"
-           th:if="${generalFile.attachmenttype == T(boardExample.simpleBoard.domain.AttachmentType).GENERAL}"
-           th:href="@{/attaches/{generalFile}(generalFile=${generalFile.storefilename}, originName=${generalFile.originfilename})}"
-           th:text="${generalFile.originfilename}" style="margin-right: 5px"/><br/>
+    <div class="file-preview">
+        <div th:each="generalFile : ${board.attachedFiles}">
+            <div th:if="${generalFile.attachmenttype == T(boardExample.simpleBoard.domain.AttachmentType).GENERAL}" class="file-card">
+                <a th:href="@{/attaches/{generalFile}(generalFile=${generalFile.storefilename}, originName=${generalFile.originfilename})}"
+                   th:text="${generalFile.originfilename}" style="margin-right: 5px"/>
+            </div>
+        </div>
     </div>
     <br/>
     <div class="card">
         <div class="card-header">댓글 목록</div>
         <div th:each="comment:${comments}" th:with="step=${comment.step}">
-            <ul id="comment-box" class="list-group">
-                <li id="comment--1" class="list-group-item d-flex justify-content-between">
-                    <!--                step만큼 반복하여 -> 기호를 달아준다-->
-                    <div th:if="${comment.step}!=0" th:each="page: ${#numbers.sequence(0, step-1)}" class="bi bi-arrow-return-right"></div>
-                    <p th:attr="class = 'collapse multi-collapse'+${comment.id}+' show'" th:text="${comment.comment}"></p>
-                    <div class="d-flex">
-                        <p style="font-size:8px;" class="font-italic" th:text="${comment.member.uname}"></p>
+            <ul id="comment-box" class="list-group mb-3">
+                <li id="comment--1" class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="comment-details">
+                        <!--                step만큼 반복하여 -> 기호를 달아준다-->
+                        <span th:if="${comment.step} != 0" th:each="page: ${#numbers.sequence(0, step-1)}" class="bi bi-arrow-return-right" style="margin-right: 5px;"></span>
+                        <span class="text-muted small ml-2" th:text="${comment.member.uname}" style="margin-right: 10px;"></span>
+                        <span class="text-muted small" th:text="${comment.modified_date}"></span>
+                        <div class="comment-content">
+                            <p class="mb-2" th:text="${comment.comment}" style="margin-top: 10px;"></p>
+                        </div>
+                    </div>
+                    <div class="comment-actions d-flex align-items-center gap-2">
+                        <span><a th:if="${comment.member.uid} == ${userid?.uid}" type="button" data-toggle="collapse" th:attr="data-target='.multi-collapse'+${comment.id}" class="btn btn-outline-primary btn-sm">수정</a></span>
                         &nbsp;
-                        <p style="font-size:8px;" class="font-italic" th:text="${comment.modified_date}"></p>
-                        &nbsp;
-                        <span><a th:if="${comment.member.uid} == ${userid?.uid}" type="button" data-toggle="collapse" th:attr="data-target='.multi-collapse'+${comment.id}" class="btn btn-light btn-xs">수정</a></span>
-                        &nbsp;
-                        <span><a th:if="${comment.member.uid} == ${userid?.uid}" type="button" class="btn btn-light btn-xs" th:bid="${board.uid}" th:cid="${comment.id}" th:onclick="main.commentDelete(this.getAttribute('bid'),this.getAttribute('cid'))">삭제</a></span>
+                        <span><a th:if="${comment.member.uid} == ${userid?.uid}" type="button" class="btn btn-outline-danger btn-sm" th:bid="${board.uid}" th:cid="${comment.id}" th:onclick="main.commentDelete(this.getAttribute('bid'),this.getAttribute('cid'))">삭제</a></span>
                         &nbsp;&nbsp;
-                        <span><a th:if="${userid} != null" type="button" data-toggle="collapse" th:attr="data-target='.multi-collapse'+${comment.id}+${comment.board.uid}" class="btn btn-light btn-xs">답글</a></span>
+                        <span><a th:if="${userid} != null" type="button" data-toggle="collapse" th:attr="data-target='.multi-collapse'+${comment.id}+${comment.board.uid}" class="btn btn-outline-secondary btn-sm">답글</a></span>
+<!--                    댓글 수정 폼-->
                         <form id="form1">
                             <input type="hidden" id="cId" th:value="${comment.id}">
                             <input type="hidden" id="pId" th:value="${board.uid}">
@@ -162,6 +322,7 @@
                                 <button type="button" id="btn-comment-update" class="btn btn-primary"> 수정</button>
                             </div>
                         </form>
+<!--                    답글 작성 폼-->
                         <form id="form2">
                             <input type="hidden" id="boardsId" th:value="${comment.board.uid}">
                             <input type="hidden" id="parentsId" th:value="${comment.id}">
@@ -217,7 +378,7 @@
             <div th:if="${userid} == null"><a th:href="@{/login}">로그인</a>을 하시면 댓글을 등록할 수 있습니다.</div>
         </div>
         <div class="card-footer">
-            <button th:if="${userid} != null" type="button" class="btn btn-dark" onclick="commentCreate()">등록</button>
+            <button th:if="${userid} != null" type="button" class="btn btn-comment-submit" onclick="commentCreate()">등록</button>
         </div>
     </div>
     </br>

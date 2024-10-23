@@ -1,9 +1,8 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
-    <link th:href="@{/css/bootstrap.min.css}"
-          href="../css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -13,6 +12,7 @@
             height: 100%;
             margin: 0;
             padding: 0;
+            font-family: Arial, sans-serif;
         }
 
         body {
@@ -24,7 +24,6 @@
         .content {
             flex: 1; /* 본문 영역이 확장되도록 설정 */
             padding: 20px;
-
         }
 
         .navbar, .footerbar {
@@ -53,6 +52,86 @@
             max-width: 1200px; /* 내용의 최대 너비를 제한하여 가독성 개선 */
             margin: 0 auto;
         }
+
+        /* 테이블 스타일 */
+        .table {
+            background-color: #f9f9f9; /* 테이블 배경 연한 회색 */
+            border-radius: 12px; /* 테이블 모서리 둥글게 */
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1); /* 테이블에 부드러운 그림자 추가 */
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .table th {
+            background-color: #5bc0de; /* 헤더 배경 하늘색 */
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            padding: 15px;
+        }
+
+        .table td {
+            text-align: center;
+            vertical-align: middle;
+            padding: 12px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #e6f7ff; /* 행에 마우스를 올렸을 때 연한 하늘색 배경 */
+        }
+
+        .table a {
+            color: #0275d8;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .table a:hover {
+            text-decoration: underline;
+        }
+
+        /* 페이징 스타일 */
+        .pagination {
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination li a {
+            color: #0275d8;
+            border: 1px solid #dee2e6;
+            margin: 0 5px;
+            padding: 10px 15px;
+            border-radius: 50%;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .pagination li.active a {
+            background-color: #5bc0de;
+            color: white;
+            border: none;
+        }
+
+        .pagination li.disabled a {
+            color: #ccc;
+        }
+
+        .pagination li a:hover {
+            background-color: #0275d8;
+            color: white;
+        }
+
+        .insert-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px; /* 텍스트와 버튼 사이에 여백 추가 */
+            text-align: left; /* 왼쪽 정렬 */
+        }
+
     </style>
 
 </head>
@@ -72,32 +151,25 @@
     </nav>
     <div>
         <form class="d-flex justify-content-end" name="search-form" th:action="@{/boards}" method="get">
-            <input type="text" name="searchKeyword" th:value="${param.searchKeyword}">
-            <input type="submit" class="btn btn-dark mr-2" value="검색">
+            <input type="text" name="searchKeyword" th:value="${param.searchKeyword}" class="form-control" placeholder="검색어를 입력하세요" style="max-width: 300px; margin-right: 10px;">
+            <input type="submit" class="btn btn-dark" value="검색">
         </form>
     </div>
     <br>
-    <nav id="nav2">
-        <div class="text-right">
-            <a href="/oauth2/authorization/google" sec:authorize="isAnonymous()" role="button" class="btn btn-outline-danger">
-                <img id="img1" src="/img/google.ico" style="display: block; margin: 0 auto; width:25px; height:25px;"/>로그인
-            </a>
-            <a href="/oauth2/authorization/naver" sec:authorize="isAnonymous()" role="button" class="btn btn-outline-success">
-                <img id="img2" src="/img/naver2.ico" style="display: block; margin: 0 auto; width:25px; height:25px;"/>로그인
-            </a>
-            <a class="nav-link btn btn-outline-warning" sec:authorize="isAnonymous()" th:href="@{/signup}">
-                <img id="img3" src="/img/signup3.ico" style="display: block; margin: 0 auto; width:25px; height:25px;"/>회원가입
-            </a>
-            <a class="nav-link btn btn-outline-info" sec:authorize="isAnonymous()" th:href="@{/login}">
-                <img id="img4" src="/img/login.ico" style="display: block; margin: 0 auto; width:25px; height:25px;"/>로그인
-            </a>
+    <div class="row">
+        <div class="col text-right">
+            <button th:if="${info} != null"
+                    class="insert-btn"
+                    th:onclick="|location.href='@{/boards/add}'|"
+                    type="button">게시글 등록
+            </button>
         </div>
-    </nav>
+    </div>
     <hr class="my-4">
     <div>
         <table class="table table-hover">
-            <thead class="thead-dark">
-            <tr class="bg-primary">
+            <thead>
+            <tr>
                 <th th:text="#{label.board.id}">ID</th>
                 <th th:text="#{label.board.subject}">제목</th>
                 <th th:text="#{label.board.name}">작성자</th>
@@ -117,15 +189,6 @@
             </tr>
             </tbody>
         </table>
-    </div>
-    <div class="row">
-        <div class="col">
-            <button th:if="${info} != null"
-                    class="btn btn-primary float-end"
-                    th:onclick="|location.href='@{/boards/add}'|"
-                    type="button" th:text="#{page.addBoard}">글 작성
-            </button>
-        </div>
     </div>
     <nav aria-label="Page navigation" style="text-align: center;">
         <ul class="pagination"

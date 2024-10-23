@@ -50,7 +50,6 @@ function removeBtn2(id) {
 };
 
 function boardUpdate() {
-//
     var list = new Array();
     $("input[name=imageone]").each(function(index, item){
         list.push($(item).val());

@@ -3,6 +3,7 @@ const main = {
         const _this = this;
         document.querySelectorAll('#btn-comment-update').forEach(function (item) {
             item.addEventListener('click', function () {
+                console.log("=======");
                 const form = this.closest('#form1');
                 _this.commentUpdate(form);
             });
@@ -15,6 +16,7 @@ const main = {
         });
     },
     commentUpdate : function (form) {
+        console.log("33");
         const data = {
             id: form.querySelector('#cId').value,
             postsId: form.querySelector('#pId').value,
@@ -41,6 +43,7 @@ const main = {
     },
 
     commentReply : function (form2) {
+        console.log("44");
         const data = {
             postsId: form2.querySelector('#boardsId').value,
             comment: form2.querySelector('#comment-content2').value,
