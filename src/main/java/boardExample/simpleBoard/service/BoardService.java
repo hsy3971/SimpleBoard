@@ -155,7 +155,7 @@ public class BoardService {
     }
 
     /** 글 좋아요 **/
-    public boolean saveLike(Board likeBoard, Member likeMember) {
+    public void saveLike(Board likeBoard, Member likeMember) {
 
         /** 로그인한 유저가 해당 게시물을 좋아요 했는지 안 했는지 확인 **/
         if(!findLike(likeBoard, likeMember)){
@@ -163,13 +163,10 @@ public class BoardService {
             Like memberLikeBoard = Like.builder().likeBoard(likeBoard).likeMember(likeMember).build();
             likeRepository.save(memberLikeBoard);
             boardRepository.plusLike(likeBoard.getUid());
-            return true;
         } else {
-
             /* 좋아요 한 게시물이면 좋아요 삭제, false 반환 */
             likeRepository.deleteByLikeBoardAndLikeMember(likeBoard, likeMember);
             boardRepository.minusLike(likeBoard.getUid());
-            return false;
         }
     }
 }

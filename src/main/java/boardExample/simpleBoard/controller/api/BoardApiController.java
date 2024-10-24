@@ -84,4 +84,15 @@ public class BoardApiController {
         boardService.BoardDelete(uid);
         return ResponseEntity.ok(uid);
     }
+
+    /* 비동기 게시글 좋아요 */
+    @PostMapping("/boards/{uid}/like")
+    public ResponseEntity Boardlike(@PathVariable Long uid){
+        MemberDto.UserSessionDto user = (MemberDto.UserSessionDto) httpSession.getAttribute("user");
+        Long uno = user.getUno();
+        Board board = boardService.BoardOne(uid).get();
+        Member member = memberService.findByUno(uno);
+        boardService.saveLike(board, member);
+        return ResponseEntity.ok("게시글 좋아요 or 취소 완료.");
+    }
 }

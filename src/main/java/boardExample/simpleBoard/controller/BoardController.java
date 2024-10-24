@@ -30,19 +30,12 @@ public class BoardController {
 
     //목록 조회
     @GetMapping
-    public String boards(Model model, Authentication authentication, @PageableDefault Pageable pageable, String searchKeyword) {
+    public String boards(Model model, @PageableDefault Pageable pageable, String searchKeyword) {
         Page<Board> list = null;
         MemberDto.UserSessionDto user = (MemberDto.UserSessionDto) httpSession.getAttribute("user");
         if (user != null) {
             model.addAttribute("info", user.getUname());
         }
-        else {
-            if (authentication != null) {
-                Member member = (Member) authentication.getPrincipal();  //userDetail 객체를 가져옴
-                model.addAttribute("info", member.getUname());
-            }
-        }
-
         if (searchKeyword == null) {
             list = boardService.pageList(pageable);
         }
@@ -50,62 +43,47 @@ public class BoardController {
             list = boardService.findBySubjectContaining(searchKeyword, pageable);
         }
         model.addAttribute("boards", list);
-
         return "boards/Boards";
     }
     //게시글 조회(게시글 상세)
     @GetMapping("/{uid}")
-    public String board(@PathVariable("uid") Long uid, Model model, Authentication authentication, @PageableDefault Pageable pageable, HttpServletRequest request, HttpServletResponse response) {
+    public String board(@PathVariable("uid") Long uid, Model model, @PageableDefault Pageable pageable, HttpServletRequest request, HttpServletResponse response) {
         MemberDto.UserSessionDto user = (MemberDto.UserSessionDto) httpSession.getAttribute("user");
         Board board = boardService.BoardOne(uid).get();
-        Long id = null;
         boolean like = false;
-
+        Long id = null;
         if (user != null) {
             id = user.getUno();
             Member likeMember = memberService.findByUno(id);
             model.addAttribute("userid", user);
-//            현재 로그인한 유저가 이 게시물을 좋아요 했는지 안 했는지 여부 확인
+            // 현재 로그인한 유저가 이 게시물을 좋아요 했는지 안 했는지 여부 확인
             like = boardService.findLike(board, likeMember);
         }
-        // 일반 로그인일때
-        else {
-            if (authentication != null) {
-                Member member = (Member) authentication.getPrincipal();
-                id = member.getUno();
-                Member likeMember = memberService.findByUno(id);
-                model.addAttribute("userid", member);
-//                현재 로그인한 유저가 이 게시물을 좋아요 했는지 안 했는지 여부 확인
-                like = boardService.findLike(board, likeMember);
-            }
-        }
-        Page<Comment> list = null;
-//        uid:게시판의 id
-        Long bId = board.getUid();
-//      조회수 증가
-        boardService.updateView(bId, request, response);
-//      해당 게시물의 1페이지의 갯수만큼 list에 저장된다(만약 1페이지당 10개로 지정했다면 10개에 해당되는 댓글들이 저장된다.)
-        list = commentService.findBoardByComments(bId, pageable);
+        // 조회수 증가
+        boardService.updateView(board.getUid(), request, response);
+        // 해당 게시물의 1페이지의 갯수만큼 list에 저장된다(만약 1페이지당 10개로 지정했다면 10개에 해당되는 댓글들이 저장된다.)
+        Page<Comment> list = commentService.findBoardByComments(board.getUid(), pageable);
         List<Comment> cnt = board.getComments();
-        // 해당 게시물의 댓글의 갯수
-        int cnt_size = cnt.size();
-        // 한 페이지의 댓글 갯수
-        int list_size = list.getSize();
-        int mok = cnt_size / list_size;
-        int res = cnt_size % list_size;
-        if (res != 0) {
-            mok += 1;
-        }
-        if (cnt_size != 0) {
-            model.addAttribute("comments", list);
-        }
-        model.addAttribute("totalPages", mok);
-
+        // 게시글을 등록한 사람인지 확인
         if (id != null) {
             if (id.equals(board.getMember().getUno())) {
                 model.addAttribute("writer", true);
             }
         }
+        // 해당 게시물의 댓글의 갯수
+        int totalComments = cnt.size();
+        // 한 페이지의 댓글 갯수
+        int pageSize = list.getSize();
+        // 필요한 페이지 수
+        int totalPages = 0;
+        // 페이징 계산
+        if (pageSize != 0) {
+            totalPages = ((totalComments % pageSize) == 0) ? totalComments / pageSize : (totalComments / pageSize) + 1;
+        }
+        if (totalComments != 0) {
+            model.addAttribute("comments", list);
+        }
+        model.addAttribute("totalPages", totalPages);
         model.addAttribute("board", board);
         model.addAttribute("like", like);
         return "boards/Board";
@@ -113,16 +91,9 @@ public class BoardController {
 
     // 게시글 등록
     @GetMapping("/add")
-    public String addForm(Model model, Authentication authentication) {
+    public String addForm(Model model) {
         MemberDto.UserSessionDto user = (MemberDto.UserSessionDto) httpSession.getAttribute("user");
-        String name = null;
-        if (user != null) {
-            name = user.getUname();
-        }
-        else {
-            Member member = (Member) authentication.getPrincipal();
-            name = member.getUname();
-        }
+        String name = user.getUname();
         Board board = BoardDto.builder().build().toEntity();
         board.setName(name);
         model.addAttribute("board", board);
@@ -135,26 +106,5 @@ public class BoardController {
         Board board = boardService.BoardOne(uid).get();
         model.addAttribute("board", board);
         return "boards/editForm";
-    }
-
-    // 게시글 좋아요
-    @PostMapping("/{uid}/like")
-//    api호출을 위해 선언
-    @ResponseBody
-    public boolean like(@PathVariable Long uid, Authentication authentication){
-        MemberDto.UserSessionDto user = (MemberDto.UserSessionDto) httpSession.getAttribute("user");
-        Long uno = null;
-        if (user != null) {
-            uno = user.getUno();
-        }
-        else {
-            Member member = (Member) authentication.getPrincipal();
-            uno = member.getUno();
-        }
-        Board board = boardService.BoardOne(uid).get();
-        Member member = memberService.findByUno(uno);
-        // 저장 true, 삭제 false
-        boolean result = boardService.saveLike(board, member);
-        return result;
     }
 }
