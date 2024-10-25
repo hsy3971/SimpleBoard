@@ -110,6 +110,7 @@
         <form id="createForm" th:object="${board}" enctype="multipart/form-data">
             <div>
                 <input type="text" id="subject" name="subject" th:field="*{subject}" class="form-control" placeholder="제목을 입력하세요.">
+                <input type="hidden" id="name" name="name" class="form-control" th:value="${board.name}" readonly>
             </div>
             <div>
                 <textarea cols="150" rows="6" id="content" name="content" th:field="*{content}" class="form-control" placeholder="내용을 입력하세요."></textarea>

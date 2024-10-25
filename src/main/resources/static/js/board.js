@@ -93,6 +93,7 @@ function boardUpdate() {
 function boardDelete() {
     const boardId = $('#boardId').val();
     const con_check = confirm("정말 삭제하시겠습니까?");
+    console.log(boardId);
 
     if(con_check == true) {
         $.ajax({

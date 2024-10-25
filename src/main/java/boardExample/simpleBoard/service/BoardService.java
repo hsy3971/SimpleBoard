@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -56,41 +57,35 @@ public class BoardService {
         attachments.stream()
                 .forEach(attachment -> board.setAttachment(attachment));
         Board saveBoard = boardRepository.save(board);
-        for (Attachment attachment : attachments) {
-            attachmentRepository.save(attachment);
-        }
+        attachments.forEach(attachmentRepository::save);
         return saveBoard;
     }
     public void BoardDelete(Long uid) {
-        Board board = boardRepository.findById(uid).get();
-        List<Attachment> attachedFiles = board.getAttachedFiles();
-        for (Attachment attachedFile : attachedFiles) {
+        Board board = boardRepository.findById(uid).orElseThrow(() -> new IllegalArgumentException("Invalid board ID"));
+        board.getAttachedFiles().forEach(attachedFile -> {
             String path = fileStore.createPath(attachedFile.getStorefilename(), attachedFile.getAttachmenttype());
             File file = new File(path);
-            if (file.exists() == true) {
+            if (file.exists()) {
                 file.delete();
             }
-        }
+        });
         boardRepository.deleteById(uid);
     }
 
     @Transactional
     public Long BoardUpdate(Long uid, BoardDto dto) throws IOException {
-        SimpleDateFormat format = new SimpleDateFormat ( "yyyy-MM-dd HH:mm");
-        Date time = new Date();
-        String localTime = format.format(time);
+        String localTime = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date());
         // updateBoard를 통해서 제목,내용,이미지,일반파일 업데이트
         Board board = boardRepository.findById(uid).orElseThrow(()->new IllegalArgumentException("해당 게시글이 없습니다. id = " + uid));
 //      텍스트 업데이트
         board.updateBoard(dto.getSubject(), dto.getContent(), localTime);
         //      실제 파일로 저장
         List<Attachment> attachments = attachmentService.saveAttachments(dto.getAttachmentFiles());
-//        attachment DB 저장
-        for (Attachment attachment : attachments) {
-//          boardid 외래키를 초기화(새로 넣을 attachment에다가 board를 초기화시켜줌)
+//      attachment DB 저장
+        attachments.forEach(attachment -> {
             attachment.setAttachmentBoard(board);
             attachmentRepository.save(attachment);
-        }
+        });
         return uid;
     }
 
@@ -109,20 +104,12 @@ public class BoardService {
         Cookie[] cookies = request.getCookies();
         boolean checkCookie = false;
         int result = 0;
-        if(cookies != null){
-            for (Cookie cookie : cookies)
-            {
-                // 이미 조회를 한 경우 체크
-                if (cookie.getName().equals(VIEWCOOKIENAME+bId)) checkCookie = true;
-            }
-            if(!checkCookie){
-                Cookie newCookie = createCookieForForNotOverlap(bId);
-                response.addCookie(newCookie);
-                result = boardRepository.updateView(bId);
-            }
-        } else {
+//      cookies가 null이거나, cookies 배열 내에 VIEWCOOKIENAME + bId라는 이름의 쿠키가 없을 때만 조회수 증가 및 쿠키 추가 작업을 수행
+        if (cookies == null || Arrays.stream(cookies).noneMatch(cookie -> cookie.getName().equals(VIEWCOOKIENAME + bId))) {
+            // 조회 쿠키가 없을 경우, 새로운 쿠키 생성 및 조회수 증가
             Cookie newCookie = createCookieForForNotOverlap(bId);
             response.addCookie(newCookie);
+//          query가 잘 동작했다면 1반환, 아니라면 0반환
             result = boardRepository.updateView(bId);
         }
         return result;
@@ -150,13 +137,11 @@ public class BoardService {
 
     /** 글 좋아요 확인 **/
     public boolean findLike(Board likeBoard, Member likeMember) {
-
         return likeRepository.existsByLikeBoardAndLikeMember(likeBoard, likeMember);
     }
 
     /** 글 좋아요 **/
     public void saveLike(Board likeBoard, Member likeMember) {
-
         /** 로그인한 유저가 해당 게시물을 좋아요 했는지 안 했는지 확인 **/
         if(!findLike(likeBoard, likeMember)){
             /* 좋아요 엔티티 생성 */

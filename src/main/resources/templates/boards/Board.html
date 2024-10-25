@@ -236,6 +236,7 @@
                     </div>
                 </div>
             </div>
+            <input type="hidden" id="boardId" name="boardId" class="form-control" th:value="${board.uid}" readonly>
             <label for="regdate" th:text="${board.regdate}"></label>
             <input type="hidden" id="regdate" name="regdate" class="form-control" value="10" th:value="${board.regdate}" readonly>
         </div>
@@ -260,13 +261,11 @@
     <div class="row">
         <div class="col">
             <button th:if="${writer} == true" class="w-100 btn btn-primary btn-lg"
-                    onclick="location.href='editForm.html'"
                     th:onclick="|location.href='@{/boards/{uid}/edit(uid=${board.uid})}'|"
                     type="button" th:text="#{page.updateBoard}">수정</button>
         </div>
         <div class="col">
             <button class="w-100 btn btn-success btn-lg"
-                    onclick="location.href='Board.html'"
                     th:onclick="|location.href='@{/boards}'|"
                     type="button" th:text="#{button.list}">목록</button>
         </div>
