@@ -30,13 +30,14 @@ public class CommentService {
         Optional<Member> userid = memberRepository.findByUid(uid);
         Member member = userid.get();
         Board board = boardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("댓글 쓰기 실패: 해당 게시글이 존재하지 않습니다." + id));
-//      ref의 제일 큰값을 찾고 있다면 MAX값을, 없다면 0을 return
+//      해당 게시글의 ref의 가장 큰값이 있다면 MAX값을, 없다면 0을 반환
         Long commentRef = commentRepository.findByRef(board.getUid());
         CommentDto dto = CommentDto.builder()
                 .comment(req.getComment())
                 .board(board)
                 .member(member)
                 .build();
+//      그룹,깊이,같은그룹내 순서,자식수
         Long ref = commentRef+1L;
         Long step = 0L;
         Long refOrder = 0L;
@@ -48,7 +49,7 @@ public class CommentService {
         commentRepository.save(comment);
         return dto.getId();
     }
-    //  cid가 해당 부모댓글이다. 최상의 루트노드를 삭제하면 다같이 삭제된다.
+    //  cid : 부모댓글, 최상의 루트노드를 삭제하면 다같이 삭제된다.
     public Long parentSave(String uid, Long id, Long cid, CommentDto.Request req) {
         Member member = memberRepository.findByUid(uid).get();
         Board board = boardRepository.findById(id).get();
@@ -61,9 +62,7 @@ public class CommentService {
 //      부모인 댓글을 찾아서 updateParent에 넣어준다
         Comment comment = commentRepository.findById(cid).get();
         Long refOrderResult  = refOrderAndUpdate(comment, board);
-        if (refOrderResult == null) {
-            return null;
-        }
+
         dto.updateParent(comment);
         Long ref = comment.getRef();
         Long step = comment.getStep()+1L;
@@ -93,20 +92,16 @@ public class CommentService {
         } else if (saveStep == maxStep) {
             commentRepository.updateRefOrderPlus(ref, refOrder + answerNum, board);
             return refOrder + answerNum + 1l;
-        } else if (saveStep > maxStep) {
+        } else {
             commentRepository.updateRefOrderPlus(ref, refOrder, board);
             return refOrder + 1l;
         }
-
-        return null;
     }
 
     /* UPDATE */
     @Transactional
     public void update(Long id, CommentDto commentDto) {
-        SimpleDateFormat format = new SimpleDateFormat ( "yyyy-MM-dd HH:mm");
-        Date time = new Date();
-        String localTime = format.format(time);
+        String localTime = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date());
         Comment comment = commentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다." + id));
         comment.update(commentDto.getComment(), localTime);
     }
@@ -114,6 +109,7 @@ public class CommentService {
     @Transactional
     public void delete(Long id) {
         Comment comment = commentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다. id=" + id));
+//      삭제하는 댓글의 부모가 있다면 부모댓글의 자식수를 -1 해준다.
         if (comment.getParent() != null) {
             Long parentId = comment.getParent().getId();
             commentRepository.updateAnswerNumMinus(parentId);

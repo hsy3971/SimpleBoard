@@ -370,15 +370,17 @@
     </div>
     </br>
     <div class="card">
-        <input type="hidden" id="postsId" th:value="${board.uid}">
-        <div class="card-header">댓글 작성</div>
-        <div class="card-body">
-            <textarea th:if="${userid} != null" id="cmt" class="form-control" rows="1" placeholder="댓글을 입력하세요"></textarea>
-            <div th:if="${userid} == null"><a th:href="@{/login}">로그인</a>을 하시면 댓글을 등록할 수 있습니다.</div>
-        </div>
-        <div class="card-footer">
-            <button th:if="${userid} != null" type="button" class="btn btn-comment-submit" onclick="commentCreate()">등록</button>
-        </div>
+        <form id="form3">
+            <input type="hidden" id="postsId" th:value="${board.uid}">
+            <div class="card-header">댓글 작성</div>
+            <div class="card-body">
+                <textarea th:if="${userid} != null" id="cmt" class="form-control" rows="1" placeholder="댓글을 입력하세요"></textarea>
+                <div th:if="${userid} == null"><a th:href="@{/login}">로그인</a>을 하시면 댓글을 등록할 수 있습니다.</div>
+            </div>
+            <div class="card-footer">
+                <button th:if="${userid} != null" type="button" class="btn btn-comment-submit" th:onclick="main.commentCreate(document.getElementById('form3'))">등록</button>
+            </div>
+        </form>
     </div>
     </br>
 

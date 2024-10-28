@@ -15,6 +15,7 @@ const main = {
             });
         });
     },
+
     commentUpdate : function (form) {
         console.log("33");
         const data = {
@@ -43,7 +44,6 @@ const main = {
     },
 
     commentReply : function (form2) {
-        console.log("44");
         const data = {
             postsId: form2.querySelector('#boardsId').value,
             comment: form2.querySelector('#comment-content2').value,
@@ -57,11 +57,40 @@ const main = {
         if (con_check === true) {
             $.ajax({
                 type: 'POST',
-                url: '/boards/' + data.postsId + '/comments/reply',
+                url: '/api/boards/' + data.postsId + '/comments/reply',
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify(data)
             }).done(function () {
                 alert('답글 작성이 완료되었습니다.');
+                window.location.reload();
+            }).fail(function (error) {
+                alert(JSON.stringify(error));
+            });
+        }
+    },
+
+    commentCreate: function (form3) {
+        // 댓글 저장
+        const data = {
+            postsId: form3.querySelector('#postsId').value,
+            comment: form3.querySelector('#cmt').value
+        }
+
+        // 공백 및 빈 문자열 체크
+        if (!data.comment || data.comment.trim() === "") {
+            alert("댓글을 입력해주세요!!");
+            return false;
+        }
+
+        const con_check = confirm("등록하시겠습니까?");
+        if (con_check === true) {
+            $.ajax({
+                type: 'POST',
+                url: '/api/boards/' + data.postsId + '/comments',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data)
+            }).done(function () {
+                alert('댓글이 등록되었습니다.');
                 window.location.reload();
             }).fail(function (error) {
                 alert(JSON.stringify(error));

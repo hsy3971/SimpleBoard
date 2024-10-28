@@ -26,17 +26,9 @@ public class CommentApiController {
     }
     //create
     @PostMapping("/boards/{bid}/comments")
-    public ResponseEntity commentSave(@PathVariable("bid") Long id, @RequestBody CommentDto.Request req, Authentication authentication) {
+    public ResponseEntity commentSave(@PathVariable("bid") Long id, @RequestBody CommentDto.Request req) {
         MemberDto.UserSessionDto user = (MemberDto.UserSessionDto) httpSession.getAttribute("user");
-        String uid = null;
-//        세션일때와 아닐때로 구글로그인연동인지 일반 로그인인지를 구분
-        if (user != null) {
-            uid = user.getUid();
-        }
-        else {
-            Member member = (Member) authentication.getPrincipal();  //userDetail 객체를 가져옴
-            uid = member.getUid();
-        }
+        String uid = user.getUid();
         return ResponseEntity.ok(commentService.commentSave(uid, id, req));
     }
     //update
@@ -51,5 +43,14 @@ public class CommentApiController {
     public ResponseEntity delete(@PathVariable Long bid, @PathVariable Long cid) {
         commentService.delete(cid);
         return ResponseEntity.ok(cid);
+    }
+
+    //답글 작성
+    @PostMapping(value = "/boards/{boardId}/comments/reply")
+    @ResponseBody
+    public ResponseEntity replySave(@PathVariable("boardId") Long boardId, @RequestBody CommentDto.Request req) {
+        MemberDto.UserSessionDto user = (MemberDto.UserSessionDto) httpSession.getAttribute("user");
+        String uid = user.getUid();
+        return ResponseEntity.ok(commentService.parentSave(uid, boardId, req.getParentId(), req));
     }
 }
