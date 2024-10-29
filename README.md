@@ -206,8 +206,3 @@
 
 
 ● [조회수 기능 구현(중복방지)](https://flaxen-cucumber-c3a.notion.site/79d06b80e4614f82aee7838ba861e049)
-
-
-## 마치며
-
-### 1. 프로젝트 보완사항
