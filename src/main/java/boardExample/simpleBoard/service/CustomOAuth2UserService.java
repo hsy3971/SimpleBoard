@@ -43,9 +43,11 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         // 로그인 한 유저 정보
         Member member = saveOrUpdate(attributes);
-
+        // 유저의 아이디
+        String uid = member.getUid();
         // httpSession의 유저 속성을 설정
-        session.setAttribute("user", new MemberDto.UserSessionDto(member));
+        session.setAttribute("uid", uid);
+//        session.setAttribute("user", new MemberDto.UserSessionDto(member));
         // 로그인한 유저를 리턴함
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(Role.SOCIAL.getValue())),

@@ -3,6 +3,7 @@ package boardExample.simpleBoard.controller;
 import boardExample.simpleBoard.domain.*;
 import boardExample.simpleBoard.dto.BoardDto;
 import boardExample.simpleBoard.dto.MemberDto;
+import boardExample.simpleBoard.repository.MemberRepository;
 import boardExample.simpleBoard.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,8 +33,9 @@ public class BoardController {
     @GetMapping
     public String boards(Model model, @PageableDefault Pageable pageable, String searchKeyword) {
         Page<Board> list = null;
-        MemberDto.UserSessionDto user = (MemberDto.UserSessionDto) httpSession.getAttribute("user");
-        if (user != null) {
+        String uid = (String) httpSession.getAttribute("uid");
+        if (uid != null) {
+            Member user = memberService.findByUid(uid).get();
             model.addAttribute("info", user.getUname());
         }
         if (searchKeyword == null) {
@@ -46,13 +48,14 @@ public class BoardController {
         return "boards/Boards";
     }
     //게시글 조회(게시글 상세)
-    @GetMapping("/{uid}")
-    public String board(@PathVariable("uid") Long uid, Model model, @PageableDefault Pageable pageable, HttpServletRequest request, HttpServletResponse response) {
-        MemberDto.UserSessionDto user = (MemberDto.UserSessionDto) httpSession.getAttribute("user");
-        Board board = boardService.BoardOne(uid).get();
+    @GetMapping("/{bid}")
+    public String board(@PathVariable("bid") Long bid, Model model, @PageableDefault Pageable pageable, HttpServletRequest request, HttpServletResponse response) {
+        String uid = (String) httpSession.getAttribute("uid");
+        Board board = boardService.BoardOne(bid).get();
         boolean like = false;
         Long id = null;
-        if (user != null) {
+        if (uid != null) {
+            Member user = memberService.findByUid(uid).get();
             id = user.getUno();
             Member likeMember = memberService.findByUno(id);
             model.addAttribute("userid", user);
@@ -92,7 +95,8 @@ public class BoardController {
     // 게시글 등록
     @GetMapping("/add")
     public String addForm(Model model) {
-        MemberDto.UserSessionDto user = (MemberDto.UserSessionDto) httpSession.getAttribute("user");
+        String uid = (String) httpSession.getAttribute("uid");
+        Member user = memberService.findByUid(uid).get();
         String name = user.getUname();
         Board board = BoardDto.builder().build().toEntity();
         board.setName(name);

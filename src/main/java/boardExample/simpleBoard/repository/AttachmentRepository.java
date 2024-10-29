@@ -17,7 +17,7 @@ public interface AttachmentRepository extends JpaRepository<Attachment, Long> {
     Optional<Attachment> findByStorefilename(String storefilename);
     @Transactional
     @Modifying
-//  ids리스트안에 attachment의 id가 포함되어 있다면 제거하라.
+//  ids리스트안에 attachment의 id가 포함되어 있다면 제거
     @Query("delete from Attachment a where a.id in :ids")
     void deleteAllByIds(@Param("ids") List<Long> ids);
 }

@@ -38,8 +38,7 @@ public class FileStore {
         String storeFilename = createStoreFilename(originalFilename);
 //      createPath한 경로에 파일 저장
         multipartFile.transferTo(new File(createPath(storeFilename, attachmentType)));
-//      Attachment DB에 저장하자.
-
+//      Attachment DB에 저장
         return Attachment.builder()
                 .originfilename(originalFilename)
                 .storePath(storeFilename)

@@ -10,6 +10,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Entity
@@ -50,17 +52,13 @@ public class Member implements UserDetails {
     // 해당 엔티티를 저장하기 이전에 실행
     @PrePersist
     public void onPrePersist(){
-        SimpleDateFormat format = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:sss");
-        Date time = new Date();
-        this.append_date = format.format(time);
+        this.append_date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         this.update_date = this.append_date;
     }
     // 해당 엔티티를 업데이트 하기 이전에 실행
     @PreUpdate
     public void onPreUpdate(){
-        SimpleDateFormat format = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:sss");
-        Date time = new Date();
-        this.update_date = format.format(time);
+        this.update_date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
     /* 소셜로그인시 이미 등록된 회원이라면 수정날짜만 업데이트하고
      *  기존 데이터는 그대로 보존하도록 예외처리 */

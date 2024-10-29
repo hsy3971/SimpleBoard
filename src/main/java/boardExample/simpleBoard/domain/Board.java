@@ -37,9 +37,8 @@ public class Board {
 
     private String updatedate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
     @ManyToOne(fetch = FetchType.LAZY)
-//  조인컬럼을 뭘로 정할거냐?
     @JoinColumn(name = "user_no")
-//  응답데이터에서 제외(LAZY에서 EAGER로 바꾸면 해결되지만 LAZY를 유지하기위해 @JsonIgnore사용
+//  응답데이터에서 제외(LAZY를 유지하기위해 @JsonIgnore사용)
     @JsonIgnore
     private Member member;
 

@@ -22,9 +22,7 @@ public class MemberService {
     private final BCryptPasswordEncoder encoder;
     @Transactional
     public Long joinMember(MemberDto memberDto) {
-        SimpleDateFormat format = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:sss");
-        Date time = new Date();
-        String localTime = format.format(time);
+        String localTime = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date());
 
         Member member = Member.builder()
                 .uno(memberDto.getUno())
@@ -48,7 +46,6 @@ public class MemberService {
     @Transactional
     public Map<String, String> validateHandling(Errors errors) {
         Map<String, String> validatorResult = new HashMap<>();
-
         // 유효성 검사에 실패한 필드 목록을 받음
         for(FieldError error : errors.getFieldErrors()) {
             String validKeyName = String.format("valid_%s", error.getField());
@@ -62,10 +59,15 @@ public class MemberService {
         return memberRepository.findByUno(id);
     }
 
+    @Transactional
+    public Optional<Member> findByUid(String uid) {
+        return memberRepository.findByUid(uid);
+    }
+
     //아이디 중복검사
     public void DuplicateMember(MemberDto member) {
         Optional<Member> uid = memberRepository.findByUid(member.getUid());
-        if (!uid.isEmpty()) {
+        if (uid.isPresent()) {
             throw new IllegalStateException("이미 존재하는 회원입니다.");
         }
     }

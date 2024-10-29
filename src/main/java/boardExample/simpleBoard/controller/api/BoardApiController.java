@@ -9,6 +9,7 @@ import boardExample.simpleBoard.dto.BoardDto;
 import boardExample.simpleBoard.dto.MemberDto;
 import boardExample.simpleBoard.repository.AttachmentRepository;
 import boardExample.simpleBoard.repository.BoardRepository;
+import boardExample.simpleBoard.repository.MemberRepository;
 import boardExample.simpleBoard.service.AttachmentService;
 import boardExample.simpleBoard.service.BoardService;
 import boardExample.simpleBoard.service.MemberService;
@@ -42,16 +43,10 @@ public class BoardApiController {
     }
     // 비동기 게시글 저장
     @PostMapping("/boards")
-    public ResponseEntity create(@ModelAttribute BoardAddForm boardAddForm, Authentication authentication) throws IOException {
-        MemberDto.UserSessionDto user = (MemberDto.UserSessionDto) httpSession.getAttribute("user");
-        Long uno = null;
-        if (user != null) {
-            uno = user.getUno();
-        }
-        else {
-            Member member = (Member) authentication.getPrincipal();
-            uno = member.getUno();
-        }
+    public ResponseEntity create(@ModelAttribute BoardAddForm boardAddForm) throws IOException {
+        String uid = (String) httpSession.getAttribute("uid");
+        Member user = memberService.findByUid(uid).get();
+        Long uno = user.getUno();
         BoardDto dto = boardAddForm.createBoardDto(memberService.findByUno(uno));
         Board post = boardService.BoardAdd(dto);
         return ResponseEntity.ok(post);
@@ -86,11 +81,12 @@ public class BoardApiController {
     }
 
     /* 비동기 게시글 좋아요 */
-    @PostMapping("/boards/{uid}/like")
-    public ResponseEntity Boardlike(@PathVariable Long uid){
-        MemberDto.UserSessionDto user = (MemberDto.UserSessionDto) httpSession.getAttribute("user");
+    @PostMapping("/boards/{bid}/like")
+    public ResponseEntity Boardlike(@PathVariable Long bid){
+        String uid = (String) httpSession.getAttribute("uid");
+        Member user = memberService.findByUid(uid).get();
         Long uno = user.getUno();
-        Board board = boardService.BoardOne(uid).get();
+        Board board = boardService.BoardOne(bid).get();
         Member member = memberService.findByUno(uno);
         boardService.saveLike(board, member);
         return ResponseEntity.ok("게시글 좋아요 or 취소 완료.");

@@ -14,7 +14,7 @@ public class MemberApiController {
 
     @GetMapping("/users-ids/{uid}/exists")
     public ResponseEntity<String> checkIdDuplication(@RequestParam(value = "uid") String uid) throws BadRequestException {
-        if (memberService.existsByMemberId(uid) == true) {
+        if (memberService.existsByMemberId(uid)) {
             throw new BadRequestException("이미 사용중인 아이디 입니다.");
         } else {
             return ResponseEntity.ok("사용 가능한 아이디 입니다.");
