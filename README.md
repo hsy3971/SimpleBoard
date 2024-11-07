@@ -69,138 +69,90 @@
 <details markdown="1">
 <summary>게시글</summary>
 
-#### 게시글 전체 목록
-<img width="800" src="https://user-images.githubusercontent.com/85252989/217251082-d7a02735-53b2-4109-9ee2-70c4a06d5121.PNG">
+#### 메인 페이지(홈)
+<img width="800" src="https://github.com/user-attachments/assets/791c45e5-f60f-4070-9314-cf61990976b2">
 
-게시판 전체 목록을 페이징처리하여 조회가능하다.
+- 상단 바에는 홈과  로그인, 회원가입, 게시판으로 갈 수 있는 버튼이 있다.
+- 시작하기 버튼을 누르면 회원가입 페이지로 이동하게 된다.
+#### 게시판 페이지
+<img width="800" src="https://github.com/user-attachments/assets/77316d2c-b3cf-410a-8fbd-85dae86d6b5b">
 
+- 전체 게시판에 대해 조회할 수 있다.
+- 제목으로 검색하여 특정 게시판을 검색 할 수 있다.
+- 글 작성 버튼을 누르면 게시글을 등록 할 수 있다.
 #### 게시글 등록
-<img width="800" src="https://user-images.githubusercontent.com/85252989/217258038-65a401b3-7137-4093-b7ff-c4d98b0ceb52.PNG">
+<img width="800" src="https://github.com/user-attachments/assets/13333d1d-70f1-4a33-a7db-26a43c95b1ce">
 
-로그인한 사용자만 게시글을 등록할 수 있으며 저장시 alert문이 뜨고 확인을 누르면 게시글이 등록된다.
-
+- 제목과 내용을 입력한다.
+- 이미지 파일과 첨부 파일을 여러 개 등록할 수 있다.
+- 이미지와 첨부 파일은 특정 폴더인 로컬에 저장된다.
 #### 게시글 상세보기
-<img width="800" src="https://user-images.githubusercontent.com/85252989/217254011-161b6523-d944-4846-a203-213058094e50.PNG">
+<img width="800" src="https://github.com/user-attachments/assets/d2bb1e4f-de1b-4373-802b-23f1cc95f594">
 
-작성자와 로그인한 유저가 같으면 수정과 삭제 버튼이 뜬다
-
-<img width="800" src="https://user-images.githubusercontent.com/85252989/217254037-71f25082-1a64-4b73-9cce-f90806c0cd07.PNG">
-
-비로그인 or 다른 유저라면 목록버튼만 뜨게 된다.
-
+- 해당 글의 상세 페이지로 들어가면 등록했던 이미지가 출력이 되고 첨부파일은 다운로드 받을 수 있다.
+- 본인이 등록했던 게시글이면 수정과 삭제 버튼이 활성화된다.
+- 왼쪽 상단에 빈 하트를 누르게 되면 좋아요의 횟수가 +1이 되며 꽉 채운 하트로 활성화 된다.
 #### 게시글 수정
-<img width="800" src="https://user-images.githubusercontent.com/85252989/217254695-e9558599-b436-4726-8d70-922a3b4d6ccc.PNG">
+<img width="800" src="https://github.com/user-attachments/assets/7cdede04-9845-4475-a88f-a95b4ede1700">
 
-게시글 수정시 기존에 넣었던데로 입력이 되어있고 텍스트, 이미지, 첨부파일을 수정하면 된다. 특히 이미지와 첨부파일은 옆에 REMOVE라는 버튼이 존재하는데 누를시에 기존에 들어가있던 데이터가 사라지고 새롭게 이미지와 첨부파일을 등록할 수 있다.
-
-<img width="800" src="https://user-images.githubusercontent.com/85252989/217254721-46b3c0ff-1812-462b-b9b3-9d9522d2ef4e.PNG">
-
-수정시 수정하시겠습니까라는 확인창이 뜨게 되고 확인을 누를시 수정된다.
-
-#### 게시글 삭제
-<img width="800" src="https://user-images.githubusercontent.com/85252989/217254747-eb3a3a1d-0401-4e42-9acb-f5f9c35f9ef1.PNG">
-
-작성자와 로그인한 유저가 같다면 수정,삭제버튼이 뜨는데 삭제버튼을 누르게되면 삭제하시겠습니까라는 확인창이 뜨게 되고 확인을 누를시 삭제된다.
-
-#### 게시글 검색
-<img width="800" src="https://user-images.githubusercontent.com/85252989/217254784-38472554-2495-41ea-a060-bd7dab5eba6e.PNG">
-
-검색키워드에 포함된 모든 글들을 보여줍니다.
-
-#### 게시글 추천
-<img width="800" src="https://user-images.githubusercontent.com/85252989/217254805-975be855-1182-40cb-ac4d-410c2b676e64.PNG">
-<img width="800" src="https://user-images.githubusercontent.com/85252989/217254824-d3859c26-e09e-46fd-af64-5d1bc8fc5a23.PNG">
-
-본인이 올린 글을 제외한 게시글에만 좋아요를 할 수 있고 본인이 올린글에는 추천을 할수없습니다. 상세화면에서 빈하트가 노말 상태이고 검쟁색하트가 좋아요인 상태입니다. 빈하트를 클릭시에 확인창이 뜨고 확인을 누를시에 좋아요 표시가 되면서 하트옆에 숫자가 +1이 됩니다.
-
-<img width="800" src="https://user-images.githubusercontent.com/85252989/217405395-1bb1a76b-03a5-4651-a308-705eb6ac699c.PNG">
-
-검정색하트를 다시 누르면 취소 확인창이 뜨고 확인을 누를시에 다시 빈하트가 되고 숫자는 -1이 됩니다.
-
+- 기존에 등록했던 제목과 내용이 출력이 되고 이를 수정할 수 있다.
+- 첨부했던 이미지와 파일은 박스 형태로 출력이 되는데 X버튼을 통해 기존에 있던 파일을 지우고 수정할 수 있다.
+- 또 파일선택을 통해 새롭게 이미지와 파일을 등록할 수 있다.
 </details>
 
 <details markdown="1">
 <summary>회원</summary>
 
 #### 회원가입
-<img width="800" src="https://user-images.githubusercontent.com/85252989/217258912-61d4dedc-c53d-4632-9123-0e5a3f2be3a3.PNG">
+<img width="400" src="https://github.com/user-attachments/assets/7cad07d5-f5a1-431a-9cbd-397d7a422f84">
+<img width="400" src="https://github.com/user-attachments/assets/06f809be-5489-4ef7-818e-d82e92a564c9">
 
-회원가입시 가입완료버튼은 비활성화되어있고 중복체크가 되어야지만 가입완료버튼이 활성화가 된다.
-
-#### 중복확인 및 유효성검사
-<img width="450" src="https://user-images.githubusercontent.com/85252989/217258925-c79707b4-acfc-43bf-b440-2a0ea7add4ba.PNG">
-<img width="450" src="https://user-images.githubusercontent.com/85252989/217405519-cf838b16-c94e-4972-a4b3-4a4678b9bef2.PNG">
-
-아이디 중복체크시 이미 사용중인 아이디라면 이미 사용중인 아이디라는 문구가 뜨게 된다. 이름, 비밀번호, 이메일을 입력하지 않을 시 해당 데이터를 입력해주세요라는 문구가 뜨게 된다. 아이디 중복체크시 중복되지 않았다면 사용 가능한 아이디라는 문구가 뜨고 가입완료버튼이 활성화가 된다. 
-
+- 회원가입 시 아이디 중복체크를 한다.
+- 아이디의 중복체크가 확인되지 않으면 가입버튼이 활성화되지 않는다.
+- 아이디 중복체크가 완료되면 가입버튼이 활성화된다.
+- 아이디 중복시 이미 사용중인 아이디, 사용 가능할 때엔 사용가능한 아이디라고 출력한다.
+- 비밀번호, 이름, 이메일은 유효성 검사를 통해 입력을 확인한다.
 #### 로그인
-<img width="800" src="https://user-images.githubusercontent.com/85252989/217258935-bbe51e17-2dad-4c69-be8f-5c0097e6e33f.PNG">
+<img width="400" src="https://github.com/user-attachments/assets/441222b8-63d3-4b42-a290-961ecb5b0abd">
+<img width="400" src="https://github.com/user-attachments/assets/a9129e2c-56e7-4d69-8d72-82208ff834e6">
 
-로그인창에 해당하고 아이디, 비밀번호를 입력하면 된다.
-
-#### 로그인실패
-<img width="800" src="https://user-images.githubusercontent.com/85252989/217258950-3ae5b1f8-481f-4405-a5ed-66b6719e58e6.PNG">
-
-아이디가 틀렸거나 비밀번호가 틀렸을시 사용자ID 또는 비밀번호를 확인해주세요라는 문구가 뜨게 된다.
-
+- 일반 로그인과 구글,네이버를 연동 로그인 할 수 있다.
+- 아이디와 비밀번호가 맞지 않을 경우 로그인 실패 문구가 뜬다.
 #### 구글로그인
-<img width="800" src="https://user-images.githubusercontent.com/85252989/217407448-8f73958c-315b-42ef-bc3f-ab32d87dc74a.png">
+<img width="800" src="https://github.com/user-attachments/assets/5f5b3a5f-fc9a-47d5-942c-5068c3df1eae">
 
 #### 네이버로그인
-<img width="800" src="https://user-images.githubusercontent.com/85252989/217258976-8990c60b-2756-4eed-9154-7e89d852116a.PNG">
+<img width="500" src="https://github.com/user-attachments/assets/46b4a126-c599-4205-b92e-7a33ca704eef">
 
-구글로그인과 네이버로그인이 가능하다.
-
+- 구글과 네이버 계정을 통해 로그인 할 수 있다.
+- 아이디가 해당 이메일로 미리 가입이 되어 있다면 바로 로그인 할 수 있다.
+- 아이디가 해당 이메일로 가입이 안되어 있어도 해당 소셜(구글, 네이버)의 정보를 가지고 자동으로 가입된다.
 </details>
 
 <details markdown="1">
 <summary>댓글</summary>
 
-#### 미로그인 사용자 댓글작성
-<img width="800" src="https://user-images.githubusercontent.com/85252989/217266665-0dacd38c-5d8b-4557-945e-2bc237a7aaf3.PNG">
-
-미로그인시 로그인을 해야 댓글을 등록할 수 있다는 문구가 뜨게 됩니다.
+#### 비로그인 사용자 댓글작성
+<img width="500" src="https://github.com/user-attachments/assets/8c651d0e-9855-403a-af6a-27dfdeff2629">
 
 #### 로그인 사용자 댓글작성
-<img width="800" src="https://user-images.githubusercontent.com/85252989/217266701-fc5d38e2-ec39-4bb4-aa96-83b0acde91e6.PNG">
-
-로그인이 되었을때는 댓글작성을 할 수 있는 텍스트박스와 버튼이 뜨게 됩니다.
+<img width="500" src="https://github.com/user-attachments/assets/f388bdda-f617-49a1-bea9-7af1730a2de7">
 
 #### 댓글목록
-<img width="800" src="https://user-images.githubusercontent.com/85252989/217266729-e7eebf3e-1168-4542-b61d-d80a40cefb4b.PNG">
+<img width="500" src="https://github.com/user-attachments/assets/1534a6f8-99f3-4c6e-a979-25e1613ad988">
 
-게시글과 마찬가지로 페이징 처리되어 댓글들을 볼 수 있습니다.
+- 로그인을 하지 않은 경우 댓글을 등록할 수 없기 때문에 로그인을 요청한다.
+- 댓글 작성란에서 댓글을 등록하면 댓글 목록에 출력이 된다.
+- 댓글을 작성한 사람이라면 본인의 댓글을 수정 또는 삭제할 수 있다.
+#### 대댓글 작성 
+<img width="500" src="https://github.com/user-attachments/assets/90a45280-250e-4feb-b58d-6449a4d638b6">
 
-#### 댓글수정
-<img width="800" src="https://user-images.githubusercontent.com/85252989/217260716-c9a0a599-be71-47fa-b5b1-e80c36eb0be4.PNG">
+#### 댓글목록(대댓글 작성 후)
+<img width="500" src="https://github.com/user-attachments/assets/fa1ff877-c701-470f-aabf-56f859be23fc">
 
-댓글작성자와 유저가 같아야하고 댓글수정시 수정하시겠습니까?라는 확인창이 뜨고 확인시 수정이 됩니다.
-
-#### 댓글삭제
-<img width="800" src="https://user-images.githubusercontent.com/85252989/217260738-006d4587-c26a-4c08-8b0d-b3115bfc822d.PNG">
-
-댓글작성자와 유저가 같아야하고 댓글삭제시 삭제하시겠습니까?라는 확인창이 뜨고 확인시 삭제가 됩니다.
-
-#### 댓글에 답글작성 
-<img width="800" src="https://user-images.githubusercontent.com/85252989/217260756-96fc17dd-1cb0-4980-9fc0-62bf05eb1881.PNG">
-
-달린댓글에 답글이라는 버튼을 누를시 텍스트박스가 열리게 되고 답글을 작성후 완료버튼을 누르면 답글이 등록이 됩니다.
-
-#### 답글작성후
-<img width="800" src="https://user-images.githubusercontent.com/85252989/217260774-cdfb3252-d6c9-42b9-b509-1b3ff10f419c.PNG">
-
-답글 작성시 텍스트 옆에 화살표로 달리게 되고
-
-#### 대대댓글작성시
-<img width="800" src="https://user-images.githubusercontent.com/85252989/217260791-dc09ceb8-4ebc-4e21-90e9-e41a14cb3b5e.PNG">
-
-그 답글에 다시 답글을 작성시 화살표가 또 증가하며 화살표 갯수로 대댓글을 표시하였습니다.
-
-#### 대댓글에서 새로운 댓글 등록시
-<img width="800" src="https://user-images.githubusercontent.com/85252989/217260802-7236ed97-6c6d-4647-b007-2b93f821d12d.PNG">
-
-위 상태에서 일반 댓글등록시 윗칸에 새롭게 할당이 되고 그 댓글에 답글이 달릴시 바로 밑에 대댓글이 달리게 된다.
-
+- 댓글목록에 있는 댓글에 답글 버튼을 클릭하면 텍스트 박스가 나오고 대댓글을 작성할 수 있다.
+- 대댓글은 무한계층형의 형태로 대댓글을 계속해서 달 수 있다. 대댓글의 깊이는 화살표의 개수로 구분한다.
+- 대댓글이 달린 것을 수정 또는 삭제할 수 있다.
 </details>
 
 ## 구조 및 설계
@@ -254,8 +206,3 @@
 
 
 ● [조회수 기능 구현(중복방지)](https://flaxen-cucumber-c3a.notion.site/79d06b80e4614f82aee7838ba861e049)
-
-
-## 마치며
-
-### 1. 프로젝트 보완사항
