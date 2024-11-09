@@ -10,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface CommentRepository extends JpaRepository<Comment, Long>, CustomCommentRepository {
 //  ref중에서 가장 큰 값을 검색하고 없다면 0을 반환하자.(있다면 Long형으로 반환)
-    @Query("select CAST(NVL(MAX(ref),0) as java.lang.Long) from Comment b where b.board.uid = :bId")
+//    mysql에서는 NVL함수가 존재하지 않기 때문에 IFNULL을 써야한다.
+//    @Query("select CAST(NVL(MAX(ref),0) as java.lang.Long) from Comment b where b.board.uid = :bId")
+    @Query("select CAST(IFNULL(MAX(ref),0) as java.lang.Long) from Comment b where b.board.uid = :bId")
     Long findByRef(@Param("bId") Long bId);
 //    해당 게시물의 ref그룹에 해당되는 모든 자식수들의 합을 구해준다.
     @Query("select SUM(answernum) from Comment c where c.board = :board and c.ref = :ref")
