@@ -1,5 +1,5 @@
-# Step 1: Base image로 OpenJDK를 사용합니다.
 FROM openjdk:11
-ARG JAR_FILE=*.jar
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java", "-jar", "app.jar"]
+WORKDIR /spring-boot
+# 정확한 JAR 파일 이름을 지정해 주세요. 예: my-app-0.0.1-SNAPSHOT.jar
+COPY build/libs/simpleBoard-0.0.1-SNAPSHOT.jar app.jar
+ENTRYPOINT ["java", "-jar", "/spring-boot/app.jar"]
