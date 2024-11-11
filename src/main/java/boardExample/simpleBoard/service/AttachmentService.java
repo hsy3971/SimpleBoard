@@ -43,8 +43,11 @@ public class AttachmentService {
             AttachmentType attachmentType = a.getAttachmenttype();
 //          해당 게시글(Board)의 전체 첨부파일과 updateFile과 비교시에 포함하지 않는것들만 삭제해주면 된다.
             if(!updateFile.containsKey(storeFilename)) {
-                File file = new File(fileStore.createPath(storeFilename, attachmentType));
-                boolean delete = file.delete();
+//                로컬에서 삭제
+//                File file = new File(fileStore.createPath(storeFilename, attachmentType));
+//                boolean delete = file.delete();
+                // S3에서 파일 삭제
+                fileStore.deleteFileFromS3(storeFilename, attachmentType);
                 Attachment filename = attachmentRepository.findByStorefilename(storeFilename).get();
 //              지워줄 파일들을 ids에 넣어준다.
                 ids.add(filename.getId());

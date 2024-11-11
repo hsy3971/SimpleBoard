@@ -17,11 +17,11 @@ spring:
       max-file-size: 100MB
       # 한번에 최대 업로드 가능 용량
       max-request-size: 100MB
-      location: C:\tempImg
+#      location: C:\tempImg
 logging.level:
   org.hibernate.SQL: debug
   org.hibernate.type: trace
-com:
-  example:
-    upload:
-      path: C:\tempImg\
+#com:
+#  example:
+#    upload:
+#      path: C:\tempImg\

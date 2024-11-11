@@ -62,12 +62,17 @@ public class BoardService {
     }
     public void BoardDelete(Long uid) {
         Board board = boardRepository.findById(uid).orElseThrow(() -> new IllegalArgumentException("Invalid board ID"));
+//        로컬 삭제
+//        board.getAttachedFiles().forEach(attachedFile -> {
+//            String path = fileStore.createPath(attachedFile.getStorefilename(), attachedFile.getAttachmenttype());
+//            File file = new File(path);
+//            if (file.exists()) {
+//                file.delete();
+//            }
+//        });
+        // S3에서 각 첨부파일 삭제
         board.getAttachedFiles().forEach(attachedFile -> {
-            String path = fileStore.createPath(attachedFile.getStorefilename(), attachedFile.getAttachmenttype());
-            File file = new File(path);
-            if (file.exists()) {
-                file.delete();
-            }
+            fileStore.deleteFileFromS3(attachedFile.getStorefilename(), attachedFile.getAttachmenttype());
         });
         boardRepository.deleteById(uid);
     }
