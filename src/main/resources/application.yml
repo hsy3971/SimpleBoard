@@ -21,7 +21,16 @@ spring:
 logging.level:
   org.hibernate.SQL: debug
   org.hibernate.type: trace
+#server:
+#  port: 8081
 #com:
 #  example:
 #    upload:
 #      path: C:\tempImg\
+server:
+  servlet:
+    session:
+      timeout: 30m # 30분
+      cookie:
+        name: JSESSIONID
+

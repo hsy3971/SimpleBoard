@@ -5,6 +5,7 @@ import boardExample.simpleBoard.domain.Member;
 import boardExample.simpleBoard.dto.MemberDto;
 import boardExample.simpleBoard.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder encoder;
+
     @Transactional
     public Long joinMember(MemberDto memberDto) {
         String localTime = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date());
