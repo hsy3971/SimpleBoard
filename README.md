@@ -1,13 +1,10 @@
-# SpringBoot-Project-BOARD
-게시판 프로젝트입니다.
-
-# 목차
+# SimpleBoard
 
 ## 들어가며
 
 ### 1. 프로젝트 소개
 
-프로젝트를 시작하게 된 계기는 SpringBoot와 JPA를 독학으로 학습하면서 직접 만들며 배우고자 시작하게 되었습니다.
+SpringBoot와 JPA를 학습하면서 만들었던 개인 프로젝트입니다. 기본적인 CRUD기능을 만들고 기능을 점점 더 추가하는 방식으로 프로젝트를 진행하였습니다.
 
 
 ### 2. 프로젝트 기능
@@ -173,7 +170,7 @@
 <img width="800" src="https://user-images.githubusercontent.com/85252989/218687955-6b72e8b5-9e33-4415-963c-27af36998a26.PNG">
 <img width="800" src="https://user-images.githubusercontent.com/85252989/218687992-4a64a56e-6a17-4a64-96e2-bc3d04dfcbcc.PNG">
 
-## 개발 내용
+<!--## 개발 내용
 
 ● [구글 로그인 구현](https://flaxen-cucumber-c3a.notion.site/4fd4fb06db154c79810cacab9a30b790)
 
@@ -205,4 +202,4 @@
 ● [댓글작성과 대댓글 기능 구현](https://flaxen-cucumber-c3a.notion.site/08a8273dc01848e4b6f2f5ff663b4ac5)
 
 
-● [조회수 기능 구현(중복방지)](https://flaxen-cucumber-c3a.notion.site/79d06b80e4614f82aee7838ba861e049)
+● [조회수 기능 구현(중복방지)](https://flaxen-cucumber-c3a.notion.site/79d06b80e4614f82aee7838ba861e049)-->
